@@ -1,4 +1,4 @@
 /* eslint-disable import/no-commonjs */
 
-import docsearch from './src/lib/main';
+const docsearch = require('./src/lib/main').default;
 module.exports = docsearch;
