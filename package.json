@@ -18,7 +18,10 @@
     "release": "./scripts/release",
     "serve": "./scripts/serve",
     "test": "./scripts/test",
-    "test:watch": "./scripts/test-watch"
+    "test:watch": "./scripts/test-watch",
+    "webpack-dev": "webpack --config webpack.serve.config.babel.js -w",
+    "onchange-dev": "onchange \"./src/styles/*.scss\" -- npm run build:css",
+    "live-server": "live-server --no-browser ./dist/cdn"
   },
   "files": [
     "dist/"
@@ -38,16 +41,17 @@
     ]
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-transform-runtime": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "@babel/register": "^7.12.10",
     "autoprefixer": "9.6.1",
-    "babel-cli": "6.26.0",
-    "babel-core": "6.26.3",
-    "babel-eslint": "10.0.3",
     "babel-istanbul": "0.12.2",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
     "babel-plugin-rewire": "1.2.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-stage-3": "6.24.1",
     "conventional-changelog-cli": "2.0.23",
     "cssnano": "4.1.10",
     "eslint": "6.3.0",
@@ -63,7 +67,6 @@
     "mversion": "2.0.0",
     "node-sass": "4.12.0",
     "onchange": "6.0.0",
-    "parallelshell": "3.0.2",
     "postcss-cli": "6.1.3",
     "prettier": "1.19.1",
     "pretty-bytes-cli": "2.0.0",
@@ -76,9 +79,11 @@
   },
   "peerDependencies": {},
   "dependencies": {
+    "@babel/eslint-parser": "^7.12.1",
     "algoliasearch": "^3.24.5",
     "autocomplete.js": "0.37.0",
     "hogan.js": "^3.0.2",
+    "npm-run-all": "^4.1.5",
     "request": "^2.87.0",
     "stack-utils": "^1.0.1",
     "to-factory": "^1.0.0",

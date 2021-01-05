@@ -1,15 +1,6 @@
 {
-  "presets": [
-    [
-      "env",
-      {
-        "targets": {
-          "browsers": ["last 2 versions", "ie >= 9"]
-        }
-      }
-    ],
-    "stage-3"
-  ],
+  "presets": ["@babel/preset-env"],
+  "plugins": ["@babel/plugin-transform-runtime"],
   "env": {
     "test": {
       "plugins": ["babel-plugin-rewire"]
