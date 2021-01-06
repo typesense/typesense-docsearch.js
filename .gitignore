@@ -9,3 +9,4 @@ dist-es5-module/
 tmp
 docs/.textlintcache
 .netlify
+/typesense-server-data/

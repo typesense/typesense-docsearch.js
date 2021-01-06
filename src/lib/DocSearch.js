@@ -1,41 +1,37 @@
 import Hogan from 'hogan.js';
-import algoliasearch from 'algoliasearch/lite';
 import autocomplete from 'autocomplete.js';
 import templates from './templates';
 import utils from './utils';
-import version from './version';
 import $ from './zepto';
+import { SearchClient as TypesenseSearchClient } from 'typesense';
+import { SearchResponseAdapter as TypesenseSearchResponseAdapter } from 'typesense-instantsearch-adapter/lib/SearchResponseAdapter';
 
 /**
  * Adds an autocomplete dropdown to an input field
  * @function DocSearch
- * @param  {string} options.apiKey         Read-only API key
- * @param  {string} options.indexName      Name of the index to target
+ * @param  {string} options.typesenseServerConfig        Typesense Server configuration, passed to typesense.js
+ * @param  {string} options.typesenseCollectionName      Name of the collection to search
  * @param  {string} options.inputSelector  CSS selector that targets the input
- * @param  {string} [options.appId]  Lets you override the applicationId used.
- * If using the default Algolia Crawler, you should not have to change this
- * value.
- * @param  {Object} [options.algoliaOptions] Options to pass the underlying Algolia client
+ * @param  {Object} [options.typesenseSearchParams] Additional parameters to pass to the underlying Typesense client
  * @param  {Object} [options.autocompleteOptions] Options to pass to the underlying autocomplete instance
  * @return {Object}
  */
 const usage = `Usage:
-  documentationSearch({
-  apiKey,
-  indexName,
+  docsearch({
+  typesenseServerConfig,
+  typesenseCollectionName,
   inputSelector,
-  [ appId ],
-  [ algoliaOptions.{hitsPerPage} ]
+  [ typesenseSearchParams.{per_page} ]
   [ autocompleteOptions.{hint,debug} ]
 })`;
+
 class DocSearch {
   constructor({
-    apiKey,
-    indexName,
+    typesenseServerConfig,
+    typesenseCollectionName,
     inputSelector,
-    appId = 'BH4D9OD16A',
     debug = false,
-    algoliaOptions = {},
+    typesenseSearchParams = {},
     queryDataCallback = null,
     autocompleteOptions = {
       debug: false,
@@ -49,11 +45,11 @@ class DocSearch {
     layout = 'columns',
   }) {
     DocSearch.checkArguments({
-      apiKey,
-      indexName,
+      typesenseServerConfig,
+      typesenseCollectionName,
       inputSelector,
       debug,
-      algoliaOptions,
+      typesenseSearchParams,
       queryDataCallback,
       autocompleteOptions,
       transformData,
@@ -63,11 +59,18 @@ class DocSearch {
       layout,
     });
 
-    this.apiKey = apiKey;
-    this.appId = appId;
-    this.indexName = indexName;
+    this.typesenseServerConfig = typesenseServerConfig;
+    this.typesenseCollectionName = typesenseCollectionName;
     this.input = DocSearch.getInputFromSelector(inputSelector);
-    this.algoliaOptions = { hitsPerPage: 5, ...algoliaOptions };
+    this.typesenseSearchParams = {
+      per_page: 5, // eslint-disable-line camelcase
+      query_by: 'content', // eslint-disable-line camelcase
+      group_by: 'url', // eslint-disable-line camelcase
+      group_limit: 1, // eslint-disable-line camelcase
+      include_fields: 'hierarchy,content,anchor,url', // eslint-disable-line camelcase
+      highlight_full_fields: 'hierarchy,hierarchy_camel,content', // eslint-disable-line camelcase
+      ...typesenseSearchParams,
+    };
     this.queryDataCallback = queryDataCallback || null;
     const autocompleteOptionsDebug =
       autocompleteOptions && autocompleteOptions.debug
@@ -80,14 +83,16 @@ class DocSearch {
       this.autocompleteOptions.cssClasses || {};
     this.autocompleteOptions.cssClasses.prefix =
       this.autocompleteOptions.cssClasses.prefix || 'ds';
-    const inputAriaLabel = this.input && typeof this.input.attr === 'function' && this.input.attr('aria-label');
-    this.autocompleteOptions.ariaLabel = 
-      this.autocompleteOptions.ariaLabel || inputAriaLabel || "search input";
+    const inputAriaLabel =
+      this.input &&
+      typeof this.input.attr === 'function' &&
+      this.input.attr('aria-label');
+    this.autocompleteOptions.ariaLabel =
+      this.autocompleteOptions.ariaLabel || inputAriaLabel || 'search input';
 
     this.isSimpleLayout = layout === 'simple';
 
-    this.client = algoliasearch(this.appId, this.apiKey);
-    this.client.addAlgoliaAgent(`docsearch.js ${version}`);
+    this.client = new TypesenseSearchClient(this.typesenseServerConfig);
 
     if (enhancedSearchInput) {
       this.input = DocSearch.injectSearchBox(this.input);
@@ -136,15 +141,13 @@ class DocSearch {
    * @returns {void}
    */
   static checkArguments(args) {
-    if (!args.apiKey || !args.indexName) {
+    if (!args.typesenseServerConfig || !args.typesenseCollectionName) {
       throw new Error(usage);
     }
 
     if (typeof args.inputSelector !== 'string') {
       throw new Error(
-        `Error: inputSelector:${
-          args.inputSelector
-        }  must be a string. Each selector must match only one element and separated by ','`
+        `Error: inputSelector:${args.inputSelector}  must be a string. Each selector must match only one element and separated by ','`
       );
     }
 
@@ -211,18 +214,30 @@ class DocSearch {
       }
 
       this.client
-        .search([
-          {
-            indexName: this.indexName,
-            query,
-            params: this.algoliaOptions,
-          },
-        ])
+        .collections(this.typesenseCollectionName)
+        .documents()
+        .search({
+          q: query,
+          ...this.typesenseSearchParams,
+        })
         .then(data => {
-          if (this.queryDataCallback && typeof this.queryDataCallback == "function") {
-            this.queryDataCallback(data)
+          if (
+            this.queryDataCallback &&
+            typeof this.queryDataCallback === 'function'
+          ) {
+            this.queryDataCallback(data);
           }
-          let hits = data.results[0].hits;
+          const typesenseSearchResponseAdapter = new TypesenseSearchResponseAdapter(
+            data,
+            {
+              params: {
+                highlightPreTag:
+                  '<span class="algolia-docsearch-suggestion--highlight">',
+                highlightPostTag: '</span>',
+              },
+            }
+          );
+          let hits = typesenseSearchResponseAdapter.adapt().hits;
           if (transformData) {
             hits = transformData(hits) || hits;
           }
@@ -284,7 +299,9 @@ class DocSearch {
         displayTitle && displayTitle !== '' && displayTitle !== subcategory;
       const isLvl1 =
         !isLvl2 &&
-        (subcategory && subcategory !== '' && subcategory !== category);
+        subcategory &&
+        subcategory !== '' &&
+        subcategory !== category;
       const isLvl0 = !isLvl1 && !isLvl2;
 
       return {
@@ -313,7 +330,7 @@ class DocSearch {
       return url;
     } else if (anchor) return `#${hit.anchor}`;
     /* eslint-disable */
-    console.warn('no anchor nor url for : ', JSON.stringify(hit));
+    console.warn("no anchor nor url for : ", JSON.stringify(hit));
     /* eslint-enable */
     return null;
   }

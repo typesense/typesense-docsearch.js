@@ -21,7 +21,8 @@
     "test:watch": "./scripts/test-watch",
     "webpack-dev": "webpack --config webpack.serve.config.babel.js -w",
     "onchange-dev": "onchange \"./src/styles/*.scss\" -- npm run build:css",
-    "live-server": "live-server --no-browser ./dist/cdn"
+    "live-server": "live-server --no-browser ./dist/cdn",
+    "typesenseServer": "docker run -i -p 8108:8108 -v`pwd`/typesense-server-data/:/data typesense/typesense:0.18.0 --data-dir /data --api-key=xyz --listen-port 8108 --enable-cors"
   },
   "files": [
     "dist/"
@@ -48,6 +49,7 @@
     "@babel/preset-env": "^7.12.1",
     "@babel/register": "^7.12.10",
     "autoprefixer": "9.6.1",
+    "babel-eslint": "^10.1.0",
     "babel-istanbul": "0.12.2",
     "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
@@ -87,6 +89,8 @@
     "request": "^2.87.0",
     "stack-utils": "^1.0.1",
     "to-factory": "^1.0.0",
+    "typesense": "^0.10.0",
+    "typesense-instantsearch-adapter": "^0.3.3",
     "zepto": "^1.2.0"
   }
 }
