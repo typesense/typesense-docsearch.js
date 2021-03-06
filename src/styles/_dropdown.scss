@@ -185,12 +185,12 @@
         cursor: pointer;
 
         &.ds-cursor {
-          .algolia-docsearch-suggestion.suggestion-layout-simple {
+          .typesense-docsearch-suggestion.suggestion-layout-simple {
             background-color: rgba($main-color, 0.05);
           }
 
-          .algolia-docsearch-suggestion:not(.suggestion-layout-simple) {
-            .algolia-docsearch-suggestion--content {
+          .typesense-docsearch-suggestion:not(.suggestion-layout-simple) {
+            .typesense-docsearch-suggestion--content {
               background-color: rgba($main-color, 0.05);
             }
           }
@@ -213,7 +213,7 @@
     }
 
     // Each suggestion item is wrapped
-    .algolia-docsearch-suggestion {
+    .typesense-docsearch-suggestion {
       display: block;
       position: relative;
       padding: 0 $padding/2;
@@ -234,18 +234,18 @@
         }
 
         &--category-header
-          .algolia-docsearch-suggestion--category-header-lvl0
-          .algolia-docsearch-suggestion--highlight,
+          .typesense-docsearch-suggestion--category-header-lvl0
+          .typesense-docsearch-suggestion--highlight,
         &--category-header
-          .algolia-docsearch-suggestion--category-header-lvl1
-          .algolia-docsearch-suggestion--highlight {
+          .typesense-docsearch-suggestion--category-header-lvl1
+          .typesense-docsearch-suggestion--highlight {
           padding: 0 0 1px;
           background: inherit;
           box-shadow: inset 0 -2px 0 0 rgba($main-color, 0.8);
           color: inherit;
         }
 
-        &--text .algolia-docsearch-suggestion--highlight {
+        &--text .typesense-docsearch-suggestion--highlight {
           padding: 0 0 1px;
           background: inherit;
           box-shadow: inset 0 -2px 0 0 rgba($main-color, 0.8);
@@ -349,28 +349,28 @@
         background-color: $code-background;
         border-radius: 3px;
         font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
-        .algolia-docsearch-suggestion--highlight {
+        .typesense-docsearch-suggestion--highlight {
           background: none;
         }
       }
 
       // Rules to display categories and subcategories
-      &.algolia-docsearch-suggestion__main
-        .algolia-docsearch-suggestion--category-header {
+      &.typesense-docsearch-suggestion__main
+        .typesense-docsearch-suggestion--category-header {
         display: block;
       }
 
-      &.algolia-docsearch-suggestion__secondary {
+      &.typesense-docsearch-suggestion__secondary {
         display: block;
       }
 
       @media all and (min-width: #{$responsive-breakpoint}) {
-        .algolia-docsearch-suggestion--subcategory-column {
+        .typesense-docsearch-suggestion--subcategory-column {
           display: block;
         }
       }
       @media all and (max-width: #{$responsive-breakpoint}) {
-        .algolia-docsearch-suggestion--subcategory-column {
+        .typesense-docsearch-suggestion--subcategory-column {
           display: inline-block;
           width: auto;
           text-align: left;
@@ -389,7 +389,7 @@
             content: '|';
           }
         }
-        .algolia-docsearch-suggestion--content {
+        .typesense-docsearch-suggestion--content {
           display: inline-block;
           width: auto;
           text-align: left;
@@ -405,13 +405,13 @@
 
     //Simple layout (no column)
     .suggestion-layout-simple {
-      &.algolia-docsearch-suggestion {
+      &.typesense-docsearch-suggestion {
         border-bottom: solid 1px #eee;
         padding: $padding/2;
         margin: 0;
       }
 
-      .algolia-docsearch-suggestion {
+      .typesense-docsearch-suggestion {
         &--content {
           width: 100%;
           padding: 0;
@@ -482,7 +482,7 @@
           font-size: $text-size;
           opacity: 0.8;
 
-          .algolia-docsearch-suggestion--highlight {
+          .typesense-docsearch-suggestion--highlight {
             color: darken($text-color, 15%);
             font-weight: bold;
             box-shadow: none;
@@ -492,7 +492,7 @@
     }
 
   // powered by
-    .algolia-docsearch-footer {
+    .typesense-docsearch-footer {
       width: 134px;
       height: 20px;
       z-index: 2000;

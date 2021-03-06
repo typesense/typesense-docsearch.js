@@ -232,7 +232,7 @@ class DocSearch {
             {
               params: {
                 highlightPreTag:
-                  '<span class="algolia-docsearch-suggestion--highlight">',
+                  '<span class="typesense-docsearch-suggestion--highlight">',
                 highlightPostTag: '</span>',
               },
             }
