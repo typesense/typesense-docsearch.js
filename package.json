@@ -22,7 +22,7 @@
     "webpack-dev": "webpack --config webpack.serve.config.babel.js -w",
     "onchange-dev": "onchange \"./src/styles/*.scss\" -- npm run build:css",
     "live-server": "live-server --no-browser ./dist/cdn",
-    "typesenseServer": "docker run -i -p 8108:8108 -v`pwd`/typesense-server-data/:/data typesense/typesense:0.18.0 --data-dir /data --api-key=xyz --listen-port 8108 --enable-cors"
+    "typesenseServer": "docker run -i -p 8108:8108 -v`pwd`/typesense-server-data/:/data typesense/typesense:0.19.0 --data-dir /data --api-key=xyz --listen-port 8108 --enable-cors"
   },
   "files": [
     "dist/"

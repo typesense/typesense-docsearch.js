@@ -62,15 +62,20 @@ class DocSearch {
     this.typesenseServerConfig = typesenseServerConfig;
     this.typesenseCollectionName = typesenseCollectionName;
     this.input = DocSearch.getInputFromSelector(inputSelector);
+    /* eslint-disable camelcase */
     this.typesenseSearchParams = {
-      per_page: 5, // eslint-disable-line camelcase
-      query_by: 'content', // eslint-disable-line camelcase
-      group_by: 'url', // eslint-disable-line camelcase
-      group_limit: 1, // eslint-disable-line camelcase
-      include_fields: 'hierarchy,content,anchor,url', // eslint-disable-line camelcase
-      highlight_full_fields: 'hierarchy,hierarchy_camel,content', // eslint-disable-line camelcase
+      per_page: 5,
+      query_by:
+        'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
+      group_by: 'url',
+      group_limit: 1,
+      include_fields:
+        'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content,anchor,url',
+      highlight_full_fields:
+        'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
       ...typesenseSearchParams,
     };
+    /* eslint-enable camelcase */
     this.queryDataCallback = queryDataCallback || null;
     const autocompleteOptionsDebug =
       autocompleteOptions && autocompleteOptions.debug
@@ -251,7 +256,9 @@ class DocSearch {
   static formatHits(receivedHits) {
     const clonedHits = utils.deepClone(receivedHits);
     const hits = clonedHits.map(hit => {
+      utils.unnestFields(hit);
       if (hit._highlightResult) {
+        utils.unnestFields(hit._highlightResult);
         // eslint-disable-next-line no-param-reassign
         hit._highlightResult = utils.mergeKeyWithParent(
           hit._highlightResult,

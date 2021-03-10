@@ -265,6 +265,37 @@ const utils = {
   deepClone(object) {
     return JSON.parse(JSON.stringify(object));
   },
+
+  /*
+   * Converts an object with a field like { nested.field: value } to { nested: { field: value } }
+   * Note: It does delete existing fields, it just added new nested fields
+   * Note 2: It only supports a max of 1 nesting level
+   * @param {object} object Object whose keys to unnest
+   */
+  unnestFields(object) {
+    Object.keys(object).forEach(key => {
+      const unnestedFieldNames = key.split('.');
+
+      if (unnestedFieldNames.length <= 0) {
+        return;
+      }
+
+      // lvl1.lvl2.lvl3 = 4
+      unnestedFieldNames.reduce(
+        (accumulator, currentFieldName, currentNestingLevel) => {
+          /* eslint-disable no-param-reassign */
+          accumulator[currentFieldName] = accumulator[currentFieldName] || {};
+          if (currentNestingLevel === unnestedFieldNames.length - 1) {
+            accumulator[currentFieldName] = object[key];
+          }
+          /* eslint-enable no-param-reassign */
+
+          return accumulator[currentFieldName];
+        },
+        object
+      );
+    });
+  },
 };
 
 export default utils;
