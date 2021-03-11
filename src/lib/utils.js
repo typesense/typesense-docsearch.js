@@ -267,6 +267,19 @@ const utils = {
   },
 
   /*
+   * Set null values in hierarchy fields
+   * @param {object} object Object where hierarchy.lvlX needs to be set to null if missing
+   */
+  assignNullValuesToMissingHierarchyFields(object) {
+    for (let lvl = 0; lvl <= 6; lvl++) {
+      if (typeof object[`hierarchy.lvl${lvl}`] === 'undefined') {
+        // eslint-disable-next-line no-param-reassign
+        object[`hierarchy.lvl${lvl}`] = null;
+      }
+    }
+  },
+
+  /*
    * Converts an object with a field like { nested.field: value } to { nested: { field: value } }
    * Note: It does delete existing fields, it just added new nested fields
    * Note 2: It only supports a max of 1 nesting level

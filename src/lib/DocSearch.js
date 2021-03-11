@@ -256,8 +256,10 @@ class DocSearch {
   static formatHits(receivedHits) {
     const clonedHits = utils.deepClone(receivedHits);
     const hits = clonedHits.map(hit => {
+      utils.assignNullValuesToMissingHierarchyFields(hit);
       utils.unnestFields(hit);
       if (hit._highlightResult) {
+        utils.assignNullValuesToMissingHierarchyFields(hit._highlightResult);
         utils.unnestFields(hit._highlightResult);
         // eslint-disable-next-line no-param-reassign
         hit._highlightResult = utils.mergeKeyWithParent(
