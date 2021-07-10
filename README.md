@@ -84,6 +84,13 @@ You can override the following styles as needed:
 
 Notice that you still need to use `.algolia-autocomplete` class names since we use [autocomplete.js](https://github.com/algolia/autocomplete) unmodified, but for docsearch classnames the class names are `.typesense-docsearch-*` since this is a modified version of DocSearch.js.
 
+## Integrations
+
+#### Vuepress component
+
+If you use Vuepress for a documentation framework, here's a Vue Component that uses this version of DocSearch: https://github.com/typesense/typesense-website/blob/master/docs-site/content/.vuepress/components/TypesenseSearchBox.vue
+
+
 ## Help
 
 If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
