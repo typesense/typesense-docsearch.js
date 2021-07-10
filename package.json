@@ -1,6 +1,6 @@
 {
   "name": "typesense-docsearch.js",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A fork of Algolia's DocSearch.js, customized to work with Typesense.",
   "homepage": "https://github.com/typesense/typesense-docsearch.js",
   "main": "dist/npm/index.js",
