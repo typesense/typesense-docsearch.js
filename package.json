@@ -1,8 +1,8 @@
 {
-  "name": "docsearch.js",
-  "version": "2.6.3",
-  "description": "Add an autocomplete dropdown to your documentation",
-  "homepage": "https://docsearch.algolia.com/",
+  "name": "typesense-docsearch.js",
+  "version": "0.0.0",
+  "description": "A fork of Algolia's DocSearch.js, customized to work with Typesense.",
+  "homepage": "https://github.com/typesense/typesense-docsearch.js",
   "main": "dist/npm/index.js",
   "scripts": {
     "build": "./scripts/build",
@@ -22,14 +22,14 @@
     "webpack-dev": "webpack --config webpack.serve.config.babel.js -w",
     "onchange-dev": "onchange \"./src/styles/*.scss\" -- npm run build:css",
     "live-server": "live-server --no-browser ./dist/cdn",
-    "typesenseServer": "docker run -i -p 8108:8108 -v`pwd`/typesense-server-data/:/data typesense/typesense:0.19.0 --data-dir /data --api-key=xyz --listen-port 8108 --enable-cors"
+    "typesenseServer": "docker run -i -p 8108:8108 -v`pwd`/typesense-server-data/:/data typesense/typesense:0.20.0 --data-dir /data --api-key=xyz --listen-port 8108 --enable-cors"
   },
   "files": [
     "dist/"
   ],
-  "author": "Algolia <support@algolia.com> (https://github.com/algolia/)",
+  "author": "Typesense <contact@typesense.org>",
   "license": "MIT",
-  "repository": "algolia/docsearch",
+  "repository": "typesense/typesense-docsearch.js",
   "renovate": {
     "extends": [
       "config:library",
