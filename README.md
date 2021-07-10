@@ -88,7 +88,7 @@ Notice that you still need to use `.algolia-autocomplete` class names since we u
 
 #### Vuepress component
 
-If you use Vuepress for a documentation framework, here's a Vue Component that uses this version of DocSearch: https://github.com/typesense/typesense-website/blob/master/docs-site/content/.vuepress/components/TypesenseSearchBox.vue
+If you use Vuepress for a documentation framework, here's a [Vue Component](https://github.com/typesense/typesense-website/blob/master/docs-site/content/.vuepress/components/TypesenseSearchBox.vue) that uses this version of DocSearch.
 
 
 ## Help
