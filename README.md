@@ -1,44 +1,89 @@
-[![DocSearch][1]][8]
+# Typesense DocSearch.js
 
-The easiest way to add search to your documentation. For free.
+This is a fork of Algolia's awesome [DocSearch.js](https://github.com/algolia/docsearch) library, customized to send queries to [Typesense](https://typesense.org).
 
-[![npm version][2]](https://npmjs.org/package/docsearch.js)
-[![build][3]](https://travis-ci.org/algolia/docsearch)
-[![coverage][4]](https://coveralls.io/github/algolia/docsearch)
-[![License][5]](./LICENSE)
-[![Downloads][6]](https://npm-stat.com/charts.html?package=docsearch.js)
-[![jsDelivr Hits][7]](https://www.jsdelivr.com/package/npm/docsearch.js)
+To be able to use this, you'd first need to setup and run the [Typesense DocSearch Scraper](https://github.com/typesense/typesense-docsearch-scraper).
 
-DocSearch will crawl your documentation website, push its content to an Algolia
-index, and allow you to add a dropdown search menu for your users to find
-relevant content in no time.
+#### What is Typesense? 
 
-Check out our [website][8] for a complete explanation and documentation.
+If you're new to Typesense, it is an **open source** search engine that is simple to use, run and scale, with clean APIs and documentation. 
 
-[![Bootstrap demo][9]][8]
+Think of it as an open source alternative to Algolia and an easier-to-use, batteries-included alternative to ElasticSearch. Get a quick overview from [this guide](https://typesense.org/guide/).
 
-## Related projects
+## Usage
 
-DocSearch is made of 4 repositories:
+#### Step 1: Add the following snippet to all your pages
 
-- [algolia/docsearch][10] contains the `docsearch.js` code source 
-- [algolia/docsearch-website](https://github.com/algolia/docsearch-website) contains the
-  documentation website.
-- [algolia/docsearch-configs][11] contains the JSON files representing all the
-  configs for all the documentations DocSearch is powering
-- [algolia/docsearch-scraper][12] contains the crawler we use to extract data
-  from your documentation. The code is open-source and you can run it from
-  a Docker image
+```html
+<!-- Somwhere in your doc site's navigation -->
+<input type="search" id="searchbar">
 
-[1]: ./.github/docsearch-logo.svg
-[2]: https://img.shields.io/npm/v/docsearch.js.svg?style=flat-square
-[3]: https://img.shields.io/travis/algolia/docsearch/master.svg?style=flat-square
-[4]: https://img.shields.io/coveralls/algolia/docsearch/master.svg?style=flat-square
-[5]: https://img.shields.io/badge/license-MIT-green.svg?style=flat-square
-[6]: https://img.shields.io/npm/dm/docsearch.js.svg?style=flat-square
-[7]: https://data.jsdelivr.com/v1/package/npm/docsearch.js/badge
-[8]: https://docsearch.algolia.com/
-[9]: ./.github/demo.gif
-[10]: https://github.com/algolia/docsearch
-[11]: https://github.com/algolia/docsearch-configs
-[12]: https://github.com/algolia/docsearch-scraper
+<!-- Before the closing head -->
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@{{docSearchJSVersion}}/dist/cdn/docsearch.min.css"
+/>
+
+<!-- Before the closing body -->
+<script src="https://cdn.jsdelivr.net/npm/typesense-docsearch.js@{{docSearchJSVersion}}/dist/cdn/docsearch.min.js"></script>
+
+<script>
+  docsearch({
+    inputSelector: '#searchbar',
+    typesenseCollectionName: 'docs', // Should match the collection name you mention in the docsearch scraper config.js
+    typesenseServerConfig: { // See here for all possible options under this key: https://typesense.org/docs/0.20.0/api/authentication.html#search-delivery-network
+      nodes: [{
+        host: 'localhost', // For Typesense Cloud use xxx.a1.typesense.net
+        port: '8108',      // For Typesense Cloud use 443
+        protocol: 'http'   // For Typesense Cloud use https
+      }],
+      apiKey: '<SEARCH_API_KEY>', // Use API Key with only Search permissions
+    },
+    typesenseSearchParams: { // Optional. Any search parameters here can be used: https://typesense.org/docs/0.20.0/api/documents.html#arguments
+      filter_by: 'version:=0.21.0'
+    },
+  });
+</script>
+```
+
+Read the official [DocSearch documentation](https://docsearch.algolia.com/docs/behavior#handleselected) for information about additional options.
+
+#### Step 2: Style your DocSearch Dropdown
+
+You can override the following styles as needed:
+
+```css
+
+.algolia-autocomplete .ds-dropdown-menu {
+  width: 500px;
+}
+
+.algolia-autocomplete .typesense-docsearch-suggestion--category-header {
+  color: darkgray;
+  border: 1px solid gray;
+}
+
+.algolia-autocomplete .typesense-docsearch-suggestion--subcategory-column {
+  color: gray;
+}
+
+.algolia-autocomplete .typesense-docsearch-suggestion--title {
+  font-weight: bold;
+  color: black;
+}
+
+.algolia-autocomplete .typesense-docsearch-suggestion--text {
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.algolia-autocomplete .typesense-docsearch-suggestion--highlight {
+  color: blue;
+}
+```
+
+Notice that you still need to use `.algolia-autocomplete` class names since we use [autocomplete.js](https://github.com/algolia/autocomplete) unmodified, but for docsearch classnames the class names are `.typesense-docsearch-*` since this is a modified version of DocSearch.js.
+
+## Help
+
+If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
