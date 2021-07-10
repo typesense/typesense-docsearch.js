@@ -39,7 +39,7 @@ Think of it as an open source alternative to Algolia and an easier-to-use, batte
       }],
       apiKey: '<SEARCH_API_KEY>', // Use API Key with only Search permissions
     },
-    typesenseSearchParams: { // Optional. Any search parameters here can be used: https://typesense.org/docs/0.20.0/api/documents.html#arguments
+    typesenseSearchParams: { // Optional. Any search parameters [here](https://typesense.org/docs/0.20.0/api/documents.html#arguments) can be used.
       filter_by: 'version:=0.21.0'
     },
   });
