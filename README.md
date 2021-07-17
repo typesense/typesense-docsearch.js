@@ -12,6 +12,10 @@ Think of it as an open source alternative to Algolia and an easier-to-use, batte
 
 ## Usage
 
+#### Step 0: Setup typesense-docsearch-scraper
+
+Follow the instructions in the [typesense-docsearch-scraper](https://github.com/typesense/typesense-docsearch-scraper) repo to setup the scraper for your site.
+
 #### Step 1: Add the following snippet to all your pages
 
 ```html
