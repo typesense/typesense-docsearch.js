@@ -25,7 +25,7 @@ export function Snippet<TItem extends StoredDocSearchHit>({
     ...rest,
     dangerouslySetInnerHTML: {
       __html:
-        getPropertyByPath(hit, `_snippetResult.${attribute}.value`) ||
+        hit._highlightResult[attribute]?.value ||
         getPropertyByPath(hit, attribute),
     },
   });

@@ -10,13 +10,14 @@ export function removeHighlightTags(
     !(hit as InternalDocSearchHit).__docsearch_parent &&
     !hit._highlightResult
   ) {
-    return hit.hierarchy.lvl0;
+    return hit['hierarchy.lvl0'];
   }
 
   const { value } = hit._highlightResult
-    ? hit._highlightResult.hierarchy.lvl0
-    : (hit as InternalDocSearchHit).__docsearch_parent!._highlightResult
-        .hierarchy.lvl0;
+    ? hit._highlightResult['hierarchy.lvl0']
+    : (hit as InternalDocSearchHit).__docsearch_parent!._highlightResult[
+        'hierarchy.lvl0'
+      ];
 
   return value && regexHasHighlightTags.test(value)
     ? value.replace(regexHighlightTags, '')

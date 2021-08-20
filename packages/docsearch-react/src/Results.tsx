@@ -113,7 +113,7 @@ function Result<TItem extends StoredDocSearchHit>({
         <div className="DocSearch-Hit-Container">
           {renderIcon({ item, index })}
 
-          {item.hierarchy[item.type] && item.type === 'lvl1' && (
+          {item[`hierarchy.${item.type}`] && item.type === 'lvl1' && (
             <div className="DocSearch-Hit-content-wrapper">
               <Snippet
                 className="DocSearch-Hit-title"
@@ -130,7 +130,7 @@ function Result<TItem extends StoredDocSearchHit>({
             </div>
           )}
 
-          {item.hierarchy[item.type] &&
+          {item[`hierarchy.${item.type}`] &&
             (item.type === 'lvl2' ||
               item.type === 'lvl3' ||
               item.type === 'lvl4' ||

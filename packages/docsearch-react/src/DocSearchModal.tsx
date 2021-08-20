@@ -175,9 +175,9 @@ export function DocSearchModal({
           return searchClient
             .search<DocSearchHit>([
               {
-                query,
                 indexName,
                 params: {
+                  query,
                   attributesToRetrieve: [
                     'hierarchy.lvl0',
                     'hierarchy.lvl1',
@@ -251,7 +251,7 @@ export function DocSearchModal({
                     },
                     getItems() {
                       return Object.values(
-                        groupBy(items, (item) => item.hierarchy.lvl1)
+                        groupBy(items, (item) => item['hierarchy.lvl1'])
                       )
                         .map(transformItems)
                         .map((hits) =>
@@ -264,8 +264,8 @@ export function DocSearchModal({
                                 hits.find(
                                   (siblingItem) =>
                                     siblingItem.type === 'lvl1' &&
-                                    siblingItem.hierarchy.lvl1 ===
-                                      item.hierarchy.lvl1
+                                    siblingItem['hierarchy.lvl1'] ===
+                                      item['hierarchy.lvl1']
                                 ),
                             };
                           })

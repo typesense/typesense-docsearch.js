@@ -49,15 +49,13 @@ export declare type DocSearchHit = {
   url_without_anchor: string;
   type: ContentType;
   anchor: string | null;
-  hierarchy: {
-    lvl0: string;
-    lvl1: string;
-    lvl2: string | null;
-    lvl3: string | null;
-    lvl4: string | null;
-    lvl5: string | null;
-    lvl6: string | null;
-  };
+  'hierarchy.lvl0': string;
+  'hierarchy.lvl1': string;
+  'hierarchy.lvl2': string | null;
+  'hierarchy.lvl3': string | null;
+  'hierarchy.lvl4': string | null;
+  'hierarchy.lvl5': string | null;
+  'hierarchy.lvl6': string | null;
   _highlightResult: DocSearchHitHighlightResult;
   _snippetResult: DocSearchHitSnippetResult;
   _rankingInfo?: {
