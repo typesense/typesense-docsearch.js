@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { AlgoliaLogo } from './AlgoliaLogo';
+import { TypesenseLogo } from './TypesenseLogo';
 
 export function Footer() {
   return (
     <>
       <div className="DocSearch-Logo">
-        <AlgoliaLogo />
+        <TypesenseLogo />
       </div>
       <ul className="DocSearch-Commands">
         <li>

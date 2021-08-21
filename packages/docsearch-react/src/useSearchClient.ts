@@ -1,31 +1,38 @@
-import algoliasearch from 'algoliasearch/dist/algoliasearch-lite.esm.browser';
-import { SearchClient } from 'algoliasearch/lite';
 import React from 'react';
-
-import { version } from './version';
+import { SearchClient } from 'typesense';
+import { SearchResponseAdapter as TypesenseSearchResponseAdapter } from 'typesense-instantsearch-adapter/lib/SearchResponseAdapter';
 
 export function useSearchClient(
-  appId: string,
-  apiKey: string,
+  typesenseServerConfig: object,
   transformSearchClient: (searchClient: SearchClient) => SearchClient
 ): SearchClient {
-  const searchClient = React.useMemo(() => {
-    const client = algoliasearch(appId, apiKey);
-    client.addAlgoliaAgent('docsearch', version);
+  return React.useMemo(() => {
+    const typesense = new SearchClient(typesenseServerConfig);
 
-    // Since DocSearch.js relies on DocSearch React with an alias to Preact,
-    // we cannot add the `docsearch-react` user agent by default, otherwise
-    // it would also be sent on a DocSearch.js integration.
-    // We therefore only add the `docsearch-react` user agent if `docsearch.js`
-    // is not present.
-    if (
-      /docsearch.js \(.*\)/.test(client.transporter.userAgent.value) === false
-    ) {
-      client.addAlgoliaAgent('docsearch-react', version);
-    }
+    const client = {
+      search: async ([request]) => {
+        const response = await typesense.multiSearch.perform({
+          searches: [request],
+        });
+        const typesenseSearchResponseAdapter = new TypesenseSearchResponseAdapter(
+          response.results[0],
+          {
+            params: {
+              ...request.params,
+              highlightPreTag: '<mark>',
+              highlightPostTag: '</mark>',
+            },
+          },
+          {
+            geoLocationField: '',
+          }
+        );
+        return {
+          results: [typesenseSearchResponseAdapter.adapt()],
+        };
+      },
+    };
 
     return transformSearchClient(client);
-  }, [appId, apiKey, transformSearchClient]);
-
-  return searchClient;
+  }, [transformSearchClient]);
 }

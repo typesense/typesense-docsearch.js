@@ -2,9 +2,9 @@ import {
   AutocompleteState,
   AutocompleteOptions,
 } from '@algolia/autocomplete-core';
-import { SearchClient } from 'algoliasearch/lite';
 import React from 'react';
 import { createPortal } from 'react-dom';
+import { SearchClient } from 'typesense';
 
 import { DocSearchButton } from './DocSearchButton';
 import { DocSearchModal } from './DocSearchModal';
@@ -16,11 +16,10 @@ import {
 import { useDocSearchKeyboardEvents } from './useDocSearchKeyboardEvents';
 
 export interface DocSearchProps {
-  appId?: string;
-  apiKey: string;
-  indexName: string;
+  typesenseCollectionName: string;
+  typesenseServerConfig: object;
+  typesenseSearchParameters: object;
   placeholder?: string;
-  searchParameters?: any;
   transformItems?(items: DocSearchHit[]): DocSearchHit[];
   hitComponent?(props: {
     hit: InternalDocSearchHit | StoredDocSearchHit;

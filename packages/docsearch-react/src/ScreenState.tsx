@@ -26,7 +26,7 @@ export interface ScreenStateProps<TItem extends BaseItem>
   onItemClick(item: InternalDocSearchHit): void;
   inputRef: React.MutableRefObject<null | HTMLInputElement>;
   hitComponent: DocSearchProps['hitComponent'];
-  indexName: DocSearchProps['indexName'];
+  indexName: DocSearchProps['typesenseCollectionName'];
   disableUserPersonalization: boolean;
   resultsFooterComponent: DocSearchProps['resultsFooterComponent'];
 }

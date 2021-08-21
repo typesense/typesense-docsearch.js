@@ -27,11 +27,10 @@ export interface DocSearchModalProps extends DocSearchProps {
 }
 
 export function DocSearchModal({
-  appId = 'BH4D9OD16A',
-  apiKey,
-  indexName,
+  typesenseCollectionName,
+  typesenseServerConfig,
+  typesenseSearchParameters,
   placeholder = 'Search docs',
-  searchParameters,
   onClose = noop,
   transformItems = identity,
   hitComponent = Hit,
@@ -54,6 +53,7 @@ export function DocSearchModal({
     status: 'idle',
   });
 
+  const indexName = typesenseCollectionName;
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const modalRef = React.useRef<HTMLDivElement | null>(null);
   const formElementRef = React.useRef<HTMLDivElement | null>(null);
@@ -69,7 +69,10 @@ export function DocSearchModal({
     initialQueryFromProp || initialQueryFromSelection
   ).current;
 
-  const searchClient = useSearchClient(appId, apiKey, transformSearchClient);
+  const searchClient = useSearchClient(
+    typesenseServerConfig,
+    transformSearchClient
+  );
   const favoriteSearches = React.useRef(
     createStoredSearches<StoredDocSearchHit>({
       key: `__DOCSEARCH_FAVORITE_SEARCHES__${indexName}`,
@@ -175,36 +178,19 @@ export function DocSearchModal({
           return searchClient
             .search<DocSearchHit>([
               {
-                indexName,
-                params: {
-                  query,
-                  attributesToRetrieve: [
-                    'hierarchy.lvl0',
-                    'hierarchy.lvl1',
-                    'hierarchy.lvl2',
-                    'hierarchy.lvl3',
-                    'hierarchy.lvl4',
-                    'hierarchy.lvl5',
-                    'hierarchy.lvl6',
-                    'content',
-                    'type',
-                    'url',
-                  ],
-                  attributesToSnippet: [
-                    `hierarchy.lvl1:${snippetLength.current}`,
-                    `hierarchy.lvl2:${snippetLength.current}`,
-                    `hierarchy.lvl3:${snippetLength.current}`,
-                    `hierarchy.lvl4:${snippetLength.current}`,
-                    `hierarchy.lvl5:${snippetLength.current}`,
-                    `hierarchy.lvl6:${snippetLength.current}`,
-                    `content:${snippetLength.current}`,
-                  ],
-                  snippetEllipsisText: '…',
-                  highlightPreTag: '<mark>',
-                  highlightPostTag: '</mark>',
-                  hitsPerPage: 20,
-                  ...searchParameters,
-                },
+                collection: typesenseCollectionName,
+                q: query,
+                /* eslint-disable @typescript-eslint/camelcase */
+                query_by:
+                  'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
+                include_fields:
+                  'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content,anchor,url,type,id',
+                highlight_full_fields:
+                  'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
+                group_by: 'url',
+                group_limit: 3,
+                ...typesenseSearchParameters,
+                /* eslint-enable @typescript-eslint/camelcase */
               },
             ])
             .catch((error) => {
@@ -219,8 +205,11 @@ export function DocSearchModal({
               throw error;
             })
             .then(({ results }) => {
+              console.log(results);
               const { hits, nbHits } = results[0];
-              const sources = groupBy(hits, (hit) => removeHighlightTags(hit));
+              const sources = groupBy(hits, (hit) =>
+                removeHighlightTags(hit as DocSearchHit)
+              ) as Record<string, DocSearchHit[]>;
 
               // We store the `lvl0`s to display them as search suggestions
               // in the "no results" screen.
@@ -280,7 +269,7 @@ export function DocSearchModal({
       }),
     [
       indexName,
-      searchParameters,
+      typesenseSearchParameters,
       searchClient,
       onClose,
       recentSearches,
