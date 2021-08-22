@@ -2,12 +2,6 @@ import { createElement } from 'react';
 
 import { StoredDocSearchHit } from './types';
 
-function getPropertyByPath(object: object, path: string): any {
-  const parts = path.split('.');
-
-  return parts.reduce((current, key) => current && current[key], object);
-}
-
 interface SnippetProps<TItem> {
   [prop: string]: unknown;
   hit: TItem;
@@ -25,8 +19,9 @@ export function Snippet<TItem extends StoredDocSearchHit>({
     ...rest,
     dangerouslySetInnerHTML: {
       __html:
-        hit._highlightResult[attribute]?.value ||
-        getPropertyByPath(hit, attribute),
+        (hit._highlightResult
+          ? hit._highlightResult[attribute]?.value
+          : false) || hit[attribute],
     },
   });
 }

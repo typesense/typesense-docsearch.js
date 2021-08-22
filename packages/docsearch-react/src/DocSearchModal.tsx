@@ -205,7 +205,6 @@ export function DocSearchModal({
               throw error;
             })
             .then(({ results }) => {
-              console.log(results);
               const { hits, nbHits } = results[0];
               const sources = groupBy(hits, (hit) =>
                 removeHighlightTags(hit as DocSearchHit)
