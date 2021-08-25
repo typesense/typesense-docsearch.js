@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-react",
   "description": "React package for DocSearch, customized to work with Typesense",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "homepage": "https://docsearch.algolia.com",
   "repository": "typesense/docsearch.js",
