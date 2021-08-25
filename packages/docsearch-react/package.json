@@ -1,14 +1,20 @@
 {
-  "name": "@docsearch/react",
-  "description": "React package for DocSearch, the best search experience for docs.",
-  "version": "3.0.0-alpha.39",
+  "name": "typesense-docsearch-react",
+  "description": "React package for DocSearch, customized to work with Typesense",
+  "version": "0.0.0",
   "license": "MIT",
   "homepage": "https://docsearch.algolia.com",
-  "repository": "algolia/docsearch",
-  "author": {
-    "name": "Algolia, Inc.",
-    "url": "https://www.algolia.com"
-  },
+  "repository": "typesense/docsearch.js",
+  "contributors": [
+    {
+      "name": "Algolia, Inc.",
+      "url": "https://www.algolia.com"
+    },
+    {
+      "name": "Typesense, Inc.",
+      "url": "https://typesense.org"
+    }
+  ],
   "sideEffects": false,
   "files": [
     "dist/",
