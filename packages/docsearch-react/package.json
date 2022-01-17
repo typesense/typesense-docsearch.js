@@ -43,7 +43,6 @@
     "@algolia/autocomplete-core": "1.2.1",
     "@algolia/autocomplete-preset-algolia": "1.2.1",
     "@docsearch/css": "3.0.0-alpha.39",
-    "algoliasearch": "^4.0.0",
     "typesense": "^0.14.0",
     "typesense-instantsearch-adapter": "^2.0.1"
   },
