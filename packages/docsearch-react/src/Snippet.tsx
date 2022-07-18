@@ -1,12 +1,12 @@
 import { createElement } from 'react';
 
-import { StoredDocSearchHit } from './types';
+import type { StoredDocSearchHit } from './types';
 
 interface SnippetProps<TItem> {
-  [prop: string]: unknown;
   hit: TItem;
   attribute: string;
   tagName?: string;
+  [prop: string]: unknown;
 }
 
 export function Snippet<TItem extends StoredDocSearchHit>({

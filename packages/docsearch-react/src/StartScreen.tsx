@@ -2,14 +2,35 @@ import React from 'react';
 
 import { RecentIcon, ResetIcon, StarIcon } from './icons';
 import { Results } from './Results';
-import { ScreenStateProps } from './ScreenState';
-import { InternalDocSearchHit } from './types';
+import type { ScreenStateProps } from './ScreenState';
+import type { InternalDocSearchHit } from './types';
 
-interface StartScreenProps extends ScreenStateProps<InternalDocSearchHit> {
+export type StartScreenTranslations = Partial<{
+  recentSearchesTitle: string;
+  noRecentSearchesText: string;
+  saveRecentSearchButtonTitle: string;
+  removeRecentSearchButtonTitle: string;
+  favoriteSearchesTitle: string;
+  removeFavoriteSearchButtonTitle: string;
+}>;
+
+type StartScreenProps = Omit<
+  ScreenStateProps<InternalDocSearchHit>,
+  'translations'
+> & {
   hasCollections: boolean;
-}
+  translations?: StartScreenTranslations;
+};
 
-export function StartScreen(props: StartScreenProps) {
+export function StartScreen({ translations = {}, ...props }: StartScreenProps) {
+  const {
+    recentSearchesTitle = 'Recent',
+    noRecentSearchesText = 'No recent searches',
+    saveRecentSearchButtonTitle = 'Save this search',
+    removeRecentSearchButtonTitle = 'Remove this search from history',
+    favoriteSearchesTitle = 'Favorite',
+    removeFavoriteSearchButtonTitle = 'Remove this search from favorites',
+  } = translations;
   if (props.state.status === 'idle' && props.hasCollections === false) {
     if (props.disableUserPersonalization) {
       return null;
@@ -17,7 +38,7 @@ export function StartScreen(props: StartScreenProps) {
 
     return (
       <div className="DocSearch-StartScreen">
-        <p className="DocSearch-Help">No recent searches</p>
+        <p className="DocSearch-Help">{noRecentSearchesText}</p>
       </div>
     );
   }
@@ -30,7 +51,7 @@ export function StartScreen(props: StartScreenProps) {
     <div className="DocSearch-Dropdown-Container">
       <Results
         {...props}
-        title="Recent"
+        title={recentSearchesTitle}
         collection={props.state.collections[0]}
         renderIcon={() => (
           <div className="DocSearch-Hit-icon">
@@ -46,7 +67,8 @@ export function StartScreen(props: StartScreenProps) {
             <div className="DocSearch-Hit-action">
               <button
                 className="DocSearch-Hit-action-button"
-                title="Save this search"
+                title={saveRecentSearchButtonTitle}
+                type="submit"
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -63,7 +85,8 @@ export function StartScreen(props: StartScreenProps) {
             <div className="DocSearch-Hit-action">
               <button
                 className="DocSearch-Hit-action-button"
-                title="Remove this search from history"
+                title={removeRecentSearchButtonTitle}
+                type="submit"
                 onClick={(event) => {
                   event.preventDefault();
                   event.stopPropagation();
@@ -82,7 +105,7 @@ export function StartScreen(props: StartScreenProps) {
 
       <Results
         {...props}
-        title="Favorites"
+        title={favoriteSearchesTitle}
         collection={props.state.collections[1]}
         renderIcon={() => (
           <div className="DocSearch-Hit-icon">
@@ -93,7 +116,8 @@ export function StartScreen(props: StartScreenProps) {
           <div className="DocSearch-Hit-action">
             <button
               className="DocSearch-Hit-action-button"
-              title="Remove this search from favorites"
+              title={removeFavoriteSearchButtonTitle}
+              type="submit"
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();

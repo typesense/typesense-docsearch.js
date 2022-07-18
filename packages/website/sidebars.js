@@ -1,31 +1,54 @@
 /**
- * Copyright (c) 2017-present, Facebook, Inc.
+ * Creating a sidebar enables you to:
+ * - create an ordered group of docs
+ * - render a sidebar for each doc of that group
+ * - provide next/previous navigation.
  *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
+ * The sidebars can be generated from the filesystem, or explicitly defined here.
+ *
+ * Create as many sidebars as you want.
  */
 
 module.exports = {
-  docs: {
-    'Getting Started': [
-      'what-is-docsearch',
-      'how-does-it-work',
-      'who-can-apply',
-      'apply',
-    ],
-    'Adding DocSearch to your UI': ['migration-guide', 'styling'],
-    'Requirements, tips, FAQ': [
-      'required-configuration',
-      'tips',
-      'faq',
-      'integrations',
-    ],
-    'Under the Hood': [
-      'scraper',
-      'inside-the-engine',
-      'config-file',
-      'how-do-we-build-an-index',
-      'run-your-own',
-    ],
-  },
+  docs: [
+    {
+      type: 'category',
+      label: 'Introduction',
+      items: ['what-is-docsearch', 'who-can-apply', 'migrating-from-legacy'],
+    },
+    {
+      type: 'category',
+      label: 'DocSearch v3',
+      items: ['DocSearch-v3', 'api', 'styling', 'migrating-from-v2'],
+    },
+    {
+      type: 'category',
+      label: 'Algolia Crawler',
+      items: ['record-extractor', 'templates', 'manage-your-crawls'],
+    },
+    {
+      type: 'category',
+      label: 'Requirements, tips, FAQ',
+      items: [
+        {
+          type: 'category',
+          label: 'FAQ',
+          items: ['crawler', 'DocSearch-program'],
+        },
+        {
+          type: 'doc',
+          id: 'tips',
+        },
+        {
+          type: 'doc',
+          id: 'integrations',
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Under the hood',
+      items: ['how-does-it-work', 'required-configuration'],
+    },
+  ],
 };

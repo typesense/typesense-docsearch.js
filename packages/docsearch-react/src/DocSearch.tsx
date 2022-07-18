@@ -1,4 +1,4 @@
-import {
+import type {
   AutocompleteState,
   AutocompleteOptions,
 } from '@algolia/autocomplete-core';
@@ -8,37 +8,46 @@ import { SearchClient } from 'typesense';
 
 import { DocSearchButton } from './DocSearchButton';
 import { DocSearchModal } from './DocSearchModal';
-import {
+import type {
   DocSearchHit,
   InternalDocSearchHit,
   StoredDocSearchHit,
 } from './types';
 import { useDocSearchKeyboardEvents } from './useDocSearchKeyboardEvents';
 
+import type { ButtonTranslations, ModalTranslations } from '.';
+
+export type DocSearchTranslations = Partial<{
+  button: ButtonTranslations;
+  modal: ModalTranslations;
+}>;
+
 export interface DocSearchProps {
   typesenseCollectionName: string;
   typesenseServerConfig: object;
   typesenseSearchParameters: object;
   placeholder?: string;
-  transformItems?(items: DocSearchHit[]): DocSearchHit[];
-  hitComponent?(props: {
+  transformItems?: (items: DocSearchHit[]) => DocSearchHit[];
+  hitComponent?: (props: {
     hit: InternalDocSearchHit | StoredDocSearchHit;
     children: React.ReactNode;
-  }): JSX.Element;
-  resultsFooterComponent?(props: {
+  }) => JSX.Element;
+  resultsFooterComponent?: (props: {
     state: AutocompleteState<InternalDocSearchHit>;
-  }): JSX.Element | null;
-  transformSearchClient?(searchClient: SearchClient): SearchClient;
+  }) => JSX.Element | null;
+  transformSearchClient?: (searchClient: SearchClient) => SearchClient;
   disableUserPersonalization?: boolean;
   initialQuery?: string;
   navigator?: AutocompleteOptions<InternalDocSearchHit>['navigator'];
+  translations?: DocSearchTranslations;
+  getMissingResultsUrl?: ({ query: string }) => string;
 }
 
 export function DocSearch(props: DocSearchProps) {
   const searchButtonRef = React.useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = React.useState(false);
   const [initialQuery, setInitialQuery] = React.useState<string | undefined>(
-    undefined
+    props?.initialQuery || undefined
   );
 
   const onOpen = React.useCallback(() => {
@@ -67,7 +76,11 @@ export function DocSearch(props: DocSearchProps) {
 
   return (
     <>
-      <DocSearchButton onClick={onOpen} ref={searchButtonRef} />
+      <DocSearchButton
+        ref={searchButtonRef}
+        translations={props?.translations?.button}
+        onClick={onOpen}
+      />
 
       {isOpen &&
         createPortal(
@@ -75,6 +88,7 @@ export function DocSearch(props: DocSearchProps) {
             {...props}
             initialScrollY={window.scrollY}
             initialQuery={initialQuery}
+            translations={props?.translations?.modal}
             onClose={onClose}
           />,
           document.body

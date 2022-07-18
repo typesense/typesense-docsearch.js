@@ -3,24 +3,36 @@
 declare namespace Cypress {
   interface Chainable {
     /**
+     * Ensures the modal is visible and focused.
+     */
+    modalIsVisibleAndFocused: () => void;
+    /**
+     * Ensures the modal not visible.
+     */
+    modalIsNotVisible: () => void;
+    /**
      * Toggles the dark mode on the preview website.
      */
-    darkmode(): Chainable<Element>;
+    darkmode: () => void;
     /**
      * Opens the DocSearch modal.
      */
-    openModal(): Chainable<Element>;
+    openModal: () => void;
     /**
      * Closes the DocSearch modal.
      */
-    closeModal(): Chainable<Element>;
+    closeModal: () => void;
+    /**
+     * Search for a given query.
+     */
+    search: (query: string) => void;
     /**
      * Types a query that returns results.
      */
-    typeQueryMatching(): Chainable<Element>;
+    typeQueryMatching: () => void;
     /**
      * Types a query that returns no results.
      */
-    typeQueryNotMatching(): Chainable<Element>;
+    typeQueryNotMatching: () => void;
   }
 }

@@ -4,14 +4,24 @@ Style package for [DocSearch](http://docsearch.algolia.com/), the best search ex
 
 ## Installation
 
-In a JavaScript environment:
-
-```sh
-yarn add @docsearch/css@alpha
+```bash
+yarn add @docsearch/css@3
 # or
-npm install @docsearch/css@alpha
+npm install @docsearch/css@3
+```
+
+If you don’t want to use a package manager, you can use a standalone endpoint:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/@docsearch/css@3"></script>
+```
+
+## Get started
+
+```js
+import '@docsearch/css';
 ```
 
 ## Documentation
 
-[Read documentation →](https://autocomplete-experimental.netlify.app/docs/docsearch-css)
+[Read documentation →](https://docsearch.algolia.com/docs/styling)

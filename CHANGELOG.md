@@ -1,3 +1,89 @@
+## [3.1.1](https://github.com/algolia/docsearch/compare/v3.1.0...v3.1.1) (2022-06-30)
+
+### Bug Fixes
+
+- **js:** use outDir to avoid ambient type definition creation ([#1396](https://github.com/algolia/docsearch/issues/1396)) ([4c924bc](https://github.com/algolia/docsearch/commit/4c924bc3c19c295d24ef13ccffd58ae51a37b68f))
+- **searchbutton:** fix react production hydration error ([#1384](https://github.com/algolia/docsearch/issues/1384)) ([448192e](https://github.com/algolia/docsearch/commit/448192e07b482724e581a0181d85e871ec27befa))
+- **deps:** bump and fix autocomplete deps ([#1416](https://github.com/algolia/docsearch/issues/1416)) ([448192e](https://github.com/algolia/docsearch/commit/d7be594fc62c8ee8573dbaf5ffad3f4bb9149002))
+
+# [3.1.0](https://github.com/algolia/docsearch/compare/v3.0.0...v3.1.0) (2022-05-18)
+
+### Bug Fixes
+
+- **button:** use kbd instead of span ([#1335](https://github.com/algolia/docsearch/issues/1335)) ([7459a42](https://github.com/algolia/docsearch/commit/7459a424d9435f46f3f6115921f1b7528e0c10da))
+- **css:** prevent `kbd` unwanted style overriding ([#1389](https://github.com/algolia/docsearch/issues/1389)) ([613f2a8](https://github.com/algolia/docsearch/commit/613f2a882d73a967d738971376fc30e799cc61eb))
+
+### Features
+
+- **deps:** bump peer to React 18 ([#1385](https://github.com/algolia/docsearch/issues/1385)) ([eb372f2](https://github.com/algolia/docsearch/commit/eb372f2743e9f74e2546cde59e676c32b903bece))
+
+# [3.0.0](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.50...v3.0.0) (2022-02-22)
+
+### Breaking Change
+
+- **v3:** require appId ([#1299](https://github.com/algolia/docsearch/issues/1299)) ([80630cb](https://github.com/algolia/docsearch/commit/80630cb36dcfe486eff4f7b859deef5431775045))
+
+### Bug Fixes
+
+- **footer:** make SVG accessible ([#1306](https://github.com/algolia/docsearch/issues/1306)) ([59a3ebf](https://github.com/algolia/docsearch/commit/59a3ebf5ecfca951da5139faa08812d450fab1e0))
+
+# [3.0.0-alpha.50](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.42...v3.0.0-alpha.50) (2022-02-03)
+
+### Bug Fixes
+
+- **deps:** update algoliasearch-autocomplete monorepo to v1.5.2 ([#1225](https://github.com/algolia/docsearch/issues/1225)) ([aa309f5](https://github.com/algolia/docsearch/commit/aa309f54afddaca54b38f571e367c2ad2830fb3e))
+- **deps:** update dependency @svgr/webpack to v6 ([#1219](https://github.com/algolia/docsearch/issues/1219)) ([52d6927](https://github.com/algolia/docsearch/commit/52d6927c7e4c840f6201ce64793a811a2e17ff2e))
+- **deps:** update dependency postcss to v8.4.5 ([#1205](https://github.com/algolia/docsearch/issues/1205)) ([d348589](https://github.com/algolia/docsearch/commit/d34858949e7f6dd0e2ff3af68f459e00a1d6a337))
+- **deps:** update dependency postcss-preset-env to v7.0.2 ([#1228](https://github.com/algolia/docsearch/issues/1228)) ([1a7093b](https://github.com/algolia/docsearch/commit/1a7093b93ea03c20f1f1efaff2a450ce6aa007af))
+- **deps:** update dependency postcss-preset-env to v7.1.0 ([#1240](https://github.com/algolia/docsearch/issues/1240)) ([cbb14eb](https://github.com/algolia/docsearch/commit/cbb14eb11451c291299ceee38e39aae527196232))
+- **deps:** update dependency postcss-preset-env to v7.2.0 ([#1252](https://github.com/algolia/docsearch/issues/1252)) ([b3288fe](https://github.com/algolia/docsearch/commit/b3288feb31138bd61a0cc0953e6dc281870eac58))
+- **deps:** update docusaurus monorepo to v2.0.0-beta.13 ([#1226](https://github.com/algolia/docsearch/issues/1226)) ([02025e5](https://github.com/algolia/docsearch/commit/02025e5a2c0477eb39676a73f7cf2e17b761594b))
+- **deps:** update docusaurus monorepo to v2.0.0-beta.14 ([#1238](https://github.com/algolia/docsearch/issues/1238)) ([77f785d](https://github.com/algolia/docsearch/commit/77f785d66de0a9527b5a572855e3d8e938b0b7d4))
+- **logo:** empty utm campaign ([#1259](https://github.com/algolia/docsearch/issues/1259)) ([30ee161](https://github.com/algolia/docsearch/commit/30ee161921c61bf994a6be2da212fd999171fe47))
+
+### Features
+
+- **noResults:** allow providing URL to report missing results ([#1289](https://github.com/algolia/docsearch/issues/1289)) ([2c1fe7c](https://github.com/algolia/docsearch/commit/2c1fe7c77c5d5ab28875aa86c9a8ef3b4ffdb254))
+
+# [v3.0.0-alpha.42](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.41...v3.0.0-alpha.42) (2021-12-03)
+
+### Bug Fixes
+
+- **deps:** update dependency postcss to v8.3.11 ([#1153](https://github.com/algolia/docsearch/issues/1153)) ([0ddad32](https://github.com/algolia/docsearch/commit/0ddad32aaff34c7660d3f0e3a71fe88eafa3dfb8))
+- **deps:** update dependency postcss-import to v14 ([#1155](https://github.com/algolia/docsearch/issues/1155)) ([ebaf66e](https://github.com/algolia/docsearch/commit/ebaf66e3ef26f74152ce25ea062f7010a45ad05a))
+- **deps:** update dependency postcss-preset-env to v7 ([#1194](https://github.com/algolia/docsearch/issues/1194)) ([96af398](https://github.com/algolia/docsearch/commit/96af3984110825baa4b048b9fef4fdfec44148bc))
+- **deps:** update docusaurus monorepo to v2.0.0-beta.9 ([#1166](https://github.com/algolia/docsearch/issues/1166)) ([5aed646](https://github.com/algolia/docsearch/commit/5aed646ba8d5f1adf3d5a6671387a8595bc7347a))
+- **discord:** update invite link ([510cbc6](https://github.com/algolia/docsearch/commit/510cbc679954919d58148f14d55d416b49d3009f))
+- **DocSearchProps:** type `searchParameters` ([#1200](https://github.com/algolia/docsearch/issues/1200)) ([80677fd](https://github.com/algolia/docsearch/commit/80677fd7d36a85b6a205383a7ca3d68969fbe3bf))
+- **examples:** use new infra credentials ([65d9414](https://github.com/algolia/docsearch/commit/65d9414fce6c26389e9e86c93b46a28d49f8102c))
+- **issue template:** update codesandbox link ([891fd88](https://github.com/algolia/docsearch/commit/891fd88d1bd3670533fc4a8b41d21678a6f6b832))
+
+### Features
+
+- **translations:** expose Button and Modal translations ([#1183](https://github.com/algolia/docsearch/issues/1183)) ([ef13dea](https://github.com/algolia/docsearch/commit/ef13dea393e02ec459c8adcb5883e896fbd64bb0))
+
+# [v3.0.0-alpha.41](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.40...v3.0.0-alpha.41) (2021-10-18)
+
+### Bug Fixes
+
+- **build:** remove occurences of `process` in UMD build ([#1047](https://github.com/algolia/docsearch/issues/1047)) ([20f54c9](https://github.com/algolia/docsearch/commit/20f54c968cf02e95d8d85e5d6efdc163f2236edf))
+- **ci:** update docker image ([#1052](https://github.com/algolia/docsearch/issues/1052)) ([6b4944f](https://github.com/algolia/docsearch/commit/6b4944f4027e8a7107ab5b1f44cb7fe028d43a05))
+- **docs:** relative apply link ([#1060](https://github.com/algolia/docsearch/issues/1060)) ([7b48078](https://github.com/algolia/docsearch/commit/7b48078c277772ebb12f782602a66d14fc58d329))
+- **docs:** typo in `Home.js` ([#1054](https://github.com/algolia/docsearch/issues/1054)) ([2942246](https://github.com/algolia/docsearch/commit/29422464cc9c67a94e28ef7f1014221b5a17594c))
+- **v3:** pass `initialQuery` ([#1051](https://github.com/algolia/docsearch/issues/1051)) ([6e194c7](https://github.com/algolia/docsearch/commit/6e194c73bf604611a0b975554590efd748f1c2d3))
+- **website:** apply feedbacks from beta testers ([#1053](https://github.com/algolia/docsearch/issues/1053)) ([33d78e7](https://github.com/algolia/docsearch/commit/33d78e7d328bc17da259f7a83c84cd2612e6cd8b))
+
+### Features
+
+- **website:** new documentation ([#1048](https://github.com/algolia/docsearch/issues/1048)) ([9a89cde](https://github.com/algolia/docsearch/commit/9a89cde74605a1011dd3dcf8a02807228017b965))
+
+# [v3.0.0-alpha.40](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.39...v3.0.0-alpha.40) (2021-08-23)
+
+### Bug Fixes
+
+- **ci:** update config file ([#1040](https://github.com/algolia/docsearch/issues/1040)) ([4673f00](https://github.com/algolia/docsearch/commit/4673f00bf3feb114e5e1dd043c56c78177c7292a))
+- **removeHighlightTags:** prevent destructuring `undefined` object ([#1039](https://github.com/algolia/docsearch/issues/1039)) ([6a6f7f6](https://github.com/algolia/docsearch/commit/6a6f7f6e8d0f803062c42b0c4521a0501bb287a1))
+
 # [v3.0.0-alpha.39](https://github.com/algolia/docsearch/compare/v3.0.0-alpha.38...v3.0.0-alpha.39) (2021-07-23)
 
 ### Bug Fixes

@@ -1,17 +1,18 @@
-import {
-  AutocompleteState,
-  createAutocomplete,
-} from '@algolia/autocomplete-core';
+import type { AutocompleteState } from '@algolia/autocomplete-core';
+import { createAutocomplete } from '@algolia/autocomplete-core';
 import React from 'react';
 
 import { MAX_QUERY_SIZE } from './constants';
-import { DocSearchProps } from './DocSearch';
+import type { DocSearchProps } from './DocSearch';
+import type { FooterTranslations } from './Footer';
 import { Footer } from './Footer';
 import { Hit } from './Hit';
+import type { ScreenStateTranslations } from './ScreenState';
 import { ScreenState } from './ScreenState';
+import type { SearchBoxTranslations } from './SearchBox';
 import { SearchBox } from './SearchBox';
 import { createStoredSearches } from './stored-searches';
-import {
+import type {
   DocSearchHit,
   InternalDocSearchHit,
   StoredDocSearchHit,
@@ -21,10 +22,17 @@ import { useTouchEvents } from './useTouchEvents';
 import { useTrapFocus } from './useTrapFocus';
 import { groupBy, identity, noop, removeHighlightTags } from './utils';
 
-export interface DocSearchModalProps extends DocSearchProps {
+export type ModalTranslations = Partial<{
+  searchBox: SearchBoxTranslations;
+  footer: FooterTranslations;
+}> &
+  ScreenStateTranslations;
+
+export type DocSearchModalProps = DocSearchProps & {
   initialScrollY: number;
-  onClose?(): void;
-}
+  onClose?: () => void;
+  translations?: ModalTranslations;
+};
 
 export function DocSearchModal({
   typesenseCollectionName,
@@ -40,7 +48,14 @@ export function DocSearchModal({
   transformSearchClient = identity,
   disableUserPersonalization = false,
   initialQuery: initialQueryFromProp = '',
+  translations = {},
+  getMissingResultsUrl,
 }: DocSearchModalProps) {
+  const {
+    footer: footerTranslations,
+    searchBox: searchBoxTranslations,
+    ...screenStateTranslations
+  } = translations;
   const [state, setState] = React.useState<
     AutocompleteState<InternalDocSearchHit>
   >({
@@ -129,11 +144,10 @@ export function DocSearchModal({
           },
         },
         navigator,
-        onStateChange({ state }) {
-          setState(state);
+        onStateChange(props) {
+          setState(props.state);
         },
-        // @ts-ignore Temporarily ignore bad typing in autocomplete-core.
-        getSources({ query, state, setContext, setStatus }) {
+        getSources({ query, state: sourcesState, setContext, setStatus }) {
           if (!query) {
             if (disableUserPersonalization) {
               return [];
@@ -213,7 +227,7 @@ export function DocSearchModal({
               // We store the `lvl0`s to display them as search suggestions
               // in the "no results" screen.
               if (
-                (state.context.searchSuggestions as any[]).length <
+                (sourcesState.context.searchSuggestions as any[]).length <
                 Object.keys(sources).length
               ) {
                 setContext({
@@ -242,14 +256,13 @@ export function DocSearchModal({
                         groupBy(items, (item) => item['hierarchy.lvl1'])
                       )
                         .map(transformItems)
-                        .map((hits) =>
-                          hits.map((item) => {
+                        .map((groupedHits) =>
+                          groupedHits.map((item) => {
                             return {
                               ...item,
-                              // eslint-disable-next-line @typescript-eslint/camelcase
                               __docsearch_parent:
                                 item.type !== 'lvl1' &&
-                                hits.find(
+                                groupedHits.find(
                                   (siblingItem) =>
                                     siblingItem.type === 'lvl1' &&
                                     siblingItem['hierarchy.lvl1'] ===
@@ -369,6 +382,8 @@ export function DocSearchModal({
       ]
         .filter(Boolean)
         .join(' ')}
+      role="button"
+      tabIndex={0}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -381,12 +396,13 @@ export function DocSearchModal({
             {...autocomplete}
             state={state}
             autoFocus={initialQuery.length === 0}
-            onClose={onClose}
             inputRef={inputRef}
             isFromSelection={
               Boolean(initialQuery) &&
               initialQuery === initialQueryFromSelection
             }
+            translations={searchBoxTranslations}
+            onClose={onClose}
           />
         </header>
 
@@ -400,16 +416,18 @@ export function DocSearchModal({
             disableUserPersonalization={disableUserPersonalization}
             recentSearches={recentSearches}
             favoriteSearches={favoriteSearches}
+            inputRef={inputRef}
+            translations={screenStateTranslations}
+            getMissingResultsUrl={getMissingResultsUrl}
             onItemClick={(item) => {
               saveRecentSearch(item);
               onClose();
             }}
-            inputRef={inputRef}
           />
         </div>
 
         <footer className="DocSearch-Footer">
-          <Footer />
+          <Footer translations={footerTranslations} />
         </footer>
       </div>
     </div>

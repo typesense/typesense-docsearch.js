@@ -1,3 +1,5 @@
+version: 2.1
+
 aliases:
   - &install_yarn_version
     name: Install specific Yarn version
@@ -8,11 +10,11 @@ aliases:
   - &restore_yarn_cache
     name: Restore Yarn cache
     keys:
-      - yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+      - yarn-packages-{{ checksum "yarn.lock" }}
 
   - &save_yarn_cache
     name: Save Yarn cache
-    key: yarn-{{ .Branch }}-packages-{{ checksum "yarn.lock" }}
+    key: yarn-packages-{{ checksum "yarn.lock" }}
     paths:
       - ~/.cache/yarn
 
@@ -20,23 +22,40 @@ aliases:
     name: Install dependencies
     command: yarn install --frozen-lockfile
 
+  - &restore_dist_folders
+    name: Restore dist folders
+    command: |
+      set -exu
+
+      mkdir -p packages/docsearch-react/dist
+      mkdir -p packages/docsearch-js/dist
+      mkdir -p packages/docsearch-css/dist
+
+      cp -R /tmp/workspace/packages/docsearch-react/dist packages/docsearch-react
+      cp -R /tmp/workspace/packages/docsearch-js/dist packages/docsearch-js
+      cp -R /tmp/workspace/packages/docsearch-css/dist packages/docsearch-css
+
 defaults: &defaults
   working_directory: ~/docsearch
   docker:
-    - image: circleci/node:14.15.0
+    - image: cimg/node:16.13.1
 
 cypress: &cypress
   working_directory: ~/docsearch
   docker:
-    - image: cypress/browsers:node13.8.0-chrome81-ff75
+    - image: cypress/browsers:node16.13.2-chrome100-ff98
       environment:
         ## this enables colors in the output
         TERM: xterm
 
-version: 2.1
+references:
+  workspace_root: &workspace_root /tmp/workspace
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: *workspace_root
 
 jobs:
-  test_build:
+  build:
     <<: *defaults
     steps:
       - checkout
@@ -49,14 +68,32 @@ jobs:
           command: |
             yarn run build
             yarn run test:size
+      - run:
+          name: Move dist folders to workspace
+          command: |
+            set -exu
+
+            mkdir -p /tmp/workspace/packages/docsearch-react/dist
+            mkdir -p /tmp/workspace/packages/docsearch-js/dist
+            mkdir -p /tmp/workspace/packages/docsearch-css/dist
+
+            cp -R packages/docsearch-react/dist /tmp/workspace/packages/docsearch-react
+            cp -R packages/docsearch-js/dist /tmp/workspace/packages/docsearch-js
+            cp -R packages/docsearch-css/dist /tmp/workspace/packages/docsearch-css
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - packages
   test_lint:
     <<: *defaults
     steps:
       - checkout
+      - *attach_workspace
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run: *restore_dist_folders
       - run:
           name: Linting
           command: yarn run lint
@@ -64,10 +101,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *attach_workspace
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run: *restore_dist_folders
       - run:
           name: Type checking
           command: yarn run test:types
@@ -75,10 +114,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *attach_workspace
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run: *restore_dist_folders
       - run:
           name: Unit tests
           command: yarn run test --maxWorkers=4
@@ -86,10 +127,12 @@ jobs:
     <<: *defaults
     steps:
       - checkout
+      - *attach_workspace
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run: *restore_dist_folders
       - run:
           name: Release if needed
           command: yarn run shipjs trigger
@@ -97,31 +140,36 @@ jobs:
     <<: *cypress
     steps:
       - checkout
+      - *attach_workspace
       - run: *install_yarn_version
       - restore_cache: *restore_yarn_cache
       - run: *run_yarn_install
       - save_cache: *save_yarn_cache
+      - run: *restore_dist_folders
       - run:
           name: Cypress test Actions
           command: yarn run cy:run
-      - store_test_results:
-          path: cypress-results
-      - store_artifacts:
-          path: cypress\screenshots
-      - store_artifacts:
-          path: cypress\videos
 
 workflows:
-  version: 2.1
+  version: 2
   ci:
     jobs:
-      - test_build
-      # TODO: Enable once the test env setup is ready.
-      # - test_unit
-      - test_lint
-      # TODO: Enable again once Cypress is installed on the repo.
-      # - test_cypress
+      - build
+      - test_lint:
+          requires:
+            - build
+      - test_types:
+          requires:
+            - build
+      - test_unit:
+          requires:
+            - build
+      - test_cypress:
+          requires:
+            - build
       - release:
+          requires:
+            - build
           filters:
             branches:
               only: next
