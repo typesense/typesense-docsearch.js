@@ -1,13 +1,23 @@
 import React from 'react';
 
-export function TypesenseLogo() {
+type TypesenseLogoTranslations = Partial<{
+  searchByText: string;
+}>;
+
+type TypesenseLogoProps = {
+  translations?: TypesenseLogoTranslations;
+};
+
+export function TypesenseLogo({ translations = {} }: TypesenseLogoProps) {
+  const { searchByText = 'Search by' } = translations;
+
   return (
     <a
-      href="https://www.algolia.com/docsearch"
+      href={`https://typesense.org/?utm_source=${window.location.hostname}&utm_medium=referral&utm_content=powered_by&utm_campaign=docsearch`}
       target="_blank"
       rel="noopener noreferrer"
     >
-      <span className="DocSearch-Label">Search by</span>
+      <span className="DocSearch-Label">{searchByText}</span>
       <svg
         fill="none"
         height="18"

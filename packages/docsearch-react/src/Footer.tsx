@@ -53,7 +53,7 @@ export function Footer({ translations = {} }: FooterProps) {
   return (
     <>
       <div className="DocSearch-Logo">
-        <TypesenseLogo />
+        <TypesenseLogo translations={{ searchByText }} />
       </div>
       <ul className="DocSearch-Commands">
         <li>

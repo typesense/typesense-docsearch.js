@@ -4,7 +4,9 @@ import type {
 } from '@algolia/autocomplete-core';
 import React from 'react';
 import { createPortal } from 'react-dom';
-import { SearchClient } from 'typesense';
+import type { SearchClient } from 'typesense';
+import type { TypesenseConfigurationOptions } from 'typesense/lib/Typesense/Configuration';
+import type { TypesenseSearchParams } from 'typesense/lib/Typesense/Documents';
 
 import { DocSearchButton } from './DocSearchButton';
 import { DocSearchModal } from './DocSearchModal';
@@ -24,8 +26,8 @@ export type DocSearchTranslations = Partial<{
 
 export interface DocSearchProps {
   typesenseCollectionName: string;
-  typesenseServerConfig: object;
-  typesenseSearchParameters: object;
+  typesenseServerConfig: TypesenseConfigurationOptions;
+  typesenseSearchParameters: TypesenseSearchParams;
   placeholder?: string;
   transformItems?: (items: DocSearchHit[]) => DocSearchHit[];
   hitComponent?: (props: {
