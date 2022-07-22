@@ -1,4 +1,6 @@
 import replace from '@rollup/plugin-replace';
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 
 import { plugins } from '../../rollup.base.config';
 import { getBundleBanner } from '../../scripts/getBundleBanner';
@@ -35,6 +37,8 @@ export default {
           replace({
             'process.env.NODE_ENV': JSON.stringify('production'),
           }),
+          globals(),
+          builtins(),
         ]
       : plugins,
 };

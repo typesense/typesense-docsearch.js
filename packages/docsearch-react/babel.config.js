@@ -20,6 +20,15 @@ module.exports = (api) => {
         },
       ],
     ],
-    plugins: [['@babel/plugin-transform-react-jsx']],
+    plugins: [
+      ['@babel/plugin-transform-react-jsx'],
+      [
+        '@babel/plugin-transform-runtime',
+        {
+          helpers: true,
+          regenerator: true,
+        },
+      ],
+    ],
   };
 };

@@ -1,7 +1,5 @@
 import React, { render } from 'preact/compat';
-// @ts-expect-error
 import type { DocSearchProps as DocSearchComponentProps } from 'typesense-docsearch-react';
-// @ts-expect-error
 import { DocSearch } from 'typesense-docsearch-react';
 
 function getHTMLElement(

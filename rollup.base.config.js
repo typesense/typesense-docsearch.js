@@ -19,6 +19,7 @@ export const plugins = [
     exclude: 'node_modules/**',
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     rootMode: 'upward',
+    runtimeHelpers: true,
   }),
   terser(),
   filesize({

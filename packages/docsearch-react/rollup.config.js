@@ -20,6 +20,7 @@ export default {
       typesense: 'typesense',
       'typesense-instantsearch-adapter/lib/SearchResponseAdapter':
         'SearchResponseAdapter',
+      '@babel/runtime/regenerator': 'regeneratorRuntime',
     },
     file: 'dist/umd/index.js',
     format: 'umd',
