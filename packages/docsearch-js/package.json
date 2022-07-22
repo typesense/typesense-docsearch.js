@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch.js",
   "description": "JavaScript package for DocSearch, adapted to work with Typesense",
-  "version": "3.0.0-1",
+  "version": "3.0.0-2",
   "license": "MIT",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
   "repository": "typesense/docsearch.js",
