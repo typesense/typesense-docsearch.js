@@ -4049,6 +4049,14 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
+"@docsearch/js@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@docsearch/js/-/js-3.1.1.tgz#fbcf85d034b11ae15397310ef117c7d6fb4e6871"
+  integrity sha512-bt7l2aKRoSnLUuX+s4LVQ1a7AF2c9myiZNv5uvQCePG5tpvVGpwrnMwqVXOUJn9q6FwVVhOrQMO/t+QmnnAEUw==
+  dependencies:
+    "@docsearch/react" "3.1.1"
+    preact "^10.0.0"
+
 "@docsearch/react@3.1.1", "@docsearch/react@^3.0.0":
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/@docsearch/react/-/react-3.1.1.tgz#3dffb5db8cf9eb95d6e732cf038264bfc10191ed"
