@@ -1,6 +1,8 @@
-import type { DocSearchProps as DocSearchComponentProps } from '@docsearch/react';
-import { DocSearch, version } from '@docsearch/react';
 import React, { render } from 'preact/compat';
+// @ts-expect-error
+import type { DocSearchProps as DocSearchComponentProps } from 'typesense-docsearch-react';
+// @ts-expect-error
+import { DocSearch } from 'typesense-docsearch-react';
 
 function getHTMLElement(
   value: HTMLElement | string,
@@ -20,16 +22,7 @@ interface DocSearchProps extends DocSearchComponentProps {
 
 export function docsearch(props: DocSearchProps) {
   render(
-    <DocSearch
-      {...props}
-      transformSearchClient={(searchClient) => {
-        searchClient.addAlgoliaAgent('docsearch.js', version);
-
-        return props.transformSearchClient
-          ? props.transformSearchClient(searchClient)
-          : searchClient;
-      }}
-    />,
+    <DocSearch {...props} />,
     getHTMLElement(props.container, props.environment)
   );
 }

@@ -11,11 +11,11 @@
     ]
   },
   "scripts": {
-    "build:clean": "lerna run build:clean --scope @docsearch/*",
-    "build:esm": "lerna run build:esm --scope @docsearch/*",
-    "build:types": "lerna run build:types --scope @docsearch/*",
-    "build:umd": "lerna run build:umd --scope @docsearch/*",
-    "build": "lerna run build --scope @docsearch/*",
+    "build:clean": "lerna run build:clean --scope={@docsearch/*,typesense-*}",
+    "build:esm": "lerna run build:esm --scope={@docsearch/*,typesense-*}",
+    "build:types": "lerna run build:types --scope={@docsearch/*,typesense-*}",
+    "build:umd": "lerna run build:umd --scope={@docsearch/*,typesense-*}",
+    "build": "lerna run build --scope={@docsearch/*,typesense-*}",
     "cy:clean": "rm -rf cypress/screenshots",
     "cy:info": "cypress info",
     "cy:run:chrome": "yarn run cy:run --browser chrome",
@@ -32,7 +32,7 @@
     "test:size": "bundlesize",
     "test:types": "tsc --noEmit",
     "test": "jest",
-    "watch": "lerna run watch --parallel --scope @docsearch/*",
+    "watch": "lerna run watch --parallel --scope={@docsearch/*,typesense-*}",
     "website:build": "yarn workspace @docsearch/website build",
     "website:start": "yarn workspace @docsearch/website start --host 0.0.0.0",
     "website:test": "yarn workspace @docsearch/website start --no-open"
