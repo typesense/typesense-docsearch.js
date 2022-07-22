@@ -1,46 +1,19 @@
-# @docsearch/js
+# Typesense DocSearch.js
 
-JavaScript package for [DocSearch](http://docsearch.algolia.com/), the best search experience for docs.
+This is a fork of Algolia's awesome [DocSearch.js](https://github.com/algolia/docsearch) library, customized to send queries to [Typesense](https://typesense.org).
 
-## Installation
+To be able to use this, you'd first need to setup and run the [Typesense DocSearch Scraper](https://github.com/typesense/typesense-docsearch-scraper).
 
-```sh
-yarn add @docsearch/js@3
-# or
-npm install @docsearch/js@3
-```
+#### What is Typesense?
 
-## Get started
+If you're new to Typesense, it is an **open source** search engine that is simple to use, run and scale, with clean APIs and documentation.
 
-If you don’t want to use a package manager, you can use a standalone endpoint:
+Think of it as an open source alternative to Algolia and an easier-to-use, batteries-included alternative to ElasticSearch. Get a quick overview from [this guide](https://typesense.org/guide/).
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/@docsearch/js@3"></script>
-```
+## Usage
 
-To get started, you need a [`container`](https://docsearch.algolia.com/docs/api#container) for your DocSearch component to go in. If you don’t have one already, you can insert one into your markup:
+Read detailed step-by-step instructions on how to configure and setup this version of DocSearch.js on Typesense's dedicated documentation site: https://typesense.org/docs/latest/guide/docsearch.html.
 
-```html
-<div id="docsearch"></div>
-```
+## Help
 
-Then, insert DocSearch into it by calling the [`docsearch`](https://docsearch.algolia.com/docs/api) function and providing the container. It can be a [CSS selector](https://developer.mozilla.org/en-us/docs/web/css/css_selectors) or an [Element](https://developer.mozilla.org/en-us/docs/web/api/htmlelement).
-
-Make sure to provide a [`container`](https://docsearch.algolia.com/docs/api#container) (for example, a `div`), not an `input`. DocSearch generates a fully accessible search box for you.
-
-```js app.js
-import docsearch from '@docsearch/js';
-
-import '@docsearch/css';
-
-docsearch({
-  container: '#docsearch',
-  appId: 'YOUR_APP_ID',
-  indexName: 'YOUR_INDEX_NAME',
-  apiKey: 'YOUR_SEARCH_API_KEY',
-});
-```
-
-## Documentation
-
-[Read documentation →](https://docsearch.algolia.com/docs/DocSearch-v3)
+If you have any questions or run into any problems, please create a GitHub issue and we'll try our best to help.
