@@ -189,12 +189,14 @@ export function DocSearchModal({
             ];
           }
 
+          // @ts-expect-error
           return searchClient
             .search<DocSearchHit>([
               {
                 collection: typesenseCollectionName,
+                // @ts-expect-error
                 q: query,
-                /* eslint-disable @typescript-eslint/camelcase */
+                // @ts-expect-error
                 query_by:
                   'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
                 include_fields:
@@ -204,7 +206,6 @@ export function DocSearchModal({
                 group_by: 'url',
                 group_limit: 3,
                 ...typesenseSearchParameters,
-                /* eslint-enable @typescript-eslint/camelcase */
               },
             ])
             .catch((error) => {
@@ -280,7 +281,7 @@ export function DocSearchModal({
         },
       }),
     [
-      indexName,
+      typesenseCollectionName,
       typesenseSearchParameters,
       searchClient,
       onClose,

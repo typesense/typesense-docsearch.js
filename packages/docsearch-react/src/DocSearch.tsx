@@ -5,8 +5,8 @@ import type {
 import React from 'react';
 import { createPortal } from 'react-dom';
 import type { SearchClient } from 'typesense';
-import type { TypesenseConfigurationOptions } from 'typesense/lib/Typesense/Configuration';
-import type { TypesenseSearchParams } from 'typesense/lib/Typesense/Documents';
+import type { ConfigurationOptions as TypesenseConfigurationOptions } from 'typesense/lib/Typesense/Configuration';
+import type { SearchParams as TypesenseSearchParams } from 'typesense/lib/Typesense/Documents';
 
 import { DocSearchButton } from './DocSearchButton';
 import { DocSearchModal } from './DocSearchModal';
