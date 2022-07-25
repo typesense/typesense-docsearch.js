@@ -1,1 +1,1 @@
-export * from '@docsearch/css/dist/button.css';
+export * from 'typesense-docsearch-css/dist/button.css';

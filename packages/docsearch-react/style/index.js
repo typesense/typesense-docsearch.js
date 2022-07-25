@@ -1,1 +1,1 @@
-export * from '@docsearch/css';
+export * from 'typesense-docsearch-css';
