@@ -1,4 +1,4 @@
-# Typesense DocSearch.js
+# Typesense DocSearch Styles
 
 This is a fork of Algolia's awesome [DocSearch.js](https://github.com/algolia/docsearch) library, customized to send queries to [Typesense](https://typesense.org).
 
