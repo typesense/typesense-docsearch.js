@@ -1,27 +1,19 @@
-# @docsearch/css
+# Typesense DocSearch.js
 
-Style package for [DocSearch](http://docsearch.algolia.com/), the best search experience for docs.
+This is a fork of Algolia's awesome [DocSearch.js](https://github.com/algolia/docsearch) library, customized to send queries to [Typesense](https://typesense.org).
 
-## Installation
+To be able to use this, you'd first need to setup and run the [Typesense DocSearch Scraper](https://github.com/typesense/typesense-docsearch-scraper).
 
-```bash
-yarn add @docsearch/css@3
-# or
-npm install @docsearch/css@3
-```
+#### What is Typesense?
 
-If you don’t want to use a package manager, you can use a standalone endpoint:
+If you're new to Typesense, it is an **open source** search engine that is simple to use, run and scale, with clean APIs and documentation.
 
-```html
-<script src="https://cdn.jsdelivr.net/npm/@docsearch/css@3"></script>
-```
+Think of it as an open source alternative to Algolia and an easier-to-use, batteries-included alternative to ElasticSearch. Get a quick overview from [this guide](https://typesense.org/guide/).
 
-## Get started
+## Usage
 
-```js
-import '@docsearch/css';
-```
+Read detailed step-by-step instructions on how to configure and setup this version of DocSearch.js on Typesense's dedicated documentation site: https://typesense.org/docs/latest/guide/docsearch.html.
 
-## Documentation
+## Help
 
-[Read documentation →](https://docsearch.algolia.com/docs/styling)
+If you have any questions or run into any problems, please create a Github issue and we'll try our best to help.
