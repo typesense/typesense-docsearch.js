@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-css",
   "description": "Styles for DocSearch, customized for Typesense",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
   "repository": "typesense/docsearch.js",
