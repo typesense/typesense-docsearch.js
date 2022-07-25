@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-react",
   "description": "React package for DocSearch, customized to work with Typesense",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "license": "MIT",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
   "repository": "typesense/docsearch.js",
@@ -41,8 +41,8 @@
   "dependencies": {
     "@algolia/autocomplete-core": "1.7.1",
     "@algolia/autocomplete-preset-algolia": "1.7.1",
-    "typesense-docsearch-css": "^0.3.0",
     "typesense": "^1.4.0-3",
+    "typesense-docsearch-css": "^0.3.0",
     "typesense-instantsearch-adapter": "^2.4.2-1"
   },
   "peerDependencies": {
