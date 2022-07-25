@@ -1,14 +1,20 @@
 {
-  "name": "@docsearch/css",
-  "description": "Styles for DocSearch.",
-  "version": "3.1.1",
+  "name": "typesense-docsearch-css",
+  "description": "Styles for DocSearch, customized for Typesense",
+  "version": "0.0.0",
   "license": "MIT",
-  "homepage": "https://docsearch.algolia.com",
-  "repository": "algolia/docsearch",
-  "author": {
-    "name": "Algolia, Inc.",
-    "url": "https://www.algolia.com"
-  },
+  "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
+  "repository": "typesense/docsearch.js",
+  "contributors": [
+    {
+      "name": "Algolia, Inc.",
+      "url": "https://www.algolia.com"
+    },
+    {
+      "name": "Typesense, Inc.",
+      "url": "https://typesense.org"
+    }
+  ],
   "files": [
     "dist/"
   ],
