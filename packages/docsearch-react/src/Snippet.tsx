@@ -19,9 +19,8 @@ export function Snippet<TItem extends StoredDocSearchHit>({
     ...rest,
     dangerouslySetInnerHTML: {
       __html:
-        (hit._highlightResult
-          ? hit._highlightResult[attribute]?.value
-          : false) || hit[attribute],
+        (hit._snippetResult ? hit._snippetResult[attribute]?.value : false) ||
+        hit[attribute],
     },
   });
 }
