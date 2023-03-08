@@ -42,7 +42,7 @@
     "@algolia/autocomplete-core": "1.8.2",
     "@algolia/autocomplete-preset-algolia": "1.8.2",
     "typesense": "^1.4.0-3",
-    "typesense-docsearch-css": "^0.3.0",
+    "typesense-docsearch-css": "^0.4.0",
     "typesense-instantsearch-adapter": "^2.4.2-1"
   },
   "peerDependencies": {
