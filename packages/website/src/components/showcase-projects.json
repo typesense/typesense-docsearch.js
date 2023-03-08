@@ -1,8 +1,8 @@
 [
   {
     "name": "Bootstrap",
-    "image": "img/logos/bootstrap.jpg",
-    "href": "https://getbootstrap.com/docs/5.1/getting-started/introduction/"
+    "image": "img/logos/bootstrap.svg",
+    "href": "https://getbootstrap.com/docs/5.2/getting-started/introduction/"
   },
   {
     "name": "MUI",
@@ -258,5 +258,10 @@
     "name": "Flowbite",
     "image": "img/logos/flowbite.svg",
     "href": "https://flowbite.com/docs/getting-started/introduction/"
+  },
+  {
+    "name": "Fylgja",
+    "image": "img/logos/fylgja.svg",
+    "href": "https://fylgja.dev/"
   }
 ]

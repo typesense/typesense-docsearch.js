@@ -25,7 +25,7 @@ const lightCodeTheme = require('prism-react-renderer/themes/github');
             path: 'docs',
             sidebarPath: 'sidebars.js',
             editUrl:
-              'https://github.com/algolia/docsearch/edit/next/packages/website/',
+              'https://github.com/algolia/docsearch/edit/main/packages/website/',
             versions: {
               current: {
                 label: 'current',
@@ -63,6 +63,11 @@ const lightCodeTheme = require('prism-react-renderer/themes/github');
             {
               label: 'Docs',
               to: 'docs/what-is-docsearch',
+              position: 'left',
+            },
+            {
+              label: 'Apply',
+              to: 'apply',
               position: 'left',
             },
             // right
@@ -155,7 +160,9 @@ const lightCodeTheme = require('prism-react-renderer/themes/github');
           ],
           logo: {
             alt: 'Algolia',
-            src: 'img/algolia-logo.svg',
+            src: 'img/Algolia-logo-blue.svg',
+            srcDark: 'img/Algolia-logo-white.svg',
+            width: 200,
           },
           copyright: 'DocSearch 2015-now • Designed and built by Algolia',
         },
