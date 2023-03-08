@@ -37,6 +37,6 @@
   },
   "dependencies": {
     "preact": "^10.0.0",
-    "typesense-docsearch-react": "^0.2.3"
+    "typesense-docsearch-react": "^0.3.0"
   }
 }
