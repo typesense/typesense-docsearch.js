@@ -2342,14 +2342,6 @@
   resolved "https://registry.yarnpkg.com/@docsearch/css/-/css-3.3.3.tgz#f9346c9e24602218341f51b8ba91eb9109add434"
   integrity sha512-6SCwI7P8ao+se1TUsdZ7B4XzL+gqeQZnBc+2EONZlcVa0dVrk0NjETxozFKgMv0eEGH8QzP1fkN+A1rH61l4eg==
 
-"@docsearch/js@3.3.3":
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/@docsearch/js/-/js-3.3.3.tgz#70725a7a8fe92d221fcf0593263b936389d3728f"
-  integrity sha512-2xAv2GFuHzzmG0SSZgf8wHX0qZX8n9Y1ZirKUk5Wrdc+vH9CL837x2hZIUdwcPZI9caBA+/CzxsS68O4waYjUQ==
-  dependencies:
-    "@docsearch/react" "3.3.3"
-    preact "^10.0.0"
-
 "@docsearch/react@3.3.3", "@docsearch/react@^3.1.1":
   version "3.3.3"
   resolved "https://registry.yarnpkg.com/@docsearch/react/-/react-3.3.3.tgz#907b6936a565f880b4c0892624b4f7a9f132d298"
@@ -20611,6 +20603,14 @@ typesense-docsearch-react@^0.3.0:
     typesense "^1.4.0-3"
     typesense-docsearch-css "^0.4.0"
     typesense-instantsearch-adapter "^2.4.2-1"
+
+typesense-docsearch.js@^3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/typesense-docsearch.js/-/typesense-docsearch.js-3.3.3.tgz#596cb72da705bc0c038684065d69fdfb158ad819"
+  integrity sha512-hkCkcbGmJupYchkcHsS5iMBtT4ThWv+D3L5cLMinpiqdgUEvhNtYnR6zutl9BjBnIb4tmcdI23adiL8V8ioBuQ==
+  dependencies:
+    preact "^10.0.0"
+    typesense-docsearch-react "^0.3.0"
 
 typesense-instantsearch-adapter@^2.4.2-1:
   version "2.4.2-1"
