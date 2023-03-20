@@ -206,6 +206,8 @@ export function DocSearchModal({
                 group_by: 'url',
                 group_limit: 3,
                 sort_by: 'item_priority:desc',
+                snippet_threshold: 8,
+                highlight_affix_num_tokens: 4,
                 ...typesenseSearchParameters,
               },
             ])
