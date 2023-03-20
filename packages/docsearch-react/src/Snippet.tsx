@@ -20,13 +20,13 @@ export function Snippet<TItem extends StoredDocSearchHit>({
   if (hit._snippetResult?.[attribute]?.value) {
     let snippetValue = hit._snippetResult[attribute]?.value;
     if (displayValue.substring(0, 20) !== snippetValue.substring(0, 20)) {
-      snippetValue = `... ${snippetValue}`;
+      snippetValue = `… ${snippetValue}`;
     }
     if (
       displayValue.substring(displayValue.length - 20, displayValue.length) !==
       snippetValue.substring(snippetValue.length - 20, snippetValue.length)
     ) {
-      snippetValue = `${snippetValue} ...`;
+      snippetValue = `${snippetValue} …`;
     }
 
     displayValue = snippetValue;
