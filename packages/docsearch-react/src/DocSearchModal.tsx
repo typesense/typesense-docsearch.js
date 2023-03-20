@@ -205,6 +205,7 @@ export function DocSearchModal({
                   'hierarchy.lvl0,hierarchy.lvl1,hierarchy.lvl2,hierarchy.lvl3,hierarchy.lvl4,hierarchy.lvl5,hierarchy.lvl6,content',
                 group_by: 'url',
                 group_limit: 3,
+                sort_by: 'item_priority:desc',
                 ...typesenseSearchParameters,
               },
             ])
