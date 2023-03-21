@@ -15,10 +15,11 @@ export function Snippet<TItem extends StoredDocSearchHit>({
   tagName = 'span',
   ...rest
 }: SnippetProps<TItem>) {
-  let displayValue = hit._highlightResult[attribute]?.value || hit[attribute];
+  let displayValue =
+    hit?._highlightResult?.[attribute]?.value || hit?.[attribute];
 
-  if (hit._snippetResult?.[attribute]?.value) {
-    let snippetValue = hit._snippetResult[attribute]?.value;
+  if (hit?._snippetResult?.[attribute]?.value) {
+    let snippetValue = hit?._snippetResult?.[attribute]?.value;
     if (displayValue.substring(0, 20) !== snippetValue.substring(0, 20)) {
       snippetValue = `… ${snippetValue}`;
     }
