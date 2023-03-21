@@ -69,7 +69,7 @@ yarn build
 
 # First publish react version
 cd packages/docsearch-react
-yarn publish
+yarn publish --no-git-tag-version
 
 # in packages/docsearch-js/package.json
 # increment version number of typesense-docsearch-react dependency in package.json, to the one we released above
@@ -78,7 +78,7 @@ cd <root>
 yarn
 yarn build
 cd packages/docsearch-js
-yarn publish
+yarn publish --no-git-tag-version
 ```
 
 It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
