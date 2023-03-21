@@ -1,3 +1,47 @@
+# [3.4.0-7](https://github.com/typesense/docsearch.js/compare/v3.4.0-5...v3.4.0-7) (2023-03-21)
+
+
+
+# [3.4.0-5](https://github.com/typesense/docsearch.js/compare/v0.4.0-3...v3.4.0-5) (2023-03-21)
+
+
+
+# [0.4.0-3](https://github.com/typesense/docsearch.js/compare/v3.4.0-4...v0.4.0-3) (2023-03-21)
+
+
+
+# [3.4.0-4](https://github.com/typesense/docsearch.js/compare/v0.4.0-2...v3.4.0-4) (2023-03-21)
+
+
+
+# [0.4.0-2](https://github.com/typesense/docsearch.js/compare/v3.4.0-3...v0.4.0-2) (2023-03-21)
+
+
+
+# [3.4.0-3](https://github.com/typesense/docsearch.js/compare/v3.4.0-2...v3.4.0-3) (2023-03-20)
+
+
+
+# [3.4.0-2](https://github.com/typesense/docsearch.js/compare/v0.4.0-1...v3.4.0-2) (2023-03-20)
+
+
+
+# [0.4.0-1](https://github.com/typesense/docsearch.js/compare/v3.4.0-1...v0.4.0-1) (2023-03-20)
+
+
+
+# [3.4.0-1](https://github.com/typesense/docsearch.js/compare/v0.4.0-0...v3.4.0-1) (2023-03-20)
+
+
+
+# [0.4.0-0](https://github.com/typesense/docsearch.js/compare/v3.4.0-0...v0.4.0-0) (2023-03-20)
+
+
+
+# [3.4.0-0](https://github.com/typesense/docsearch.js/compare/v0.3.0...v3.4.0-0) (2023-03-20)
+
+
+
 # [3.4.0-6](https://github.com/typesense/docsearch.js/compare/v3.4.0-5...v3.4.0-6) (2023-03-21)
 
 
