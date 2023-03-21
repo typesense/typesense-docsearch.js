@@ -1,3 +1,93 @@
+# [3.4.0-6](https://github.com/typesense/docsearch.js/compare/v3.4.0-5...v3.4.0-6) (2023-03-21)
+
+
+
+# [3.4.0-5](https://github.com/typesense/docsearch.js/compare/v0.4.0-3...v3.4.0-5) (2023-03-21)
+
+
+
+# [0.4.0-3](https://github.com/typesense/docsearch.js/compare/v3.4.0-4...v0.4.0-3) (2023-03-21)
+
+
+
+# [3.4.0-4](https://github.com/typesense/docsearch.js/compare/v0.4.0-2...v3.4.0-4) (2023-03-21)
+
+
+
+# [0.4.0-2](https://github.com/typesense/docsearch.js/compare/v3.4.0-3...v0.4.0-2) (2023-03-21)
+
+
+
+# [3.4.0-3](https://github.com/typesense/docsearch.js/compare/v3.4.0-2...v3.4.0-3) (2023-03-20)
+
+
+
+# [3.4.0-2](https://github.com/typesense/docsearch.js/compare/v0.4.0-1...v3.4.0-2) (2023-03-20)
+
+
+
+# [0.4.0-1](https://github.com/typesense/docsearch.js/compare/v3.4.0-1...v0.4.0-1) (2023-03-20)
+
+
+
+# [3.4.0-1](https://github.com/typesense/docsearch.js/compare/v0.4.0-0...v3.4.0-1) (2023-03-20)
+
+
+
+# [0.4.0-0](https://github.com/typesense/docsearch.js/compare/v3.4.0-0...v0.4.0-0) (2023-03-20)
+
+
+
+# [3.4.0-0](https://github.com/typesense/docsearch.js/compare/v0.3.0...v3.4.0-0) (2023-03-20)
+
+
+
+# [0.3.0](https://github.com/typesense/docsearch.js/compare/v3.3.3...v0.3.0) (2023-03-08)
+
+
+
+## [3.0.1](https://github.com/typesense/docsearch.js/compare/v0.2.3...v3.0.1) (2022-07-25)
+
+
+
+## [0.2.3](https://github.com/typesense/docsearch.js/compare/v0.2.2...v0.2.3) (2022-07-25)
+
+
+
+## [0.2.2](https://github.com/typesense/docsearch.js/compare/v3.0.0...v0.2.2) (2022-07-25)
+
+
+
+# [3.0.0](https://github.com/typesense/docsearch.js/compare/v0.2.1...v3.0.0) (2022-07-25)
+
+
+
+## [0.2.1](https://github.com/typesense/docsearch.js/compare/v0.2.1-0...v0.2.1) (2022-07-25)
+
+
+
+## [0.2.1-0](https://github.com/typesense/docsearch.js/compare/v3.0.0-3...v0.2.1-0) (2022-07-25)
+
+
+### Features
+
+* **ui:** use Typesense color as primary color ([ad7e045](https://github.com/typesense/docsearch.js/commit/ad7e045f64e0baedef1cc6e014d8519c3d3e246e))
+* **ui:** use Typesense color in logo ([fe45232](https://github.com/typesense/docsearch.js/commit/fe452323e5537e2bcb84e3725b6bc0e918b30f2a))
+
+
+
+# [3.0.0-3](https://github.com/typesense/docsearch.js/compare/v3.0.0-2...v3.0.0-3) (2022-07-22)
+
+
+
+# [3.0.0-2](https://github.com/typesense/docsearch.js/compare/v3.0.0-1...v3.0.0-2) (2022-07-22)
+
+
+
+# [3.0.0-1](https://github.com/typesense/docsearch.js/compare/v3.1.1...v3.0.0-1) (2022-07-22)
+
+
+
 ## [3.3.3](https://github.com/algolia/docsearch/compare/v3.3.2...v3.3.3) (2023-02-06)
 
 
