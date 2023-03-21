@@ -20593,25 +20593,6 @@ typescript@4.7.4:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.4.tgz#1a88596d1cf47d59507a1bcdfb5b9dfe4d488235"
   integrity sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==
 
-typesense-docsearch-react@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/typesense-docsearch-react/-/typesense-docsearch-react-0.3.0.tgz#da8f160096218e76bedd2a073960c080dab1a81e"
-  integrity sha512-K2mO0KDUQIXlwPyybuEX+l39MLMA8fsReai/+UukXiJ3iOlT0LfEbH5IX7gb+FgxdGyNyB+DgTuEHEcy5Mi1gQ==
-  dependencies:
-    "@algolia/autocomplete-core" "1.8.2"
-    "@algolia/autocomplete-preset-algolia" "1.8.2"
-    typesense "^1.4.0-3"
-    typesense-docsearch-css "^0.4.0"
-    typesense-instantsearch-adapter "^2.4.2-1"
-
-typesense-docsearch.js@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/typesense-docsearch.js/-/typesense-docsearch.js-3.3.3.tgz#596cb72da705bc0c038684065d69fdfb158ad819"
-  integrity sha512-hkCkcbGmJupYchkcHsS5iMBtT4ThWv+D3L5cLMinpiqdgUEvhNtYnR6zutl9BjBnIb4tmcdI23adiL8V8ioBuQ==
-  dependencies:
-    preact "^10.0.0"
-    typesense-docsearch-react "^0.3.0"
-
 typesense-instantsearch-adapter@^2.4.2-1:
   version "2.4.2-1"
   resolved "https://registry.yarnpkg.com/typesense-instantsearch-adapter/-/typesense-instantsearch-adapter-2.4.2-1.tgz#922aa2c84fbe027a15bb357db9378687c04ca855"

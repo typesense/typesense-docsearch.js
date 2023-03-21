@@ -9,7 +9,7 @@
     "start": "parcel index.html"
   },
   "dependencies": {
-    "typesense-docsearch.js": "^3.3.3",
+    "typesense-docsearch.js": "^3.4.0-1",
     "typesense-docsearch-css": "^0.4.0"
   },
   "devDependencies": {

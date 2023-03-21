@@ -1,5 +1,5 @@
 // import docsearch from '@docsearch/js/dist/umd';
-import docsearch from 'typesense-docsearch.js';
+import docsearch from 'typesense-docsearch.js/dist/umd';
 
 import './app.css';
 
