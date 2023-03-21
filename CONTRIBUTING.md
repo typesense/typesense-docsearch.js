@@ -65,7 +65,20 @@ To run this project, you will need:
 ## Release
 
 ```sh
-yarn run release
+yarn build
+
+# First publish react version
+cd packages/docsearch-react
+yarn publish
+
+# in packages/docsearch-js/package.json
+# increment version number of typesense-docsearch-react dependency in package.json, to the one we released above
+
+cd <root>
+yarn
+yarn build
+cd packages/docsearch-js
+yarn publish
 ```
 
 It will create a pull request for the next release. When it's reviewed, approved and merged, then CircleCI will automatically publish it to npm.
