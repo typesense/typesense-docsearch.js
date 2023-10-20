@@ -52,6 +52,7 @@ export function DocSearchModal({
   initialQuery: initialQueryFromProp = '',
   translations = {},
   getMissingResultsUrl,
+  matomoSearchAnalytics = false,
 }: DocSearchModalProps) {
   const {
     footer: footerTranslations,
@@ -127,7 +128,12 @@ export function DocSearchModal({
     [favoriteSearches, recentSearches, disableUserPersonalization]
   );
 
-  const matomoPlugin = createMatomoPlugin();
+  var plugins_to_load: any = [];
+
+  if (matomoSearchAnalytics) {
+    const matomoPlugin = createMatomoPlugin();
+    plugins_to_load.push(matomoPlugin);
+  };
 
   const autocomplete = React.useMemo(
     () =>
@@ -286,7 +292,7 @@ export function DocSearchModal({
               );
             });
         },
-        plugins: [matomoPlugin],
+        plugins: plugins_to_load,
       }),
     [
       typesenseCollectionName,

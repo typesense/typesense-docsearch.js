@@ -43,6 +43,7 @@ export interface DocSearchProps {
   navigator?: AutocompleteOptions<InternalDocSearchHit>['navigator'];
   translations?: DocSearchTranslations;
   getMissingResultsUrl?: ({ query }: { query: string }) => string;
+  matomoSearchAnalytics?: boolean;
 }
 
 export function DocSearch(props: DocSearchProps) {
