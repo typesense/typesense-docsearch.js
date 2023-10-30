@@ -2,6 +2,8 @@
 
 This is a fork of Algolia's awesome [DocSearch.js](https://github.com/algolia/docsearch) library, customized to send queries to [Typesense](https://typesense.org).
 
+This repo contains styles.
+
 To be able to use this, you'd first need to setup and run the [Typesense DocSearch Scraper](https://github.com/typesense/typesense-docsearch-scraper).
 
 #### What is Typesense?
