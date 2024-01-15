@@ -2,6 +2,8 @@ import type { AutocompleteState } from '@algolia/autocomplete-core';
 import { createAutocomplete } from '@algolia/autocomplete-core';
 import React from 'react';
 
+import { createMatomoPlugin } from './MatomoPlugin';
+
 import { MAX_QUERY_SIZE } from './constants';
 import type { DocSearchProps } from './DocSearch';
 import type { FooterTranslations } from './Footer';
@@ -50,6 +52,7 @@ export function DocSearchModal({
   initialQuery: initialQueryFromProp = '',
   translations = {},
   getMissingResultsUrl,
+  matomoSearchAnalytics = false,
 }: DocSearchModalProps) {
   const {
     footer: footerTranslations,
@@ -124,6 +127,13 @@ export function DocSearchModal({
     },
     [favoriteSearches, recentSearches, disableUserPersonalization]
   );
+
+  var plugins_to_load: any = [];
+
+  if (matomoSearchAnalytics) {
+    const matomoPlugin = createMatomoPlugin();
+    plugins_to_load.push(matomoPlugin);
+  };
 
   const autocomplete = React.useMemo(
     () =>
@@ -282,6 +292,7 @@ export function DocSearchModal({
               );
             });
         },
+        plugins: plugins_to_load,
       }),
     [
       typesenseCollectionName,
