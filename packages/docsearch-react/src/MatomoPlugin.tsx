@@ -19,7 +19,7 @@ var matomoSiteSearch_debounced = debounce(_matomoSiteSearch, 500);
 export function createMatomoPlugin() {
     return {
         onStateChange({ state }) {
-            if ( state.isOpen && state.query.length > 0 && query_cache !== state.query ) {
+            if ( state.isOpen && state.query.length > 2 && query_cache !== state.query ) {
                 matomoSiteSearch_debounced(state.query, state.context.nbHits);
             }
         },
