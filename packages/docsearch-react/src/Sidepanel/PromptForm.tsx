@@ -135,7 +135,7 @@ export const PromptForm = React.forwardRef<HTMLTextAreaElement, Props>(
             aria-labelledby="prompt-label"
             autoComplete="off"
             translate="no"
-            rows={isMobile ? 1 : 2}
+            rows={1}
             onKeyDown={handleKeyDown}
             onInput={managePromptHeight}
             onChange={(e) => setUserPrompt(e.target.value)}

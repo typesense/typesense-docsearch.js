@@ -1,120 +1,172 @@
 /* Variables */
 
 :root {
-  --docsearch-primary-color: rgb(0, 61, 255);
-  --docsearch-soft-primary-color: rgba(0, 61, 255, 0.1);
-  --docsearch-subtle-color: rgb(214, 214, 231);
-  --docsearch-text-color: #36395a;
+  --typesense-brand: #c0ff58;
+
+  /* Fallback for browsers without relative color syntax support */
+  --typesense-primary: #4f8000;
+  --typesense-soft-primary: #f0ffd6;
+  --typesense-primary-muted: #b7f24d; /* fallback */
+  --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 5%);
+  --typesense-primary-dark: var(--typesense-brand);
+
+  --typesense-ink: #000000;
+  --typesense-muted: #4d4d4d;
+  --typesense-surface: #ffffff;
+  --typesense-surface-dim: #f9f9f9;
+  --typesense-surface-line: #f1f1f1;
+  --typesense-border-color: #eaeaea;
+  --typesense-logo-text: #000;
+  --typesense-logo-mark: #000;
+
+  --docsearch-primary-color: var(--typesense-primary);
+  --docsearch-soft-primary-color: var(--typesense-soft-primary);
+  --docsearch-subtle-color: var(--typesense-border-color);
+  --docsearch-text-color: #000;
   --docsearch-error-color: #ef5350;
-  --docsearch-success-color: #e8f5e9;
-  --docsearch-secondary-text-color: rgba(90, 94, 154, 1);
-  --docsearch-background-color: rgb(245, 245, 250);
+  --docsearch-success-color: #c3e38f;
+  --docsearch-secondary-text-color: var(--typesense-muted);
+  --docsearch-background-color: var(--typesense-surface-dim);
   --docsearch-spacing: 12px;
-  --docsearch-icon-stroke-width: 1.4;
-  --docsearch-focus-color: rgb(0, 95, 204);
-  --docsearch-highlight-color: rgb(0, 61, 255);
-  --docsearch-muted-color: rgba(150, 152, 195, 1);
-  --docsearch-muted-color-darker: rgba(120, 122, 165, 0.25);
-  --docsearch-icon-color: rgba(90, 94, 154, 1);
-  --docsearch-container-background: rgba(101, 108, 133, 0.8);
-  --docsearch-logo-color: rgba(0, 61, 255, 1);
-  --docsearch-border-radius: 4px;
+  --docsearch-icon-stroke-width: 1.6;
+  --docsearch-focus-color: var(--typesense-primary);
+  --docsearch-highlight-color: var(--typesense-primary);
+  --docsearch-muted-color: var(--typesense-muted);
+
+  --docsearch-icon-color: var(--typesense-muted);
+  --docsearch-container-background: rgba(0, 0, 0, 0.2);
+  --docsearch-logo-color: var(--typesense-primary);
+  --docsearch-border-radius: 16px;
 
   /* button */
-  --docsearch-search-button-background: #fff;
+  --docsearch-search-button-background: var(--typesense-surface);
   --docsearch-search-button-text-color: var(--docsearch-secondary-text-color);
 
   /* modal */
   --docsearch-modal-width: 800px;
-  --docsearch-modal-height: 600px;
-  --docsearch-modal-variable-height: 60dvh;
-  --docsearch-modal-background: rgb(245, 246, 247);
-  --docsearch-modal-shadow: rgba(0, 0, 0, 0.2) 0px 12px 28px 0px,
-    rgba(0, 0, 0, 0.1) 0px 2px 4px 0px,
-    rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
+  --docsearch-modal-height: 700px;
+  --docsearch-modal-variable-height: 600px;
+  --docsearch-modal-background: var(--typesense-surface);
+  --docsearch-modal-background-gradient: radial-gradient(
+      ellipse 60% 60% at top left,
+      rgba(255, 255, 255, 0),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60% 60% at top right,
+      rgba(255, 255, 255, 0),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 200% 110% at bottom left,
+      rgba(222, 255, 151, 0.2),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 55% 125% at bottom right,
+      rgba(222, 255, 151, 0.2),
+      transparent
+    );
+  --docsearch-modal-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.6),
+    0 24px 48px -12px #325a0c33, 0 0 0 1px rgba(222, 255, 151, 0.325);
 
   /* searchbox */
   --docsearch-searchbox-height: 56px;
   --docsearch-searchbox-initial-height: 56px;
-  --docsearch-searchbox-background: #ffffffa6;
-  --docsearch-searchbox-focus-background: #ffffffa6;
-  --docsearch-actions-width: 99px;
-  --docsearch-actions-height: 44px;
+  --docsearch-searchbox-background: var(--typesense-surface-dim);
+  --docsearch-searchbox-focus-background: var(--typesense-surface);
+  --docsearch-actions-width: 22px;
+  --docsearch-actions-height: 22px;
 
   /* hit */
   --docsearch-hit-height: 56px;
-  --docsearch-hit-color: rgb(68, 73, 80);
-  --docsearch-hit-highlight-color: rgba(0, 61, 255, 0.1);
-  --docsearch-hit-background: #fff;
+  --docsearch-hit-color: var(--typesense-ink);
+  --docsearch-hit-highlight-color: var(--typesense-soft-primary);
+  --docsearch-hit-background: var(--typesense-surface-dim);
 
   /* key */
-  --docsearch-key-background: rgb(245, 245, 250);
-  --docsearch-key-color: rgba(90, 94, 154, 1);
-  --docsearch-key-pressed-shadow: inset 0 2px 4px rgba(120, 122, 165, 0.25);
+  --docsearch-key-background: var(--typesense-surface-line);
+  --docsearch-key-color: var(--typesense-muted);
 
   /* footer */
-  --docsearch-footer-height: 52px;
-  --docsearch-footer-background: #ffffffa6;
-  --docsearch-footer-shadow: 0 -1px 0 0 rgb(224, 227, 232),
-    0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+  --docsearch-footer-height: 44px;
+  --docsearch-footer-background: var(--typesense-surface);
 
   /* animations */
   --fav-out-dur: 160ms;
   --del-dur: 150ms;
-
   --ease-smooth: cubic-bezier(0.25, 0.8, 0.4, 1);
   --ease-fast: cubic-bezier(0.45, 0.15, 0.6, 0.9);
   --shadow-pop: 0 4px 12px rgba(0, 0, 0, 0.06);
   --shimmer-bg: linear-gradient(
     90deg,
-    rgb(224, 227, 232) 0%,
-    var(--docsearch-muted-color) 20%,
-    var(--docsearch-muted-color) 60%,
-    rgb(224, 227, 232) 95%
+    #4d4d4d 0%,
+    rgba(150, 230, 80, 0.7) 35%,
+    var(--typesense-brand) 50%,
+    #4f8000 65%,
+    rgba(150, 230, 80, 0.7)  100%
   );
 
-  --docsearch-dropdown-menu-background: var(--docsearch-hit-background);
-  --docsearch-dropdown-menu-item-hover-background: var(--docsearch-modal-background);
+  --docsearch-backdrop-enter-dur: 230ms;
+  --docsearch-backdrop-exit-dur: 130ms;
+  --docsearch-modal-enter-dur: 200ms;
+  --docsearch-modal-exit-dur: 140ms;
+
+  --docsearch-dropdown-menu-background: var(--typesense-surface);
+  --docsearch-dropdown-menu-item-hover-background: var(--typesense-surface-dim);
 }
 
-/* Darkmode */
+@supports (color: hsl(from red h s l)) {
+  :root {
+    --typesense-primary: hsl(from var(--typesense-brand) h 100% 25%);
+    --typesense-soft-primary: hsl(from var(--typesense-brand) h s 92%);
+  }
+}
 
-html[data-theme='dark'] {
-  --docsearch-text-color: rgba(196, 199, 220, 1);
-  --docsearch-secondary-text-color: rgba(182, 183, 213, 1);
-  --docsearch-subtle-color: rgba(33, 33, 57, 1);
-  --docsearch-error-color: #ef5350;
-  --docsearch-success-color: rgba(67, 160, 71, 0.2);
-  --docsearch-highlight-color: rgba(69, 122, 255, 1);
-  --docsearch-focus-color: rgb(154, 200, 255);
-  --docsearch-background-color: rgba(54, 57, 90, 1);
-  --docsearch-icon-color: rgba(182, 183, 213, 1);
-  --docsearch-container-background: rgba(9, 10, 17, 0.8);
-  --docsearch-modal-background: rgb(21, 23, 42);
-  --docsearch-modal-shadow: inset 1px 1px 0 0 rgb(44, 46, 64),
-    0 3px 8px 0 rgb(0, 3, 9);
-  --docsearch-searchbox-background: #000000a6;
-  --docsearch-searchbox-focus-background: #000000a6;
-  --docsearch-hit-color: rgb(190, 195, 201);
-  --docsearch-hit-shadow: none;
-  --docsearch-hit-background: rgb(9, 10, 17);
-  --docsearch-key-background: rgba(54, 57, 90, 1);
-  --docsearch-key-color: rgba(182, 183, 213, 1);
-  --docsearch-key-pressed-shadow: inset 0 2px 4px rgba(12, 13, 20, 0.4);
-  --docsearch-footer-background: #000000a6;
-  --docsearch-footer-shadow: inset 0 1px 0 0 rgba(73, 76, 106, 0.5),
-    0 -4px 8px 0 rgba(0, 0, 0, 0.2);
-  --docsearch-logo-color: rgb(255, 255, 255);
-  --docsearch-muted-color: rgb(127, 132, 151);
+html.dark, html[data-theme="dark"] {
+  --typesense-primary-muted: #ade64f; /*fallback*/
+  --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 10%);
+  --typesense-ink: #fff;
+  --typesense-logo-text: #fff;
+  --typesense-logo-mark: #c0ff58;
+  --typesense-border-color: #303030;
+  --typesense-muted: #b3b3b3;
+
+  --typesense-surface: rgb(16, 16, 18);
+  --typesense-surface-dim: #141414;
+  --typesense-surface-line: #1f1f1f;
+
+  --docsearch-primary-color: var(--typesense-primary-dark);
+  --docsearch-highlight-color: var(--typesense-primary-dark);
+  --docsearch-focus-color: var(--typesense-primary-dark);
+  --docsearch-logo-color: var(--typesense-primary-dark);
+
+  --docsearch-text-color: #f9f9f9;
+
+  --docsearch-soft-primary-color: rgba(192, 255, 88, 0.08);
+  --docsearch-hit-highlight-color: rgba(192, 255, 88, 0.16);
+
+  --docsearch-searchbox-background: var(--typesense-surface);
+  --docsearch-dropdown-menu-background: var(--typesense-surface-dim);
+  --docsearch-dropdown-menu-item-hover-background: var(--typesense-surface-line);
+
+  --docsearch-hit-background: #191919;
+
+  --docsearch-container-background: rgba(0, 0, 0, 0.45);
+  --docsearch-modal-background-gradient: linear-gradient(
+    rgba(255, 255, 255, 0.03) 30%,
+    rgba(95, 120, 42, 0.16)
+  );
+  --docsearch-modal-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.04),
+    0 24px 32px -12px hsla(91, 76%, 20%, 0.2),
+    0 0 0 0.75px rgba(192, 255, 88, 0.09);
   --shimmer-bg: linear-gradient(
     90deg,
-    rgb(224, 227, 232) 0%,
-    var(--docsearch-muted-color) 20%,
-    var(--docsearch-muted-color) 60%,
-    rgb(224, 227, 232) 95%
+    #4d4d4d 0%,
+    rgba(150, 230, 80, 0.7) 35%,
+    var(--typesense-brand) 50%,
+    rgba(150, 230, 80, 0.4) 65%,
+    var(--typesense-brand) 100%
   );
-  --docsearch-dropdown-menu-background: var(--docsearch-hit-background);
-  --docsearch-dropdown-menu-item-hover-background: var(--docsearch-modal-background);
-  --docsearch-search-button-background: var(--docsearch-modal-background);
-  --docsearch-search-button-text-color: var(--docsearch-text-color);
+
 }

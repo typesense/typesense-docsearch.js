@@ -1,12 +1,13 @@
 /* eslint-disable react/react-in-jsx-scope */
+import { useEffect, useState, type JSX } from 'react';
 import { version } from 'typesense-docsearch-react';
 import { DocSearchSidepanel } from 'typesense-docsearch-react/sidepanel';
-import type { JSX } from 'react';
 
 import './App.css';
 import 'typesense-docsearch-css/dist/style.css';
 import 'typesense-docsearch-css/dist/sidepanel.css';
 
+import { defaultAskAi, defaultCollection, typesenseServerConfig } from './config';
 import { AgentStudioExample } from './examples/agent-studio';
 import Basic from './examples/basic';
 import BasicAskAI from './examples/basic-askai';
@@ -18,15 +19,25 @@ import MultiIndex from './examples/multi-index';
 import WHitComponent from './examples/w-hit-component';
 import WTransformItems from './examples/w-hit-transformItems';
 import WResultsFooter from './examples/w-results-footer';
-import { defaultAskAi, defaultCollection, typesenseServerConfig } from './config';
 
 function App(): JSX.Element {
+  const [dark, setDark] = useState(() => {
+    return document.documentElement.classList.contains('dark');
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', dark);
+  }, [dark]);
+
   return (
     <div className="body-container">
       <div className="app-container">
         <header className="app-header">
           <h1 className="app-title">DocSearch v{version}</h1>
           <p className="app-subtitle">Experience the power of intelligent documentation search</p>
+          <button type="button" onClick={() => setDark(!dark)}>
+            {dark ? '☀️ Light' : '🌙 Dark'}
+          </button>{' '}
         </header>
 
         <main>
@@ -114,7 +125,7 @@ function App(): JSX.Element {
         typesenseCollectionName={defaultCollection}
         askAi={defaultAskAi}
         panel={{
-          suggestedQuestions: ["test suggestion"],
+          suggestedQuestions: ['test suggestion'],
         }}
       />
     </div>
