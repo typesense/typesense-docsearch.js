@@ -78,17 +78,6 @@
     var(--ease-smooth) 30ms both;
 }
 
-.DocSearch-Container--closing {
-  animation: docsearch-backdrop-out var(--docsearch-backdrop-exit-dur)
-    var(--ease-fast) 40ms both;
-  pointer-events: none;
-}
-
-.DocSearch-Container--closing .DocSearch-Modal {
-  animation: docsearch-modal-out var(--docsearch-modal-exit-dur)
-    var(--ease-fast) both;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .DocSearch-Container,
   .DocSearch-Modal,

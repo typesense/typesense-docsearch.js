@@ -108,9 +108,7 @@
   );
 
   --docsearch-backdrop-enter-dur: 230ms;
-  --docsearch-backdrop-exit-dur: 130ms;
   --docsearch-modal-enter-dur: 200ms;
-  --docsearch-modal-exit-dur: 140ms;
 
   --docsearch-dropdown-menu-background: var(--typesense-surface);
   --docsearch-dropdown-menu-item-hover-background: var(--typesense-surface-dim);
