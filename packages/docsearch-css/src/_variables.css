@@ -6,8 +6,7 @@
   /* Fallback for browsers without relative color syntax support */
   --typesense-primary: #4f8000;
   --typesense-soft-primary: #f0ffd6;
-  --typesense-primary-muted: #b7f24d; /* fallback */
-  --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 5%);
+  --typesense-primary-muted: #b7f24d;
   --typesense-primary-dark: var(--typesense-brand);
 
   --typesense-ink: #000000;
@@ -114,16 +113,9 @@
   --docsearch-dropdown-menu-item-hover-background: var(--typesense-surface-dim);
 }
 
-@supports (color: hsl(from red h s l)) {
-  :root {
-    --typesense-primary: hsl(from var(--typesense-brand) h 100% 25%);
-    --typesense-soft-primary: hsl(from var(--typesense-brand) h s 92%);
-  }
-}
 
 html.dark, html[data-theme="dark"] {
-  --typesense-primary-muted: #ade64f; /*fallback*/
-  --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 10%);
+  --typesense-primary-muted: #ade64f;
   --typesense-ink: #fff;
   --typesense-logo-text: #fff;
   --typesense-logo-mark: #c0ff58;
@@ -167,4 +159,20 @@ html.dark, html[data-theme="dark"] {
     var(--typesense-brand) 100%
   );
 
+}
+
+@supports (color: hsl(from red h s l)) {
+  :root {
+    --typesense-primary: hsl(from var(--typesense-brand) h 100% 25%);
+    --typesense-soft-primary: hsl(from var(--typesense-brand) h s 92%);
+  }
+}
+
+@supports (color: color-mix(in srgb, blue, red)) {
+  :root{
+    --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 5%);
+  }
+  html.dark, html[data-theme="dark"]{
+    --typesense-primary-muted: color-mix(in srgb, var(--typesense-brand), black 10%);
+  }
 }
