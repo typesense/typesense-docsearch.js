@@ -117,7 +117,7 @@ html[data-theme='dark'] {
   border-color: var(--docsearch-sidepanel-accent);
 }
 
-html[data-theme='dark'] .DocSearch-SidepanelButton.inline:hover {
+:where(html.dark, html[data-theme='dark']) .DocSearch-SidepanelButton.inline:hover {
   background-color: var(--docsearch-sidepanel-button-background-dark);
 }
 
@@ -539,7 +539,7 @@ html[data-theme='dark'] .DocSearch-SidepanelButton.inline:hover {
   background-color: var(--docsearch-sidepanel-button-hover-background);
 }
 
-html[data-theme='dark'] .DocSearch-Sidepanel-Prompt--stop:hover {
+:where(html.dark, html[data-theme='dark']) .DocSearch-Sidepanel-Prompt--stop:hover {
   background-color: var(--docsearch-sidepanel-button-hover-background);
 }
 
@@ -805,7 +805,7 @@ html[data-theme='dark'] .DocSearch-Sidepanel-Prompt--stop:hover {
          drop-shadow(0px 0px 5px color-mix(in srgb, var(--typesense-brand) 20%, transparent))
          drop-shadow(0px 0px 6px color-mix(in srgb, var(--typesense-brand) 70%, transparent));
 }
-:where(html.dark,html[data-theme=dark]) :is(.DocSearch-Sidepanel, .DocSearch-SidepanelButton, .DocSearch-Hit[aria-selected=true]) .DocSearch-Hit-icon-sparkles{
+:where(html.dark, html[data-theme=dark]) :is(.DocSearch-Sidepanel, .DocSearch-SidepanelButton, .DocSearch-Hit[aria-selected=true]) .DocSearch-Hit-icon-sparkles{
   filter: drop-shadow(0px 0px 4px color-mix(in srgb, var(--typesense-brand) 40%, transparent))
          drop-shadow(0px 0px 6px color-mix(in srgb, var(--typesense-brand) 60%, transparent));
 }
