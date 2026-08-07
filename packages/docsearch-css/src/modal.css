@@ -52,7 +52,6 @@
   max-width: var(--docsearch-modal-width);
   position: relative;
   padding: 8px;
-  border: 0px transparent;
 }
 .DocSearch-Modal::before {
   content: '';
@@ -61,8 +60,6 @@
 
   border-radius: var(--docsearch-border-radius);
   background: var(--docsearch-modal-background);
-
-  mask-composite: exclude;
   pointer-events: none;
 }
 
