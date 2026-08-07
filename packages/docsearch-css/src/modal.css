@@ -51,18 +51,8 @@
   margin: 60px auto auto;
   max-width: var(--docsearch-modal-width);
   position: relative;
-  padding: 8px;
+  padding: 6px;
 }
-.DocSearch-Modal::before {
-  content: '';
-  position: absolute;
-  inset: 6px;
-
-  border-radius: var(--docsearch-border-radius);
-  background: var(--docsearch-modal-background);
-  pointer-events: none;
-}
-
 
 .DocSearch-Container {
   animation: docsearch-backdrop-in var(--docsearch-backdrop-enter-dur)
@@ -107,8 +97,7 @@
     var(--docsearch-searchbox-initial-height)
   );
   margin: 0;
-  padding-block: var(--docsearch-spacing);
-  padding-inline: 16px;
+  padding: var(--docsearch-spacing);
   position: relative;
   width: 100%;
 }
@@ -279,8 +268,7 @@
 /* Modal Dropdown */
 
 .DocSearch-Dropdown {
-  z-index: 10;
-  position: relative;
+  background-color: var(--docsearch-modal-background);
   height: var(--docsearch-modal-variable-height);
   max-height: calc(
     var(--docsearch-modal-height) - var(--docsearch-spacing) -

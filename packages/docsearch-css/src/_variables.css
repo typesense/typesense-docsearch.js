@@ -26,7 +26,7 @@
   --docsearch-success-color: #c3e38f;
   --docsearch-secondary-text-color: var(--typesense-muted);
   --docsearch-background-color: var(--typesense-surface-dim);
-  --docsearch-spacing: 12px;
+  --docsearch-spacing: 14px;
   --docsearch-icon-stroke-width: 1.6;
   --docsearch-focus-color: var(--typesense-primary);
   --docsearch-highlight-color: var(--typesense-primary);
@@ -78,7 +78,7 @@
   --docsearch-key-color: var(--typesense-muted);
 
   /* footer */
-  --docsearch-footer-height: 44px;
+  --docsearch-footer-height: 48px;
   --docsearch-footer-background: var(--typesense-surface);
 
   /* animations */
