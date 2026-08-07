@@ -21,21 +21,20 @@ import WTransformItems from './examples/w-hit-transformItems';
 import WResultsFooter from './examples/w-results-footer';
 
 function App(): JSX.Element {
-  const [dark, setDark] = useState(() => {
-    return document.documentElement.classList.contains('dark');
-  });
-
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', dark);
-  }, [dark]);
-
+  const [dark, setDark] = useState(false);
   return (
     <div className="body-container">
       <div className="app-container">
         <header className="app-header">
           <h1 className="app-title">DocSearch v{version}</h1>
           <p className="app-subtitle">Experience the power of intelligent documentation search</p>
-          <button type="button" onClick={() => setDark(!dark)}>
+          <button
+            type="button"
+            onClick={() => {
+              setDark(!dark);
+              document.documentElement.classList.toggle('dark', !dark);
+            }}
+          >
             {dark ? '☀️ Light' : '🌙 Dark'}
           </button>{' '}
         </header>
