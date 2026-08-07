@@ -47,16 +47,6 @@
   --docsearch-modal-variable-height: 600px;
   --docsearch-modal-background: var(--typesense-surface);
   --docsearch-modal-background-gradient: radial-gradient(
-      ellipse 60% 60% at top left,
-      rgba(255, 255, 255, 0),
-      transparent
-    ),
-    radial-gradient(
-      ellipse 60% 60% at top right,
-      rgba(255, 255, 255, 0),
-      transparent
-    ),
-    radial-gradient(
       ellipse 200% 110% at bottom left,
       rgba(222, 255, 151, 0.2),
       transparent
