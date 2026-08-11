@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useEffect, useState, type JSX } from 'react';
+import { useState, type JSX } from 'react';
 import { version } from 'typesense-docsearch-react';
 import { DocSearchSidepanel } from 'typesense-docsearch-react/sidepanel';
 
