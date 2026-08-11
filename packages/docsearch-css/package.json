@@ -28,6 +28,14 @@
     "watch": "nodemon --watch 'src/**/*.css' --exec 'yarn build:css' --ext css"
   },
   "devDependencies": {
+    "@csstools/postcss-media-minmax": "^3.0.4",
+    "autoprefixer": "^10.5.4",
     "nodemon": "^3.1.9"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 2 versions",
+    "Firefox ESR",
+    "not dead"
+  ]
 }

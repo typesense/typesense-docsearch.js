@@ -5,6 +5,8 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const util = require('util');
 
+const mediaMinMax = require('@csstools/postcss-media-minmax');
+const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const postcss = require('postcss');
 
@@ -26,7 +28,7 @@ function build({ input, output, banner }) {
       throw error;
     }
 
-    postcss([cssnano])
+    postcss([autoprefixer, mediaMinMax(), cssnano])
       .process(css, { from: input, to: output })
       .then((result) => {
         fs.writeFile(output, [banner, result.css].join('\n'), () => true);
@@ -55,13 +57,13 @@ async function buildStyle() {
   const buttonCss = await readFile('src/button.css');
   const modalCss = await readFile('src/modal.css');
 
-  const variablesOutput = await postcss([cssnano]).process(variablesCss, {
+  const variablesOutput = await postcss([autoprefixer, mediaMinMax(), cssnano]).process(variablesCss, {
     from: undefined,
   });
-  const buttonOutput = await postcss([cssnano]).process(buttonCss, {
+  const buttonOutput = await postcss([autoprefixer, mediaMinMax(), cssnano]).process(buttonCss, {
     from: undefined,
   });
-  const modalOutput = await postcss([cssnano]).process(modalCss, {
+  const modalOutput = await postcss([autoprefixer, mediaMinMax(), cssnano]).process(modalCss, {
     from: undefined,
   });
 
@@ -83,8 +85,8 @@ async function buildSidepanel() {
   const sidepanelCss = await readFile('src/sidepanel.css');
 
   const [variablesOutput, sidepanelOutput] = await Promise.all([
-    postcss([cssnano]).process(variablesCss, { from: undefined }),
-    postcss([cssnano]).process(sidepanelCss, { from: undefined }),
+    postcss([autoprefixer, mediaMinMax(), cssnano]).process(variablesCss, { from: undefined }),
+    postcss([autoprefixer, mediaMinMax(), cssnano]).process(sidepanelCss, { from: undefined }),
   ]);
 
   fs.writeFile(
