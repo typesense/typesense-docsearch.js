@@ -9,8 +9,11 @@ import type {
   InitialAskAiMessage,
 } from 'typesense-docsearch-core';
 
-import type { DocSearchProps } from './DocSearch';
-import { DocSearchAskAiModal } from './DocSearchAskAiModal';
+import type { DocSearchProps, DocSearchTranslations } from './DocSearch';
+import {
+  DocSearchAskAiModal,
+  type DocSearchAskAiModalTranslations,
+} from './DocSearchAskAiModal';
 import { DocSearchButton } from './DocSearchButton';
 import type { TypesenseAskAiSearchParameters } from './types/AskiAi';
 
@@ -48,7 +51,12 @@ export interface DocSearchAskAi {
   suggestedQuestions?: string[];
 }
 
-export interface DocSearchAIProps extends DocSearchProps {
+export type DocSearchAITranslations = Partial<{
+  button: DocSearchTranslations['button'];
+  modal: DocSearchAskAiModalTranslations;
+}>;
+
+export interface DocSearchAIProps extends Omit<DocSearchProps, 'translations'> {
   /**
    * Configuration to enable ask ai mode. Pass a bare Typesense conversation
    * model id or a full config object.
@@ -63,6 +71,7 @@ export interface DocSearchAIProps extends DocSearchProps {
    * `typesense-docsearch-sidepanel-js`) without flicker.
    */
   interceptAskAiEvent?: (initialMessage: InitialAskAiMessage) => boolean | void;
+  translations?: DocSearchAITranslations;
 }
 
 function DocSearchAIComponent(
