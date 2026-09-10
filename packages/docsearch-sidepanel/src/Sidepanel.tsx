@@ -2,10 +2,8 @@ import React from 'react';
 import type { JSX } from 'react';
 import { createPortal } from 'react-dom';
 import { useDocSearch } from 'typesense-docsearch-core';
-import {
-  Sidepanel as SidepanelComp,
-  type DocSearchSidepanelProps,
-} from 'typesense-docsearch-react/sidepanel';
+import type { DocSearchSidepanelProps } from 'typesense-docsearch-react/sidepanel';
+import { Sidepanel as SidepanelComp } from 'typesense-docsearch-react/sidepanelPanel';
 
 export type SidepanelProps = DocSearchSidepanelProps['panel'] &
   Omit<DocSearchSidepanelProps, 'button' | 'panel' | 'theme'>;
