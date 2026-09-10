@@ -124,6 +124,10 @@ export type SidepanelProps = {
 
 type Props = Omit<DocSearchSidepanelProps, 'button' | 'panel'> &
   SidepanelProps & {
+    /**
+     * Keep mounted when closed to preserve the conversation. Closed content is
+     * inert.
+     */
     isOpen?: boolean;
     onOpen: () => void;
     onClose: () => void;
@@ -156,6 +160,15 @@ function SidepanelInner(
   const sidepanelContainerRef = React.useRef<HTMLDivElement>(null);
   const promptInputRef = React.useRef<HTMLTextAreaElement>(null);
   const isMobile = useIsMobile();
+
+  const setSidepanelContainer = React.useCallback(
+    (node: HTMLDivElement | null): void => {
+      sidepanelContainerRef.current = node;
+      // React versions before 19 don't support the boolean inert prop.
+      node?.toggleAttribute('inert', !isOpen);
+    },
+    [isOpen]
+  );
 
   const expectedWidth = useSidepanelWidth({
     isExpanded,
@@ -371,7 +384,7 @@ function SidepanelInner(
       }
       role="dialog"
       tabIndex={-1}
-      ref={sidepanelContainerRef}
+      ref={setSidepanelContainer}
     >
       <aside
         id="docsearch-sidepanel"
