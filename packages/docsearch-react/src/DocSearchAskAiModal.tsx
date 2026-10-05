@@ -511,12 +511,12 @@ export function DocSearchAskAiModal({
     const wasAskAiActive = previousIsAskAiActive.current;
     previousIsAskAiActive.current = isAskAiActive;
 
-    if (!isAskAiActive) {
+    if (wasAskAiActive && !isAskAiActive) {
       autocomplete.refresh();
 
       // Reset only after leaving Ask AI, not when its first message arrives
       // before the parent toggle update commits.
-      if (wasAskAiActive && hasCurrentMessages) {
+      if (hasCurrentMessages) {
         startNewConversation();
       }
     }
