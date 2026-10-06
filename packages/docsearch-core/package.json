@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-core",
   "description": "Core package for DocSearch, customized to work with Typesense",
-  "version": "5.0.2-0",
+  "version": "5.0.2-1",
   "license": "MIT",
   "type": "module",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",

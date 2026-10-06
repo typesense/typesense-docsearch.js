@@ -1,5 +1,13 @@
 # typesense-docsearch-react
 
+## 5.0.2-1
+
+### Patch Changes
+
+- Bump the Typesense client and simplify search client caching, and avoid redundant Ask AI refreshes.
+  - typesense-docsearch-css@5.0.2-1
+  - typesense-docsearch-core@5.0.2-1
+
 ## 5.0.2
 
 ### Patch Changes
