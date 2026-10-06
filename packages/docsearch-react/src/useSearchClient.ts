@@ -67,16 +67,10 @@ export function useSearchClient(
           return { results: [] };
         }
 
-        let response: { results: Array<TypesenseSearchResponse<T>> };
-        try {
-          response = await typesense.multiSearch.perform<[T]>({
-            searches: [request],
-          });
-        } catch (error) {
-          // The SDK caches rejected promises, allow the next search to retry.
-          typesense.multiSearch.clearCache();
-          throw error;
-        }
+        const response = await typesense.multiSearch.perform<[T]>({
+          searches: [request],
+        });
+
         const typesenseSearchResponseAdapter =
           new TypesenseSearchResponseAdapter(
             response.results[0],

@@ -56,7 +56,7 @@
     "ai": "^5.0.30",
     "algoliasearch": "^5.28.0",
     "marked": "^16.3.0",
-    "typesense": "3.0.7-1",
+    "typesense": "3.1.1",
     "typesense-docsearch-core": "5.0.2-0",
     "typesense-docsearch-css": "5.0.2-0",
     "typesense-instantsearch-adapter": "3.0.0",
