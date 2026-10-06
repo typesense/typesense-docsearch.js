@@ -49,7 +49,12 @@ export function useSearchClient(
   typesenseServerConfig: TypesenseConfigurationOptions
 ): TypesenseDocsearchTransformClient {
   const searchClient = React.useMemo(() => {
-    const typesense = new TypesenseSearchClient(typesenseServerConfig);
+    const typesense = new TypesenseSearchClient({
+      ...typesenseServerConfig,
+      // Autocomplete refreshes on focus. Cache identical requests and in-flight searches by default.
+      cacheSearchResultsForSeconds:
+        typesenseServerConfig.cacheSearchResultsForSeconds ?? Infinity,
+    });
 
     const client: TypesenseDocsearchTransformClient = {
       search: async <T extends DocumentSchema>({
@@ -65,6 +70,7 @@ export function useSearchClient(
         const response = await typesense.multiSearch.perform<[T]>({
           searches: [request],
         });
+
         const typesenseSearchResponseAdapter =
           new TypesenseSearchResponseAdapter(
             response.results[0],
