@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-react",
   "description": "React package for DocSearch, customized to work with Typesense",
-  "version": "5.0.2-0",
+  "version": "5.0.2-1",
   "license": "MIT",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
   "repository": "typesense/docsearch.js",
@@ -57,8 +57,8 @@
     "algoliasearch": "^5.28.0",
     "marked": "^16.3.0",
     "typesense": "3.1.1",
-    "typesense-docsearch-core": "5.0.2-0",
-    "typesense-docsearch-css": "5.0.2-0",
+    "typesense-docsearch-core": "5.0.2-1",
+    "typesense-docsearch-css": "5.0.2-1",
     "typesense-instantsearch-adapter": "3.0.0",
     "zod": "^4.1.8"
   },
@@ -69,7 +69,7 @@
     "preact": "11.0.0-beta.0",
     "tsdown": "0.22.7",
     "typescript": "5.7.3",
-    "typesense-docsearch-core": "5.0.2-0",
+    "typesense-docsearch-core": "5.0.2-1",
     "vitest": "3.0.2"
   },
   "peerDependencies": {

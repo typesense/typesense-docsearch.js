@@ -1,7 +1,7 @@
 {
   "name": "typesense-docsearch-sidepanel",
   "description": "Sidepanel package for DocSearch, customized to work with Typesense",
-  "version": "5.0.2-0",
+  "version": "5.0.2-1",
   "license": "MIT",
   "homepage": "https://typesense.org/docs/latest/guide/docsearch.html",
   "repository": "typesense/docsearch.js",
@@ -40,9 +40,9 @@
     "watch": "tsdown --watch"
   },
   "dependencies": {
-    "typesense-docsearch-core": "5.0.2-0",
-    "typesense-docsearch-css": "5.0.2-0",
-    "typesense-docsearch-react": "5.0.2-0"
+    "typesense-docsearch-core": "5.0.2-1",
+    "typesense-docsearch-css": "5.0.2-1",
+    "typesense-docsearch-react": "5.0.2-1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.6.3",

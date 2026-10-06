@@ -1,5 +1,13 @@
 # typesense-docsearch-modal
 
+## 5.0.2-1
+
+### Patch Changes
+
+- Updated dependencies
+  - typesense-docsearch-react@5.0.2-1
+  - typesense-docsearch-core@5.0.2-1
+
 ## 5.0.2
 
 ### Patch Changes
