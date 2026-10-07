@@ -60,8 +60,6 @@
   --docsearch-searchbox-initial-height: 56px;
   --docsearch-searchbox-background: var(--typesense-surface-dim);
   --docsearch-searchbox-focus-background: var(--typesense-surface);
-  --docsearch-actions-width: 22px;
-  --docsearch-actions-height: 22px;
 
   /* hit */
   --docsearch-hit-height: 56px;

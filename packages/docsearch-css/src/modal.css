@@ -508,8 +508,6 @@
 }
 
 .DocSearch-Actions {
-  width: var(--docsearch-actions-width);
-  height: var(--docsearch-actions-height);
   display: flex;
   align-items: center;
   justify-content: flex-end;
