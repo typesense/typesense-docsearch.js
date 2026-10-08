@@ -1,5 +1,11 @@
 # typesense-docsearch-css
 
+## 5.0.2-2
+
+### Patch Changes
+
+- d7a7937: Prevent the "Clear" button from overlapping the search input.
+
 ## 5.0.2-1
 
 ## 5.0.2
