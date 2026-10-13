@@ -85,11 +85,12 @@ export function SearchBoxForm({
     >
       {leadingElement ||
         (isKeywordSearchLoading ? (
-          <div className="DocSearch-LoadingIndicator">
+          <div key="search-indicator" className="DocSearch-LoadingIndicator">
             <LoadingIcon />
           </div>
         ) : (
           <label
+            key="search-indicator"
             className="DocSearch-MagnifierLabel"
             {...autocomplete.getLabelProps()}
           >
