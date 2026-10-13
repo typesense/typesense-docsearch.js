@@ -1,5 +1,7 @@
 # typesense-docsearch-core
 
+## 5.0.2-3
+
 ## 5.0.2-2
 
 ## 5.0.2-1
