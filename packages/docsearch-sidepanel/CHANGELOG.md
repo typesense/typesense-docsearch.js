@@ -1,5 +1,14 @@
 # typesense-docsearch-sidepanel
 
+## 5.0.2-3
+
+### Patch Changes
+
+- Updated dependencies:
+  - typesense-docsearch-core@5.0.2-3
+  - typesense-docsearch-css@5.0.2-3
+  - typesense-docsearch-react@5.0.2-3
+
 ## 5.0.2-2
 
 ### Patch Changes

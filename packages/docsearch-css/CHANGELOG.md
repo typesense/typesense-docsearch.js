@@ -1,5 +1,7 @@
 # typesense-docsearch-css
 
+## 5.0.2-3
+
 ## 5.0.2-2
 
 ### Patch Changes

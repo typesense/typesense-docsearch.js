@@ -1,5 +1,14 @@
 # typesense-docsearch-react
 
+## 5.0.2-3
+
+### Patch Changes
+
+- Preserve search input focus when the loading indicator changes in the Preact-based JavaScript bundles ([#29](https://github.com/typesense/typesense-docsearch.js/pull/29)).
+- Updated dependencies:
+  - typesense-docsearch-core@5.0.2-3
+  - typesense-docsearch-css@5.0.2-3
+
 ## 5.0.2-2
 
 ### Patch Changes
