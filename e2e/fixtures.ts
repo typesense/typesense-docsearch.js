@@ -214,10 +214,29 @@ export const test = base.extend<{
   ],
 });
 
+/**
+ * Resolves once finite CSS animations and transitions settle. axe reads
+ * mid-animation opacity as low contrast, so scans wait for the modal's enter
+ * animation.
+ */
+async function waitForAnimations(page: Page): Promise<void> {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter(
+          (animation) =>
+            animation.effect?.getComputedTiming().endTime !== Infinity
+        )
+        .map((animation) => animation.finished.catch(() => undefined))
+    )
+  );
+}
+
 type AxeScanResults = Awaited<ReturnType<AxeBuilder['analyze']>>;
 
 function gatherA11yViolations(violations: AxeScanResults['violations']) {
   return violations.flatMap((v) => v.nodes);
 }
 
-export { expect, gatherA11yViolations };
+export { expect, gatherA11yViolations, waitForAnimations };

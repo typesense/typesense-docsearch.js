@@ -1,4 +1,10 @@
-import { test, expect, gatherA11yViolations } from './fixtures';
+import {
+  test,
+  expect,
+  gatherA11yViolations,
+  waitForAnimations,
+  ASK_AI_ANSWER,
+} from './fixtures';
 
 test.describe('a11y > Modal', () => {
   test.beforeEach(async ({ docSearch }) => {
@@ -6,8 +12,9 @@ test.describe('a11y > Modal', () => {
     await docSearch.waitForLoad();
   });
 
-  test('Smoke test', async ({ docSearch, axe }, testInfo) => {
+  test('Smoke test', async ({ docSearch, axe, page }, testInfo) => {
     await docSearch.openModal();
+    await waitForAnimations(page);
 
     const scanResults = await axe().include('.DocSearch-Container').analyze();
 
@@ -16,18 +23,19 @@ test.describe('a11y > Modal', () => {
       contentType: 'application/json',
     });
 
-    // 6 is the current number of reported violations
+    // 1 is the current number of reported violations (nested-interactive)
     expect(
       gatherA11yViolations(scanResults.violations).length
-    ).toBeLessThanOrEqual(6);
+    ).toBeLessThanOrEqual(1);
   });
 
-  test('Search results', async ({ docSearch, axe }, testInfo) => {
+  test('Search results', async ({ docSearch, axe, page }, testInfo) => {
     await docSearch.openModal();
 
     await docSearch.typeQueryMatching();
 
     await expect(docSearch.hits).toBeVisible();
+    await waitForAnimations(page);
 
     const scanResults = await axe()
       .include('#docsearch-hits_docsearch_0-list')
@@ -38,21 +46,22 @@ test.describe('a11y > Modal', () => {
       contentType: 'application/json',
     });
 
-    // 24 is the current number of reported violations
+    // 4 is the current number of reported violations (nested-interactive)
     expect(
       gatherA11yViolations(scanResults.violations).length
-    ).toBeLessThanOrEqual(24);
+    ).toBeLessThanOrEqual(4);
   });
 });
 
 test.describe('a11y > Sidepanel', () => {
   test.beforeEach(async ({ docSearch, sidepanel }) => {
-    await docSearch.goto();
+    await docSearch.goto('/hybrid');
     await sidepanel.waitForLoad();
   });
 
-  test('Smoke test', async ({ sidepanel, axe }, testInfo) => {
+  test('Smoke test', async ({ sidepanel, axe, page }, testInfo) => {
     await sidepanel.openSidepanel();
+    await waitForAnimations(page);
 
     const scanResults = await axe()
       .include('.DocSearch-Sidepanel-Container')
@@ -63,31 +72,15 @@ test.describe('a11y > Sidepanel', () => {
       contentType: 'application/json',
     });
 
-    // 4 is the current number of reported violations
-    expect(
-      gatherA11yViolations(scanResults.violations).length
-    ).toBeLessThanOrEqual(4);
+    expect(gatherA11yViolations(scanResults.violations)).toHaveLength(0);
   });
 
   for (const closeMethod of ['Escape', 'close button'] as const) {
     test(`Closed panel is inaccessible and preserves conversation after ${closeMethod}`, async ({
       sidepanel,
       page,
+      askAiMock,
     }) => {
-      await page.route('**/agents/*/completions?*', (route) =>
-        route.fulfill({
-          contentType: 'text/event-stream',
-          body: [
-            { type: 'text-start', id: 'answer' },
-            { type: 'text-delta', id: 'answer', delta: 'Saved answer' },
-            { type: 'text-end', id: 'answer' },
-            { type: 'finish' },
-          ]
-            .map((event) => `data: ${JSON.stringify(event)}\n\n`)
-            .join(''),
-        })
-      );
-
       // Place focus sentinels next to the mounted panel to test both Tab directions.
       await sidepanel.sidepanel.evaluate((panel) => {
         for (const position of ['beforebegin', 'afterend'] as const) {
@@ -128,7 +121,8 @@ test.describe('a11y > Sidepanel', () => {
       await expect(prompt).toBeFocused();
       await prompt.fill('My question');
       await prompt.press('Enter');
-      await expect(sidepanel.sidepanel.getByText('Saved answer')).toBeVisible();
+      await expect(sidepanel.sidepanel.getByText(ASK_AI_ANSWER)).toBeVisible();
+      expect(askAiMock.requests).toHaveLength(1);
       await prompt.fill('A follow-up question');
 
       if (closeMethod === 'Escape') {
@@ -142,7 +136,7 @@ test.describe('a11y > Sidepanel', () => {
       await expect(prompt).toBeFocused();
       await expect(prompt).toHaveValue('A follow-up question');
       await expect(sidepanel.sidepanel.getByText('My question')).toBeVisible();
-      await expect(sidepanel.sidepanel.getByText('Saved answer')).toBeVisible();
+      await expect(sidepanel.sidepanel.getByText(ASK_AI_ANSWER)).toBeVisible();
       expect(
         JSON.stringify(
           await page.accessibility.snapshot({
@@ -150,7 +144,7 @@ test.describe('a11y > Sidepanel', () => {
             interestingOnly: false,
           })
         )
-      ).toContain('Saved answer');
+      ).toContain(ASK_AI_ANSWER);
     });
   }
 });
