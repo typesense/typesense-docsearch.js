@@ -16,6 +16,7 @@ import {
   typesenseServerConfig,
 } from './config';
 import { getDocPageRecords } from './docs';
+import { ROUTES, getRouteTitle } from './routes';
 
 type Theme = 'dark' | 'light';
 
@@ -65,11 +66,16 @@ function Search({ path, theme }: { path: string; theme: Theme }): JSX.Element {
   );
 }
 
-function DocPage({ path }: { path: string }): JSX.Element {
+function Page({ path }: { path: string }): JSX.Element {
+  const routeTitle = getRouteTitle(path);
   const records = getDocPageRecords(path);
 
+  if (routeTitle) {
+    return <h1>{routeTitle}</h1>;
+  }
+
   if (records.length === 0) {
-    return <h1>Home</h1>;
+    return <h1>Not found</h1>;
   }
 
   return (
@@ -105,7 +111,17 @@ function App(): JSX.Element {
   return (
     <>
       <header>
-        <a href="/">DocSearch e2e</a>
+        <nav>
+          {ROUTES.map((route) => (
+            <a
+              key={route.path}
+              href={route.path}
+              aria-current={route.path === path ? 'page' : undefined}
+            >
+              {route.path}
+            </a>
+          ))}
+        </nav>
         <Search path={path} theme={theme} />
         <button
           type="button"
@@ -116,7 +132,7 @@ function App(): JSX.Element {
         </button>
       </header>
       <main>
-        <DocPage path={path} />
+        <Page path={path} />
       </main>
     </>
   );

@@ -4,6 +4,7 @@ import sidepanel, {
 import docsearch, { type DocSearchInstance } from 'typesense-docsearch.js';
 
 import { askAi, collectionName, typesenseServerConfig } from './config';
+import { ROUTES, getRouteTitle } from './routes';
 
 declare global {
   interface Window {
@@ -12,13 +13,18 @@ declare global {
   }
 }
 
+const nav = ROUTES.map(
+  (route) =>
+    `<a href="${route.path}"${route.path === '/js' ? ' aria-current="page"' : ''}>${route.path}</a>`
+).join('');
+
 document.getElementById('root')!.innerHTML = `
   <header>
-    <a href="/">DocSearch e2e</a>
+    <nav>${nav}</nav>
     <div id="docsearch"></div>
     <div id="docsearch-sidepanel"></div>
   </header>
-  <main><h1>Vanilla JS</h1></main>
+  <main><h1>${getRouteTitle('/js')}</h1></main>
 `;
 
 // Same wiring as examples/demo-js: Ask AI from the modal opens the Sidepanel.
