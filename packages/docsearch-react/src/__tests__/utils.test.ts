@@ -103,6 +103,12 @@ describe('utils', () => {
         })
       ).toBe('year:=[2024,1.5] && beta:=[true,false] && version:=[`v2`,`2.x`]');
     });
+
+    it('quotes empty strings and leaves negative numbers bare', () => {
+      expect(createFilterBy({ offset: ['-5'], label: [''] })).toBe(
+        'offset:=[-5] && label:=[``]'
+      );
+    });
   });
 
   describe('extractLinksFromText', () => {
