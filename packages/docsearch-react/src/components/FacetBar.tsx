@@ -10,7 +10,6 @@ import type {
 import { getFacetLabel } from '../utils/facets';
 
 import { Chip } from './ui/Chip';
-import { Collapsible } from './ui/Collapsible';
 import { Menu } from './ui/Menu';
 
 export type FacetBarTranslations = Partial<{
@@ -58,6 +57,7 @@ export interface FacetBarFacet extends DocSearchFacet {
 }
 
 const EMPTY_SELECTION: string[] = [];
+const EMPTY_CHIPS: Array<[key: string, value: string]> = [];
 
 interface FacetValueItemProps {
   facetKey: string;
@@ -310,12 +310,42 @@ export const FacetBar = React.memo(function FacetBar({
   );
 
   // Keep rendering the last chips while the bar collapses after the final
-  // selection is cleared, so it closes with its content rather than empty.
+  // selection is cleared, so it closes with its content rather than empty,
+  // and unmount it once the collapse transition has finished.
   const hasSelections = selectionsToDisplay.length > 0;
   const [chipsToRender, setChipsToRender] = React.useState(selectionsToDisplay);
   if (hasSelections && chipsToRender !== selectionsToDisplay) {
     setChipsToRender(selectionsToDisplay);
   }
+  const collapseRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const collapse = collapseRef.current;
+
+    if (hasSelections || !collapse) return undefined;
+
+    // Nothing to wait for without transitions (reduced motion, jsdom).
+    const animations = collapse.getAnimations?.() ?? [];
+
+    if (animations.length === 0) {
+      setChipsToRender(EMPTY_CHIPS);
+      return undefined;
+    }
+
+    let cancelled = false;
+
+    Promise.all(animations.map((animation) => animation.finished)).then(
+      () => {
+        if (!cancelled) setChipsToRender(EMPTY_CHIPS);
+      },
+      // A new selection reversed the collapse before it finished.
+      () => {}
+    );
+
+    return (): void => {
+      cancelled = true;
+    };
+  }, [hasSelections]);
 
   if (facets.length === 0) {
     return null;
@@ -340,33 +370,39 @@ export const FacetBar = React.memo(function FacetBar({
           />
         ))}
       </div>
-      <Collapsible open={hasSelections}>
-        <Collapsible.Panel>
-          <div
-            className="DocSearch-FacetSelectionBar"
-            role="group"
-            aria-label={selectedFacetsAriaLabel}
-          >
-            {chipsToRender.map(([key, value]) => (
-              <SelectedFacetChip
-                key={`${key}:${value}`}
-                facetKey={key}
-                facetLabel={facetLabels.get(key) ?? key}
-                value={value}
-                dismissAriaLabel={clearFacetAriaLabel}
-                onDismiss={handleDismissFacet}
-              />
-            ))}
-            <button
-              type="button"
-              className="DocSearch-FacetSelectionBar-Action"
-              onClick={handleClearAll}
+      {chipsToRender.length > 0 && (
+        <div
+          ref={collapseRef}
+          className="DocSearch-FacetSelectionBar-Collapse"
+          data-closed={hasSelections ? undefined : ''}
+        >
+          <div>
+            <div
+              className="DocSearch-FacetSelectionBar"
+              role="group"
+              aria-label={selectedFacetsAriaLabel}
             >
-              {clearAllLabel}
-            </button>
+              {chipsToRender.map(([key, value]) => (
+                <SelectedFacetChip
+                  key={`${key}:${value}`}
+                  facetKey={key}
+                  facetLabel={facetLabels.get(key) ?? key}
+                  value={value}
+                  dismissAriaLabel={clearFacetAriaLabel}
+                  onDismiss={handleDismissFacet}
+                />
+              ))}
+              <button
+                type="button"
+                className="DocSearch-FacetSelectionBar-Action"
+                onClick={handleClearAll}
+              >
+                {clearAllLabel}
+              </button>
+            </div>
           </div>
-        </Collapsible.Panel>
-      </Collapsible>
+        </div>
+      )}
     </>
   );
 });
