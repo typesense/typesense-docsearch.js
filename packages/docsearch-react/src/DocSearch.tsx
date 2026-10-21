@@ -65,7 +65,11 @@ export interface DocSearchProps {
   typesenseCollectionName: string;
   /** Typesense server configuration for the client. */
   typesenseServerConfig: TypesenseConfigurationOptions;
-  /** Additional Typesense search parameters to merge into each query. */
+  /**
+   * Additional Typesense search parameters to merge into each query. A
+   * `filter_by` here is replaced by the FacetBar's filter while any facet value
+   * is selected.
+   */
   typesenseSearchParameters?: TypesenseSearchParams<
     Record<string, unknown>,
     string
