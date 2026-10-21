@@ -7,12 +7,17 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? 'html' : 'list',
+  // Starts (or reuses) a Typesense container on port 8109 and seeds it.
+  // Not a `webServer`: Playwright SIGKILLs those, which would orphan the
+  // container.
+  globalSetup: './e2e/setup/global-setup.ts',
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
   },
+  // Serves e2e/app against the built packages (`bun run build` first).
   webServer: {
-    command: 'bun run website:test',
+    command: 'bun run e2e:app',
     reuseExistingServer: !process.env.CI,
     url: 'http://localhost:3000',
   },

@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "packages/*",
-      "examples/*"
+      "examples/*",
+      "e2e/app"
     ],
     "catalogs": {
       "dev": {
@@ -28,6 +29,7 @@
     "build:stage:react": "bun run build:pkg:react",
     "build:stage:consumers": "bun run --parallel build:pkg:js build:pkg:sidepanel build:pkg:sidepanel-js build:pkg:modal",
     "build:examples": "bun --filter './examples/*' build",
+    "e2e:app": "bun --filter typesense-docsearch-e2e-app dev",
     "fmt": "oxfmt --config ./.oxfmtrc.json .",
     "pw:clean": "rm -rf playwright-report test-results",
     "pw:run": "playwright test",

@@ -19,6 +19,7 @@
   "updateInternalDependencies": "patch",
   "ignore": [
     "@docsearch/react-example",
-    "@docsearch/js-example"
+    "@docsearch/js-example",
+    "typesense-docsearch-e2e-app"
   ]
 }
