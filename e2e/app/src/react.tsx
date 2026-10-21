@@ -8,7 +8,13 @@ import {
 import { DocSearch, DocSearchAI } from 'typesense-docsearch-react';
 import { Sidepanel, SidepanelButton } from 'typesense-docsearch-sidepanel';
 
-import { askAi, collectionName, facets, typesenseServerConfig } from './config';
+import {
+  askAi,
+  collectionName,
+  facets,
+  typesenseSearchParameters,
+  typesenseServerConfig,
+} from './config';
 import { getDocPageRecords } from './docs';
 
 type Theme = 'dark' | 'light';
@@ -21,6 +27,7 @@ function Search({ path, theme }: { path: string; theme: Theme }): JSX.Element {
       <DocSearch
         typesenseCollectionName={collectionName}
         typesenseServerConfig={typesenseServerConfig}
+        typesenseSearchParameters={typesenseSearchParameters}
         facets={facets}
         theme={theme}
       />
@@ -50,6 +57,7 @@ function Search({ path, theme }: { path: string; theme: Theme }): JSX.Element {
     <DocSearchAI
       typesenseCollectionName={collectionName}
       typesenseServerConfig={typesenseServerConfig}
+      typesenseSearchParameters={typesenseSearchParameters}
       askAi={askAi}
       facets={facets}
       theme={theme}

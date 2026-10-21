@@ -11,11 +11,18 @@ export const typesenseServerConfig = {
   ],
 };
 
+const searchParams = new URLSearchParams(window.location.search);
+
 // `?collection=missing` points the widget at a collection that doesn't exist,
 // for the error screen test.
 export const collectionName =
-  new URLSearchParams(window.location.search).get('collection') ??
-  TYPESENSE_COLLECTION;
+  searchParams.get('collection') ?? TYPESENSE_COLLECTION;
+
+// `?filter_by=…` sets an explicit `typesenseSearchParameters.filter_by`.
+const filterBy = searchParams.get('filter_by');
+export const typesenseSearchParameters = filterBy
+  ? { filter_by: filterBy }
+  : undefined;
 
 // Ask AI streams are faked in the specs (`askAiMock` fixture), so the model id
 // never reaches a real Typesense conversation model.
