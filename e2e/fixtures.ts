@@ -121,15 +121,30 @@ export class DocSearchPage {
     await this.page.locator('#docsearch-askAI-item-0').click();
   }
 
-  /** Picks `value` from the facet menu labelled `facetLabel`. */
-  async selectFacet(facetLabel: string, value: string): Promise<void> {
+  /**
+   * Toggles each of `values` in the facet menu labelled `facetLabel`, then
+   * closes the menu. Checkbox items keep the menu open, so this also checks
+   * that Escape closes only the menu.
+   */
+  async selectFacetValues(facetLabel: string, values: string[]): Promise<void> {
     await this.modal
       .locator('.DocSearch-FacetBar')
       .getByRole('button', { name: facetLabel, exact: true })
       .click();
-    await this.page
-      .getByRole('menuitemradio', { name: value, exact: true })
-      .click();
+    const menu = this.page.getByRole('menu');
+    for (const value of values) {
+      await menu
+        .getByRole('menuitemcheckbox', { name: value, exact: true })
+        .click();
+    }
+    await this.page.keyboard.press('Escape');
+    await expect(menu).toBeHidden();
+    await expect(this.modal).toBeVisible();
+  }
+
+  /** Picks `value` from the facet menu labelled `facetLabel`. */
+  async selectFacet(facetLabel: string, value: string): Promise<void> {
+    await this.selectFacetValues(facetLabel, [value]);
   }
 }
 
