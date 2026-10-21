@@ -39,6 +39,8 @@ export default defineConfig([
       useTheme: 'src/useTheme.tsx',
       version: 'src/version.ts',
       sidepanel: 'src/Sidepanel.tsx',
+      sidepanelPanel: 'src/Sidepanel/Sidepanel.tsx',
+      sidepanelButton: 'src/Sidepanel/SidepanelButton.tsx',
     },
     ...sharedConfig,
     dts: true,
@@ -64,10 +66,8 @@ export default defineConfig([
     banner: getBundleBanner(pkg),
     deps: {
       alwaysBundle: [
-        /^@ai-sdk\/react/,
         /^@algolia\/autocomplete-core/,
         /^@base-ui\/react/,
-        /^ai(?:\/|$)/,
         /^algoliasearch/,
         /^marked(?:\/|$)/,
         /^zod(?:\/|$)/,

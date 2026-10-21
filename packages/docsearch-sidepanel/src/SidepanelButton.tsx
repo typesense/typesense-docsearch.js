@@ -2,8 +2,8 @@ import React from 'react';
 import type { JSX } from 'react';
 import { createPortal } from 'react-dom';
 import { useDocSearch } from 'typesense-docsearch-core';
-import type { SidepanelButtonProps as ButtonProps } from 'typesense-docsearch-react/sidepanel';
-import { SidepanelButton as Button } from 'typesense-docsearch-react/sidepanel';
+import type { SidepanelButtonProps as ButtonProps } from 'typesense-docsearch-react/sidepanelButton';
+import { SidepanelButton as Button } from 'typesense-docsearch-react/sidepanelButton';
 
 export type SidepanelButtonProps = ButtonProps & {
   portalcontainer?: DocumentFragment | Element | null;
