@@ -183,10 +183,10 @@ export async function buildTypesenseQuerySources({
       sort_by: 'item_priority:desc',
       snippet_threshold: 8,
       highlight_affix_num_tokens: 4,
-      // FacetBar selections are applied before the caller's parameters so an
-      // explicit `filter_by` in `typesenseSearchParameters` still wins.
-      ...(filterBy ? { filter_by: filterBy } : {}),
       ...(typesenseSearchParameters ?? {}),
+      // Like typesense-instantsearch-adapter, FacetBar selections replace the
+      // caller's `filter_by`, which only applies while nothing is selected.
+      ...(filterBy ? { filter_by: filterBy } : {}),
     };
 
     const { results } = await searchClient.search<DocSearchHit>({
