@@ -5,7 +5,23 @@ import {
   expect,
   type Page,
   type Locator,
+  type Request,
 } from '@playwright/test';
+
+// The fork's Ask AI streams `/multi_search?conversation_stream=true` as SSE
+// (`useAskAi.ts`). Plain keyword searches lack that parameter, so they still
+// reach the seeded Typesense server.
+const ASK_AI_STREAM_ROUTE = '**/multi_search?*conversation_stream=true*';
+
+export const ASK_AI_ANSWER = 'Saved answer';
+
+const ASK_AI_STREAM_BODY = [
+  { conversation_id: 'conv-1', message: 'Saved ' },
+  { conversation_id: 'conv-1', message: 'answer' },
+]
+  .map((chunk) => `data: ${JSON.stringify(chunk)}\n\n`)
+  .join('')
+  .concat('data: [DONE]\n\n');
 
 export class DocSearchPage {
   readonly page: Page;
@@ -28,8 +44,13 @@ export class DocSearchPage {
       .first();
   }
 
-  async goto(): Promise<void> {
-    await this.page.goto('/docs/what-is-docsearch');
+  /**
+   * Routes of the test app (e2e/app): `/` mounts `DocSearchAI` with facets,
+   * `/keyword` the keyword-only `DocSearch`, `/hybrid` the modal + Sidepanel
+   * packages, `/js` the vanilla JS wrappers.
+   */
+  async goto(path = '/'): Promise<void> {
+    await this.page.goto(path);
   }
 
   async waitForLoad(): Promise<void> {
@@ -80,14 +101,35 @@ export class DocSearchPage {
   }
 
   async enableDarkMode(): Promise<void> {
-    await this.page.locator('.react-toggle').click({ force: true });
-    await this.page.locator('.react-toggle-screenreader-only').blur();
-    await expect(this.page.locator('html.dark')).toBeVisible();
+    await this.page.locator('.ThemeToggle').click();
+    await expect(this.page.locator('html[data-theme="dark"]')).toBeAttached();
+  }
+
+  /**
+   * The Ask AI item joins the results once the Typesense search resolves; Enter
+   * before then has no active item to select.
+   */
+  async expectAskAiItemActive(): Promise<void> {
+    await expect(this.input).toHaveAttribute(
+      'aria-activedescendant',
+      'docsearch-askAI-item-0'
+    );
   }
 
   async goToAskAi(): Promise<void> {
     await this.typeQueryMatching();
-    await this.page.locator('#docsearch-AskAi-Section').click();
+    await this.page.locator('#docsearch-askAI-item-0').click();
+  }
+
+  /** Picks `value` from the facet menu labelled `facetLabel`. */
+  async selectFacet(facetLabel: string, value: string): Promise<void> {
+    await this.modal
+      .locator('.DocSearch-FacetBar')
+      .getByRole('button', { name: facetLabel, exact: true })
+      .click();
+    await this.page
+      .getByRole('menuitemradio', { name: value, exact: true })
+      .click();
   }
 }
 
@@ -114,10 +156,17 @@ export class SidepanelPage {
   }
 }
 
+export type AskAiMock = {
+  /** Ask AI requests the fake answered, in order. */
+  requests: Request[];
+};
+
 export const test = base.extend<{
   docSearch: DocSearchPage;
   sidepanel: SidepanelPage;
   axe: () => AxeBuilder;
+  askAiMock: AskAiMock;
+  failOnPageError: void;
 }>({
   docSearch: async ({ page }, use) => {
     const docSearch = new DocSearchPage(page);
@@ -139,7 +188,50 @@ export const test = base.extend<{
       ]);
     await use(makeBuilder);
   },
+  // Opt in by destructuring `askAiMock`; Ask AI needs a conversation model the
+  // test server doesn't have.
+  askAiMock: async ({ page }, use) => {
+    const mock: AskAiMock = { requests: [] };
+    await page.route(ASK_AI_STREAM_ROUTE, async (route) => {
+      mock.requests.push(route.request());
+      await route.fulfill({
+        contentType: 'text/event-stream',
+        body: ASK_AI_STREAM_BODY,
+      });
+    });
+    await use(mock);
+  },
+  // Uncaught exceptions and unhandled rejections fail every test, which also
+  // covers broken package entry points.
+  failOnPageError: [
+    async ({ page }, use) => {
+      const errors: Error[] = [];
+      page.on('pageerror', (error) => errors.push(error));
+      await use();
+      expect(errors.map((error) => error.message)).toEqual([]);
+    },
+    { auto: true },
+  ],
 });
+
+/**
+ * Resolves once finite CSS animations and transitions settle. axe reads
+ * mid-animation opacity as low contrast, so scans wait for the modal's enter
+ * animation.
+ */
+async function waitForAnimations(page: Page): Promise<void> {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter(
+          (animation) =>
+            animation.effect?.getComputedTiming().endTime !== Infinity
+        )
+        .map((animation) => animation.finished.catch(() => undefined))
+    )
+  );
+}
 
 type AxeScanResults = Awaited<ReturnType<AxeBuilder['analyze']>>;
 
@@ -147,4 +239,4 @@ function gatherA11yViolations(violations: AxeScanResults['violations']) {
   return violations.flatMap((v) => v.nodes);
 }
 
-export { expect, gatherA11yViolations };
+export { expect, gatherA11yViolations, waitForAnimations };

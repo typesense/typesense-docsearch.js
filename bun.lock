@@ -29,6 +29,25 @@
         "watch": "1.0.2",
       },
     },
+    "e2e/app": {
+      "name": "typesense-docsearch-e2e-app",
+      "version": "0.0.0",
+      "dependencies": {
+        "react": "^19.0.0",
+        "react-dom": "^19.0.0",
+        "typesense-docsearch-core": "workspace:*",
+        "typesense-docsearch-css": "workspace:*",
+        "typesense-docsearch-modal": "workspace:*",
+        "typesense-docsearch-react": "workspace:*",
+        "typesense-docsearch-sidepanel": "workspace:*",
+        "typesense-docsearch-sidepanel-js": "workspace:*",
+        "typesense-docsearch.js": "workspace:*",
+      },
+      "devDependencies": {
+        "@vitejs/plugin-react": "^4.3.4",
+        "vite": "^6.0.7",
+      },
+    },
     "examples/demo-js": {
       "name": "@docsearch/js-example",
       "version": "4.6.0",
@@ -1579,6 +1598,8 @@
     "typesense-docsearch-core": ["typesense-docsearch-core@workspace:packages/docsearch-core"],
 
     "typesense-docsearch-css": ["typesense-docsearch-css@workspace:packages/docsearch-css"],
+
+    "typesense-docsearch-e2e-app": ["typesense-docsearch-e2e-app@workspace:e2e/app"],
 
     "typesense-docsearch-modal": ["typesense-docsearch-modal@workspace:packages/docsearch-modal"],
 
