@@ -98,7 +98,8 @@ function MenuCheckboxItem({
   return (
     <MenuPrimitive.CheckboxItem className={cn} {...props}>
       <span className="DocSearch-Menu-CheckboxItem-Indicator">
-        <MenuPrimitive.CheckboxItemIndicator>
+        {/* Kept mounted so unchecking can animate the check out. */}
+        <MenuPrimitive.CheckboxItemIndicator keepMounted={true}>
           <CheckIcon />
         </MenuPrimitive.CheckboxItemIndicator>
       </span>

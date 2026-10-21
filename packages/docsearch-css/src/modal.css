@@ -349,11 +349,6 @@
   color: var(--docsearch-highlight-color);
 }
 
-/* Aligns the reset item's label with sibling items that render an indicator. */
-.DocSearch-Menu-ResetItem {
-  padding-inline-start: calc(1.14em + 1rem + 0.25rem);
-}
-
 .DocSearch-Menu-RadioItem-Indicator,
 .DocSearch-Menu-CheckboxItem-Indicator {
   --indicator-size: 1rem;
@@ -374,6 +369,45 @@
     stroke-width: var(--docsearch-icon-stroke-width);
     height: var(--indicator-size);
     width: var(--indicator-size);
+  }
+}
+
+/* Unchecked labels start where the check goes; checking grows the check in
+   from there and pushes the label aside. */
+.DocSearch-Menu-CheckboxItem {
+  gap: 0;
+  transition: color 150ms var(--ease-smooth);
+}
+
+.DocSearch-Menu-CheckboxItem-Indicator {
+  justify-content: flex-start;
+  overflow: hidden;
+  width: 0;
+  transition: width 150ms var(--ease-smooth);
+
+  span {
+    transform-origin: left center;
+    transition:
+      opacity 150ms var(--ease-smooth),
+      transform 150ms var(--ease-smooth);
+  }
+
+  [data-unchecked] {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.DocSearch-Menu-CheckboxItem[data-checked] .DocSearch-Menu-CheckboxItem-Indicator {
+  /* The check plus the gap it keeps from the label. */
+  width: calc(var(--indicator-size) + 0.25rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .DocSearch-Menu-CheckboxItem,
+  .DocSearch-Menu-CheckboxItem-Indicator,
+  .DocSearch-Menu-CheckboxItem-Indicator span {
+    transition: none;
   }
 }
 
