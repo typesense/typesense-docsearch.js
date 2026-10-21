@@ -154,4 +154,21 @@ describe('useSearchClient caching', () => {
     ).resolves.toHaveProperty('results');
     expect(ApiCall.prototype.post).toHaveBeenCalledTimes(2);
   });
+
+  it('throws when Typesense reports a failed search inside its response', async () => {
+    vi.mocked(ApiCall.prototype.post).mockResolvedValueOnce({
+      results: [{ code: 404, error: 'Not found.' }],
+    });
+    const { result } = renderHook(() =>
+      useSearchClient(identity, typesenseServerConfig)
+    );
+
+    await expect(
+      result.current.search({ requests: [request] })
+    ).rejects.toThrow('Typesense search on "docs" failed (404): Not found.');
+
+    // The failed response isn't served from the cache on retry.
+    await result.current.search({ requests: [request] });
+    expect(ApiCall.prototype.post).toHaveBeenCalledTimes(2);
+  });
 });

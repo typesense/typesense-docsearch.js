@@ -110,7 +110,6 @@ export async function buildTypesenseQuerySources({
   query,
   state: sourcesState,
   setContext,
-  setStatus,
   searchClient,
   typesenseCollectionName,
   typesenseSearchParameters,
@@ -125,7 +124,6 @@ export async function buildTypesenseQuerySources({
   setContext: (
     context: Partial<DocSearchState<InternalDocSearchHit>['context']>
   ) => void;
-  setStatus: (status: DocSearchState<InternalDocSearchHit>['status']) => void;
   searchClient: ReturnType<typeof useSearchClient>;
   typesenseCollectionName: string;
   typesenseSearchParameters?: DocSearchProps['typesenseSearchParameters'];
@@ -228,9 +226,12 @@ export async function buildTypesenseQuerySources({
       },
     }));
   } catch (error) {
-    if ((error as Error).name === 'RetryError') {
-      setStatus('error');
-    }
-    throw error;
+    // Report the failure as an empty source instead of rejecting: autocomplete
+    // resets `status` to `idle` once a request settles, but applies resolved
+    // collections in request order, so a stale response can't hide the error
+    // and the next successful search replaces it.
+    // eslint-disable-next-line no-console
+    console.error(error);
+    return [{ sourceId: SOURCE_IDS.searchError, getItems: () => [] }];
   }
 }

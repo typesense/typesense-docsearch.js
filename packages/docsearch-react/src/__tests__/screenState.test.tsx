@@ -139,6 +139,33 @@ describe('ScreenState', () => {
     );
   });
 
+  it('renders the error screen when the latest search failed', () => {
+    const props = createProps();
+    const view = render(<ScreenState {...props} />);
+
+    view.rerender(
+      <ScreenState
+        {...props}
+        state={createState({
+          collections: [{ items: [], source: { sourceId: 'searchError' } }],
+        })}
+      />
+    );
+    expect(screen.getByText('Unable to fetch results')).toBeInTheDocument();
+
+    view.rerender(
+      <ScreenState
+        {...props}
+        state={createState({
+          collections: [{ items: [], source: { sourceId: 'hits_docs' } }],
+        })}
+      />
+    );
+    expect(
+      screen.queryByText('Unable to fetch results')
+    ).not.toBeInTheDocument();
+  });
+
   it('renders the start screen when the query is cleared', () => {
     const props = createProps();
     const view = render(<ScreenState {...props} />);

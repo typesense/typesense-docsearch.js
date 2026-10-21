@@ -71,6 +71,20 @@ export function useSearchClient(
           searches: [request],
         });
 
+        // `multi_search` answers 200 and reports a failed search (e.g. a missing
+        // collection) inside its result, which the adapter can't read. The
+        // client has cached that response, so drop it to let a retry refetch.
+        const { error, code } = response.results[0] as {
+          error?: string;
+          code?: number;
+        };
+        if (error) {
+          typesense.multiSearch.clearCache();
+          throw new Error(
+            `Typesense search on "${request.collection}" failed (${code}): ${error}`
+          );
+        }
+
         const typesenseSearchResponseAdapter =
           new TypesenseSearchResponseAdapter(
             response.results[0],
