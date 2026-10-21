@@ -66,10 +66,8 @@ export default defineConfig([
     banner: getBundleBanner(pkg),
     deps: {
       alwaysBundle: [
-        /^@ai-sdk\/react/,
         /^@algolia\/autocomplete-core/,
         /^@base-ui\/react/,
-        /^ai(?:\/|$)/,
         /^algoliasearch/,
         /^marked(?:\/|$)/,
         /^zod(?:\/|$)/,
