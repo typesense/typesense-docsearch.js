@@ -13,13 +13,10 @@ describe('useFacetValues', () => {
     search.mockResolvedValue({
       results: [
         {
-          facet_counts: [
-            {
-              field_name: 'language',
-              counts: [{ value: 'en' }, { value: 'fr' }],
-            },
-            { field_name: 'version', counts: [{ value: 'v1.0' }] },
-          ],
+          facets: {
+            language: { en: 3, fr: 1 },
+            version: { 'v1.0': 4 },
+          },
         },
       ],
     });
@@ -64,17 +61,9 @@ describe('useFacetValues', () => {
     search.mockResolvedValue({
       results: [
         {
-          facet_counts: [
-            {
-              field_name: 'language',
-              counts: [
-                { value: 'zulu' },
-                { value: 'Éclair' },
-                { value: 'eclair' },
-                { value: 'alpha' },
-              ],
-            },
-          ],
+          facets: {
+            language: { zulu: 1, Éclair: 1, eclair: 1, alpha: 1 },
+          },
         },
       ],
     });
