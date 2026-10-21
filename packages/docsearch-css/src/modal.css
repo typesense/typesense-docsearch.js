@@ -344,65 +344,50 @@
   }
 }
 
-.DocSearch-Menu-RadioItem[data-checked],
-.DocSearch-Menu-CheckboxItem[data-checked] {
-  color: var(--docsearch-highlight-color);
+/* Unchecked labels start where the check goes; checking grows the check in
+   from there and pushes the label aside. */
+.DocSearch-Menu-CheckboxItem {
+  gap: 0;
+
+  &[data-checked] {
+    color: var(--docsearch-highlight-color);
+  }
 }
 
-.DocSearch-Menu-RadioItem-Indicator,
 .DocSearch-Menu-CheckboxItem-Indicator {
   --indicator-size: 1rem;
 
   pointer-events: none;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: center;
-  width: var(--indicator-size);
-
-  span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+  overflow: hidden;
+  width: 0;
+  transition: width 120ms var(--ease-smooth);
 
   svg {
     stroke-width: var(--docsearch-icon-stroke-width);
     height: var(--indicator-size);
     width: var(--indicator-size);
-  }
-}
-
-/* Unchecked labels start where the check goes; checking grows the check in
-   from there and pushes the label aside. */
-.DocSearch-Menu-CheckboxItem {
-  gap: 0;
-}
-
-.DocSearch-Menu-CheckboxItem-Indicator {
-  justify-content: flex-start;
-  overflow: hidden;
-  width: 0;
-  transition: width 120ms var(--ease-smooth);
-
-  span {
+    transform: scale(0.5);
     transform-origin: left center;
     transition: transform 120ms var(--ease-smooth);
   }
 
-  [data-unchecked] {
-    transform: scale(0.5);
+  .DocSearch-Menu-CheckboxItem[data-checked] > & {
+    /* The check plus the gap it keeps from the label. */
+    width: calc(var(--indicator-size) + 0.25rem);
   }
-}
 
-.DocSearch-Menu-CheckboxItem[data-checked] .DocSearch-Menu-CheckboxItem-Indicator {
-  /* The check plus the gap it keeps from the label. */
-  width: calc(var(--indicator-size) + 0.25rem);
-}
+  .DocSearch-Menu-CheckboxItem[data-checked] > & svg {
+    transform: none;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  .DocSearch-Menu-CheckboxItem-Indicator,
-  .DocSearch-Menu-CheckboxItem-Indicator span {
-    transition: none;
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    svg {
+      transition: none;
+    }
   }
 }
 
