@@ -7,11 +7,10 @@ import type { useSearchClient } from './useSearchClient';
 
 export type FacetValues = Record<string, string[]>;
 
-type TypesenseFacetCounts = {
-  facet_counts?: Array<{
-    field_name?: string;
-    counts?: Array<{ value?: string }>;
-  }>;
+// The search client adapts Typesense's `facet_counts` into the InstantSearch
+// shape: value counts keyed by facet field.
+type AdaptedFacetCounts = {
+  facets?: Record<string, Record<string, number>>;
 };
 
 export function useFacetValues({
@@ -58,29 +57,15 @@ export function useFacetValues({
           return;
         }
 
+        const { facets: facetCounts = {} } = (results[0] ??
+          {}) as AdaptedFacetCounts;
+
         const valuesByFacet = facetKeys.reduce<FacetValues>((acc, facet) => {
-          acc[facet] = [];
-          return acc;
-        }, {});
-
-        const { facet_counts: facetCounts } = (results[0] ??
-          {}) as TypesenseFacetCounts;
-
-        (facetCounts ?? []).forEach(({ field_name: fieldName, counts }) => {
-          if (!fieldName || !valuesByFacet[fieldName]) {
-            return;
-          }
-
-          const values = (counts ?? [])
-            .map((count) => count.value)
-            .filter((value): value is string => typeof value === 'string');
-
-          valuesByFacet[fieldName] = Array.from(
-            new Set([...valuesByFacet[fieldName], ...values])
-          ).sort((a, b) =>
+          acc[facet] = Object.keys(facetCounts[facet] ?? {}).sort((a, b) =>
             a.localeCompare(b, undefined, { sensitivity: 'base' })
           );
-        });
+          return acc;
+        }, {});
 
         setFacetValues(valuesByFacet);
       })
