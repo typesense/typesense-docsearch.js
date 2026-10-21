@@ -10,6 +10,7 @@ import type {
 import { getFacetLabel } from '../utils/facets';
 
 import { Chip } from './ui/Chip';
+import { Collapsible } from './ui/Collapsible';
 import { Menu } from './ui/Menu';
 
 export type FacetBarTranslations = Partial<{
@@ -308,6 +309,14 @@ export const FacetBar = React.memo(function FacetBar({
     [facets]
   );
 
+  // Keep rendering the last chips while the bar collapses after the final
+  // selection is cleared, so it closes with its content rather than empty.
+  const hasSelections = selectionsToDisplay.length > 0;
+  const [chipsToRender, setChipsToRender] = React.useState(selectionsToDisplay);
+  if (hasSelections && chipsToRender !== selectionsToDisplay) {
+    setChipsToRender(selectionsToDisplay);
+  }
+
   if (facets.length === 0) {
     return null;
   }
@@ -331,31 +340,33 @@ export const FacetBar = React.memo(function FacetBar({
           />
         ))}
       </div>
-      {selectionsToDisplay.length > 0 && (
-        <div
-          className="DocSearch-FacetSelectionBar"
-          role="group"
-          aria-label={selectedFacetsAriaLabel}
-        >
-          {selectionsToDisplay.map(([key, value]) => (
-            <SelectedFacetChip
-              key={`${key}:${value}`}
-              facetKey={key}
-              facetLabel={facetLabels.get(key) ?? key}
-              value={value}
-              dismissAriaLabel={clearFacetAriaLabel}
-              onDismiss={handleDismissFacet}
-            />
-          ))}
-          <button
-            type="button"
-            className="DocSearch-FacetSelectionBar-Action"
-            onClick={handleClearAll}
+      <Collapsible open={hasSelections}>
+        <Collapsible.Panel>
+          <div
+            className="DocSearch-FacetSelectionBar"
+            role="group"
+            aria-label={selectedFacetsAriaLabel}
           >
-            {clearAllLabel}
-          </button>
-        </div>
-      )}
+            {chipsToRender.map(([key, value]) => (
+              <SelectedFacetChip
+                key={`${key}:${value}`}
+                facetKey={key}
+                facetLabel={facetLabels.get(key) ?? key}
+                value={value}
+                dismissAriaLabel={clearFacetAriaLabel}
+                onDismiss={handleDismissFacet}
+              />
+            ))}
+            <button
+              type="button"
+              className="DocSearch-FacetSelectionBar-Action"
+              onClick={handleClearAll}
+            >
+              {clearAllLabel}
+            </button>
+          </div>
+        </Collapsible.Panel>
+      </Collapsible>
     </>
   );
 });

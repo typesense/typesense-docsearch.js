@@ -161,6 +161,10 @@ for (const route of ['/', '/keyword']) {
       await page
         .getByRole('button', { name: 'Clear filter: Fr (Language)' })
         .click();
+      // The selection bar collapses, then unmounts.
+      await expect(
+        page.getByRole('group', { name: 'Selected search filters' })
+      ).toHaveCount(0);
       const search = nextKeywordSearch(page, 'gu');
       await docSearch.search('gu');
       expect((await search).filter_by).toBeUndefined();

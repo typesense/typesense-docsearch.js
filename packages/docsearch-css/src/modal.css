@@ -472,6 +472,27 @@
   display: none;
 }
 
+/* Collapsible */
+
+.DocSearch-Collapsible-Panel {
+  height: var(--collapsible-panel-height);
+  overflow: hidden;
+  transition: height 120ms var(--ease-smooth);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    height: 0;
+  }
+
+  &[data-ending-style] {
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
 /* Facet selection bar */
 
 .DocSearch-FacetSelectionBar {
