@@ -376,24 +376,20 @@
    from there and pushes the label aside. */
 .DocSearch-Menu-CheckboxItem {
   gap: 0;
-  transition: color 150ms var(--ease-smooth);
 }
 
 .DocSearch-Menu-CheckboxItem-Indicator {
   justify-content: flex-start;
   overflow: hidden;
   width: 0;
-  transition: width 150ms var(--ease-smooth);
+  transition: width 120ms var(--ease-smooth);
 
   span {
     transform-origin: left center;
-    transition:
-      opacity 150ms var(--ease-smooth),
-      transform 150ms var(--ease-smooth);
+    transition: transform 120ms var(--ease-smooth);
   }
 
   [data-unchecked] {
-    opacity: 0;
     transform: scale(0.5);
   }
 }
@@ -404,7 +400,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .DocSearch-Menu-CheckboxItem,
   .DocSearch-Menu-CheckboxItem-Indicator,
   .DocSearch-Menu-CheckboxItem-Indicator span {
     transition: none;
