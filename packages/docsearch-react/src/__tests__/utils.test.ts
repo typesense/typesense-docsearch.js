@@ -71,21 +71,37 @@ describe('utils', () => {
     });
 
     it('joins selections into a Typesense filter_by expression', () => {
-      expect(createFilterBy({ language: 'en', version: 'v2' })).toBe(
+      expect(createFilterBy({ language: ['en'], version: ['v2'] })).toBe(
         'language:=[`en`] && version:=[`v2`]'
       );
     });
 
-    it('skips cleared facet selections', () => {
-      expect(createFilterBy({ language: '', type: 'guide' })).toBe(
+    it('ORs multiple values of the same facet', () => {
+      expect(createFilterBy({ language: ['en', 'fr'], version: ['v2'] })).toBe(
+        'language:=[`en`,`fr`] && version:=[`v2`]'
+      );
+    });
+
+    it('skips facets without selected values', () => {
+      expect(createFilterBy({ language: [], type: ['guide'] })).toBe(
         'type:=[`guide`]'
       );
     });
 
     it('backtick-quotes values containing spaces', () => {
-      expect(createFilterBy({ type: 'Getting Started' })).toBe(
+      expect(createFilterBy({ type: ['Getting Started'] })).toBe(
         'type:=[`Getting Started`]'
       );
+    });
+
+    it('leaves numbers and booleans unquoted', () => {
+      expect(
+        createFilterBy({
+          year: ['2024', '1.5'],
+          beta: ['true', 'false'],
+          version: ['v2', '2.x'],
+        })
+      ).toBe('year:=[2024,1.5] && beta:=[true,false] && version:=[`v2`,`2.x`]');
     });
   });
 

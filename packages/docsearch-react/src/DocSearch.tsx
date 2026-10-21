@@ -72,7 +72,8 @@ export interface DocSearchProps {
   >;
   /**
    * Facets to display as keyword-search filter controls. Values are read
-   * dynamically from the configured Typesense collection.
+   * dynamically from the configured Typesense collection. Several values can be
+   * selected per facet: values of one facet are ORed, facets are ANDed.
    *
    * @default [ ]
    */

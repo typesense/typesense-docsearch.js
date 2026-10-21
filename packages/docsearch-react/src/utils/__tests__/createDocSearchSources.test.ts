@@ -107,7 +107,7 @@ describe('buildTypesenseQuerySources', () => {
       typesenseCollectionName: 'docs',
       saveRecentSearch: vi.fn(),
       onClose: vi.fn(),
-      facetSelections: { current: { language: 'en' } },
+      facetSelections: { current: { language: ['en', 'fr'] } },
     });
 
     expect(search).toHaveBeenCalledWith({
@@ -116,7 +116,7 @@ describe('buildTypesenseQuerySources', () => {
           collection: 'docs',
           q: 'install',
           group_by: 'url',
-          filter_by: 'language:=[`en`]',
+          filter_by: 'language:=[`en`,`fr`]',
         }),
       ],
     });

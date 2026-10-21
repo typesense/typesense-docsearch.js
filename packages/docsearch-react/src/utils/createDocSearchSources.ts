@@ -29,18 +29,54 @@ export type StoredSearchesLike<TItem> = {
   getAll: () => TItem[];
 };
 
-export type FacetSelections = Record<string, string>;
+/**
+ * Selected values per facet key. An empty array means nothing is selected for
+ * that facet.
+ */
+export type FacetSelections = Record<string, string[]>;
 
 /**
- * Translates the FacetBar selections into a Typesense `filter_by` expression,
- * e.g. `{ language: 'en', version: 'v2' }` → `language:=[\`en`] &&
- * version:=[`v2`]`. Values are backtick-quoted so they can contain spaces and
- * punctuation.
+ * Next selected values for a facet, or an updater that receives the current
+ * values. Updaters are resolved against the always-current selections so
+ * toggles can't lose selections to stale props.
+ */
+export type FacetSelectionUpdate =
+  | string[]
+  | ((currentValues: string[]) => string[]);
+
+/**
+ * Backtick-quotes a facet value so it can contain spaces and punctuation.
+ * Booleans and numbers stay bare so filters on `bool` and numeric facet fields
+ * still parse, matching typesense-instantsearch-adapter.
+ */
+function escapeFacetValue(value: string): string {
+  if (
+    value === 'true' ||
+    value === 'false' ||
+    (value.trim() !== '' && Number.isFinite(Number(value)))
+  ) {
+    return value;
+  }
+
+  return `\`${value}\``;
+}
+
+/**
+ * Translates the FacetBar selections into a Typesense `filter_by` expression.
+ * Values of one facet are ORed and facets are ANDed:
+ *
+ *     { language: ['en', 'fr'], version: ['v2'] }
+ *     → language:=[`en`,`fr`] && version:=[`v2`]
+ *
+ * Facets without values contribute nothing.
  */
 export function createFilterBy(facetSelections: FacetSelections): string {
   return Object.entries(facetSelections)
-    .filter(([, selection]) => selection !== '')
-    .map(([facet, selection]) => `${facet}:=[\`${selection}\`]`)
+    .filter(([, values]) => values.length > 0)
+    .map(
+      ([facet, values]) =>
+        `${facet}:=[${values.map(escapeFacetValue).join(',')}]`
+    )
     .join(' && ');
 }
 
