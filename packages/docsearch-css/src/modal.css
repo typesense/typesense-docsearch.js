@@ -268,6 +268,10 @@
     inline-size: 1.5rem;
     block-size: 1.5rem;
     flex-shrink: 0;
+
+    /* The chevron is drawn 6/24 in from its box; pull the box into the padding
+       so the glyph, not the box, sits at the same distance as the label. */
+    margin-inline-end: -0.25rem;
     transform: rotate(0deg);
     transition: transform 0.15s ease-in-out;
   }
@@ -375,6 +379,7 @@
   align-items: center;
   gap: 0.29em;
   font-size: 0.875em;
+  line-height: 1.43em;
   color: var(--docsearch-chip-text-color);
   background: var(--docsearch-chip-background);
   padding-inline: 0.57em;
@@ -395,6 +400,10 @@
   justify-content: center;
   height: 1em;
   width: 1em;
+
+  /* The close glyph is drawn ~1/4 in from its box; offset it so it sits at the
+     same distance from the edge as the label. */
+  margin-inline-end: -0.14em;
   cursor: pointer;
 
   svg {
@@ -449,6 +458,7 @@
   all: unset;
   color: var(--docsearch-secondary-text-color);
   font-size: 0.875em;
+  line-height: 1.43em;
   display: inline-flex;
   align-items: center;
   padding-inline: 0.57em;
