@@ -313,37 +313,43 @@ export const FacetBar = React.memo(function FacetBar({
   // selection is cleared, so it closes with its content rather than empty,
   // and unmount it once the collapse transition has finished.
   const hasSelections = selectionsToDisplay.length > 0;
-  const [chipsToRender, setChipsToRender] = React.useState(selectionsToDisplay);
+  const [chipsToRender, setChipsToRender] = React.useState(
+    hasSelections ? selectionsToDisplay : EMPTY_CHIPS
+  );
   if (hasSelections && chipsToRender !== selectionsToDisplay) {
     setChipsToRender(selectionsToDisplay);
   }
   const collapseRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    if (hasSelections) return undefined;
+
     const collapse = collapseRef.current;
+    // Nothing to wait for without a collapse transition (reduced motion,
+    // jsdom) or without a rendered bar.
+    const animations = collapse?.getAnimations?.() ?? [];
 
-    if (hasSelections || !collapse) return undefined;
-
-    // Nothing to wait for without transitions (reduced motion, jsdom).
-    const animations = collapse.getAnimations?.() ?? [];
-
-    if (animations.length === 0) {
+    if (!collapse || animations.length === 0) {
       setChipsToRender(EMPTY_CHIPS);
       return undefined;
     }
 
+    // The collapsing chips must not be reachable by keyboard or assistive tech.
+    collapse.inert = true;
     let cancelled = false;
-
+    const unmount = (): void => {
+      if (!cancelled) setChipsToRender(EMPTY_CHIPS);
+    };
+    // Unmount however the transition ends, unless a new selection reopened
+    // the bar first.
     Promise.all(animations.map((animation) => animation.finished)).then(
-      () => {
-        if (!cancelled) setChipsToRender(EMPTY_CHIPS);
-      },
-      // A new selection reversed the collapse before it finished.
-      () => {}
+      unmount,
+      unmount
     );
 
     return (): void => {
       cancelled = true;
+      collapse.inert = false;
     };
   }, [hasSelections]);
 

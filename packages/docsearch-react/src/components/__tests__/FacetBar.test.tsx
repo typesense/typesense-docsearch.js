@@ -1,4 +1,5 @@
 import {
+  act,
   render,
   screen,
   fireEvent,
@@ -220,8 +221,11 @@ describe('FacetBar', () => {
 
     const en = await screen.findByRole('menuitemcheckbox', { name: 'En' });
     const fr = screen.getByRole('menuitemcheckbox', { name: 'Fr' });
-    fireEvent.click(en);
-    fireEvent.click(fr);
+    // One batch: the second toggle must not read the first from stale props.
+    act(() => {
+      en.click();
+      fr.click();
+    });
 
     await waitFor(() => {
       expect(
@@ -425,6 +429,101 @@ describe('FacetBar', () => {
         screen.queryByRole('group', { name: 'Selected search filters' })
       ).not.toBeInTheDocument();
       expect(screen.getByRole('button', { name: 'Language' })).toHaveFocus();
+    });
+  });
+
+  describe('selection bar collapse', () => {
+    let finished: Promise<void>;
+    let settle: { resolve: () => void; reject: () => void };
+
+    // jsdom has no Web Animations; give only the collapse wrapper a pending
+    // transition so the bar has something to wait for.
+    beforeEach(() => {
+      finished = new Promise<void>((resolve, reject) => {
+        settle = { resolve, reject: () => reject(new Error('cancelled')) };
+      });
+      finished.catch(() => {});
+      Object.defineProperty(HTMLElement.prototype, 'getAnimations', {
+        configurable: true,
+        value(this: HTMLElement) {
+          return this.classList.contains('DocSearch-FacetSelectionBar-Collapse')
+            ? [{ finished }]
+            : [];
+        },
+      });
+    });
+
+    afterEach(() => {
+      delete (HTMLElement.prototype as Partial<HTMLElement>).getAnimations;
+    });
+
+    function selectionBar(): HTMLElement | null {
+      return screen.queryByRole('group', {
+        name: 'Selected search filters',
+        hidden: true,
+      });
+    }
+
+    it('keeps the last chips inert while collapsing, then unmounts', async () => {
+      render(<StatefulFacetBar initialSelections={{ language: ['en'] }} />);
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Clear filter: En (Language)' })
+      );
+
+      const collapse = selectionBar()!.closest<HTMLElement>(
+        '.DocSearch-FacetSelectionBar-Collapse'
+      )!;
+      expect(collapse).toHaveAttribute('data-closed');
+      expect(collapse.inert).toBe(true);
+      expect(collapse).toHaveTextContent('En');
+
+      await act(async () => {
+        settle.resolve();
+        await finished;
+      });
+
+      expect(selectionBar()).not.toBeInTheDocument();
+    });
+
+    it('unmounts when the collapse transition is cancelled', async () => {
+      render(<StatefulFacetBar initialSelections={{ language: ['en'] }} />);
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Clear filter: En (Language)' })
+      );
+      await act(async () => {
+        settle.reject();
+        await finished.catch(() => {});
+      });
+
+      expect(selectionBar()).not.toBeInTheDocument();
+    });
+
+    it('reopens without unmounting when a value is selected mid-collapse', async () => {
+      render(<StatefulFacetBar initialSelections={{ language: ['en'] }} />);
+
+      fireEvent.click(
+        screen.getByRole('button', { name: 'Clear filter: En (Language)' })
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Language' }));
+      fireEvent.click(
+        await screen.findByRole('menuitemcheckbox', { name: 'Fr' })
+      );
+      // The reversed collapse transition ends after the reopen.
+      await act(async () => {
+        settle.reject();
+        await finished.catch(() => {});
+      });
+
+      const collapse = selectionBar()!.closest<HTMLElement>(
+        '.DocSearch-FacetSelectionBar-Collapse'
+      )!;
+      expect(collapse).not.toHaveAttribute('data-closed');
+      expect(collapse.inert).toBe(false);
+      expect(
+        screen.getByRole('button', { name: 'Clear filter: Fr (Language)' })
+      ).toBeInTheDocument();
     });
   });
 });
