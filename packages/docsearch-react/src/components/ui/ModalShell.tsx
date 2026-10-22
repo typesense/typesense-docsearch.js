@@ -2,6 +2,7 @@ import type { AutocompleteApi } from '@algolia/autocomplete-core';
 import React, { type JSX } from 'react';
 
 import type { DocSearchState, InternalDocSearchHit } from '../../types';
+import { hasSearchError } from '../../utils';
 
 export type ModalShellProps = {
   state: DocSearchState<InternalDocSearchHit>;
@@ -45,7 +46,7 @@ export function ModalShell({
         'DocSearch',
         'DocSearch-Container',
         state.status === 'stalled' && 'DocSearch-Container--Stalled',
-        state.status === 'error' && 'DocSearch-Container--Errored',
+        hasSearchError(state) && 'DocSearch-Container--Errored',
       ]
         .filter(Boolean)
         .join(' ')}

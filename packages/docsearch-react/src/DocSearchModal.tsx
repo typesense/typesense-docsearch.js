@@ -161,7 +161,7 @@ export function DocSearchModal({
       onStateChange(changes) {
         setState(changes.state);
       },
-      getSources({ query, state: sourcesState, setContext, setStatus }) {
+      getSources({ query, state: sourcesState, setContext }) {
         if (isQueryEmpty(query)) {
           const noQuerySources = buildNoQuerySources({
             recentSearches,
@@ -181,7 +181,6 @@ export function DocSearchModal({
           query,
           state: querySourcesState,
           setContext,
-          setStatus,
           searchClient,
           typesenseCollectionName,
           typesenseSearchParameters,

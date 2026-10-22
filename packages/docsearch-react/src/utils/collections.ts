@@ -5,6 +5,7 @@ export const SOURCE_IDS = {
   favoriteSearches: 'favoriteSearches',
   recentConversations: 'recentConversations',
   recentSearches: 'recentSearches',
+  searchError: 'searchError',
 } as const;
 
 export type KnownSourceId = (typeof SOURCE_IDS)[keyof typeof SOURCE_IDS];
@@ -20,4 +21,15 @@ export function getCollection<TItem extends BaseItem>(
     (collection): collection is Collection<TItem> =>
       collection?.source.sourceId === sourceId
   );
+}
+
+/**
+ * Whether the latest keyword search failed. `buildTypesenseQuerySources`
+ * reports failures as an empty `searchError` source rather than through
+ * `status`, which autocomplete resets once the request settles.
+ */
+export function hasSearchError<TItem extends BaseItem>(state: {
+  collections: Array<Collection<TItem> | null | undefined>;
+}): boolean {
+  return getCollection(state, SOURCE_IDS.searchError) !== undefined;
 }

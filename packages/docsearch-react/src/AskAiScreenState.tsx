@@ -29,7 +29,7 @@ import type {
   SuggestedQuestionHit,
 } from './types';
 import type { AIMessage, AskAiState, AskAiStatus } from './types/AskiAi';
-import { isQueryEmpty } from './utils';
+import { hasSearchError, isQueryEmpty } from './utils';
 
 export type AskAiScreenStateTranslations = Partial<{
   errorScreen: ErrorScreenTranslations;
@@ -126,7 +126,7 @@ export const AskAiScreenState = React.memo(
       );
     }
 
-    if (props.state?.status === 'error') {
+    if (hasSearchError(props.state)) {
       return <ErrorScreen translations={translations?.errorScreen} />;
     }
 

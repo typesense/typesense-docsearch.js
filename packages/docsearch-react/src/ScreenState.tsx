@@ -16,7 +16,7 @@ import type { ResultsScreenTranslations } from './ResultsScreen';
 import { ResultsScreen } from './ResultsScreen';
 import type { StoredSearchPlugin } from './stored-searches';
 import type { InternalDocSearchHit, StoredDocSearchHit } from './types';
-import { isQueryEmpty } from './utils';
+import { hasSearchError, isQueryEmpty } from './utils';
 
 export type ScreenStateTranslations = Partial<{
   errorScreen: ErrorScreenTranslations;
@@ -54,7 +54,7 @@ export interface ScreenStateProps<
 
 export const ScreenState = React.memo(
   ({ translations = {}, ...props }: ScreenStateProps<InternalDocSearchHit>) => {
-    if (props.state?.status === 'error') {
+    if (hasSearchError(props.state)) {
       return <ErrorScreen translations={translations?.errorScreen} />;
     }
 

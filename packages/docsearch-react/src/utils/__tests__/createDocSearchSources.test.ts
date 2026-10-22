@@ -101,7 +101,6 @@ describe('buildTypesenseQuerySources', () => {
       query: 'install',
       state: { context: { searchSuggestions: [] } },
       setContext: vi.fn(),
-      setStatus: vi.fn(),
       searchClient: {
         search,
       } as any,
@@ -147,5 +146,27 @@ describe('buildTypesenseQuerySources', () => {
     expect(referenceItems[1].__docsearch_parent?.objectID).toBe(
       'reference-install'
     );
+  });
+
+  it('reports a failed search as an empty searchError source', async () => {
+    const error = new Error('Network Error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const sources = await buildTypesenseQuerySources({
+      query: 'install',
+      state: { context: { searchSuggestions: [] } },
+      setContext: vi.fn(),
+      searchClient: { search: vi.fn().mockRejectedValue(error) } as any,
+      typesenseCollectionName: 'docs',
+      saveRecentSearch: vi.fn(),
+      onClose: vi.fn(),
+    });
+
+    expect(sources.map((source) => source.sourceId)).toEqual(['searchError']);
+    expect(await sources[0].getItems({} as never)).toEqual([]);
+    expect(consoleError).toHaveBeenCalledWith(error);
+    consoleError.mockRestore();
   });
 });

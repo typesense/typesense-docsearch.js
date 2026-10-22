@@ -391,7 +391,7 @@ export function DocSearchAskAiModal({
       onStateChange(changes) {
         setState(changes.state);
       },
-      async getSources({ query, state: sourcesState, setContext, setStatus }) {
+      async getSources({ query, state: sourcesState, setContext }) {
         if (isQueryEmpty(query)) {
           const noQuerySources = buildNoQuerySources({
             recentSearches,
@@ -419,7 +419,6 @@ export function DocSearchAskAiModal({
           query,
           state: querySourcesState,
           setContext,
-          setStatus,
           searchClient,
           typesenseCollectionName,
           typesenseSearchParameters,
@@ -435,6 +434,16 @@ export function DocSearchAskAiModal({
           : [];
 
         const keywordSources = await keywordSourcesPromise;
+
+        // The error screen hides every result, so don't leave the Ask AI
+        // action selectable behind it.
+        if (
+          keywordSources.some(
+            (source) => source.sourceId === SOURCE_IDS.searchError
+          )
+        ) {
+          return keywordSources;
+        }
 
         // Combine keyword results (once resolved) with the Ask AI source
         return [...askAiSources, ...keywordSources];
