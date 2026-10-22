@@ -6,6 +6,10 @@ on:
   schedule:
     - cron: '17 * * * *'
   workflow_dispatch:
+    inputs:
+      since:
+        description: Report upstream changes after this ISO date (empty uses the script's default)
+        required: false
 
 permissions:
   contents: read
@@ -31,3 +35,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ASSIGNEES: tharropoulos
+          UPSTREAM_SINCE: ${{ inputs.since }}

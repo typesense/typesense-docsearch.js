@@ -20,7 +20,12 @@ const MAX_LISTED_FILES = 50;
 const token = process.env.GITHUB_TOKEN;
 const target =
   process.env.GITHUB_REPOSITORY ?? 'typesense/typesense-docsearch.js';
-const since = new Date(process.env.UPSTREAM_SINCE ?? DEFAULT_SINCE);
+// Empty on scheduled runs, where the workflow's `since` input isn't set.
+const since = new Date(process.env.UPSTREAM_SINCE || DEFAULT_SINCE);
+
+if (Number.isNaN(since.getTime())) {
+  throw new Error(`Invalid UPSTREAM_SINCE: ${process.env.UPSTREAM_SINCE}`);
+}
 const assignees = (process.env.ASSIGNEES ?? '').split(',').filter(Boolean);
 const dryRun = process.env.DRY_RUN === '1';
 
