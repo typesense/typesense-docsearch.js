@@ -67,8 +67,8 @@ export interface DocSearchProps {
   typesenseServerConfig: TypesenseConfigurationOptions;
   /**
    * Additional Typesense search parameters to merge into each query. A
-   * `filter_by` here is replaced by the FacetBar's filter while any facet value
-   * is selected.
+   * `filter_by` here scopes every search: FacetBar selections are ANDed with
+   * it.
    */
   typesenseSearchParameters?: TypesenseSearchParams<
     Record<string, unknown>,
@@ -77,9 +77,8 @@ export interface DocSearchProps {
   /**
    * Facets to display as keyword-search filter controls. Values are read
    * dynamically from the configured Typesense collection. Several values can be
-   * selected per facet: values of one facet are ORed, facets are ANDed. While
-   * any value is selected, the generated `filter_by` replaces the one in
-   * `typesenseSearchParameters`.
+   * selected per facet: values of one facet are ORed, facets are ANDed, and the
+   * result is ANDed with `typesenseSearchParameters.filter_by`.
    *
    * @default [ ]
    */

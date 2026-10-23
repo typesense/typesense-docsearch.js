@@ -68,16 +68,29 @@ function escapeFacetValue(value: string): string {
  *     { language: ['en', 'fr'], version: ['v2'] }
  *     → language:=[`en`,`fr`] && version:=[`v2`]
  *
- * Facets without values contribute nothing.
+ * Facets without values contribute nothing. The selections are ANDed with
+ * `scope`, the caller's own `filter_by`, which sites use to keep search inside
+ * their current language or version. It is parenthesized so it stays a single
+ * operand whatever it contains.
  */
-export function createFilterBy(facetSelections: FacetSelections): string {
-  return Object.entries(facetSelections)
+export function createFilterBy(
+  facetSelections: FacetSelections,
+  scope = ''
+): string {
+  const selectionsFilter = Object.entries(facetSelections)
     .filter(([, values]) => values.length > 0)
     .map(
       ([facet, values]) =>
         `${facet}:=[${values.map(escapeFacetValue).join(',')}]`
     )
     .join(' && ');
+
+  // A blank scope would leave an empty `()` operand, which Typesense rejects.
+  if (!scope.trim() || !selectionsFilter) {
+    return selectionsFilter || scope;
+  }
+
+  return `(${scope}) && ${selectionsFilter}`;
 }
 
 export function buildNoQuerySources({
@@ -170,7 +183,10 @@ export async function buildTypesenseQuerySources({
   facetSelections?: React.MutableRefObject<FacetSelections>;
 }): Promise<Array<AutocompleteSource<InternalDocSearchHit>>> {
   try {
-    const filterBy = createFilterBy(facetSelections?.current ?? {});
+    const filterBy = createFilterBy(
+      facetSelections?.current ?? {},
+      typesenseSearchParameters?.filter_by
+    );
 
     const typesenseRequest: MultiSearchRequestSchema<DocSearchHit, string> = {
       collection: typesenseCollectionName,
@@ -184,8 +200,6 @@ export async function buildTypesenseQuerySources({
       snippet_threshold: 8,
       highlight_affix_num_tokens: 4,
       ...(typesenseSearchParameters ?? {}),
-      // Like typesense-instantsearch-adapter, FacetBar selections replace the
-      // caller's `filter_by`, which only applies while nothing is selected.
       ...(filterBy ? { filter_by: filterBy } : {}),
     };
 

@@ -170,7 +170,7 @@ for (const route of ['/', '/keyword']) {
       expect((await search).filter_by).toBeUndefined();
     });
 
-    test('Selections replace typesenseSearchParameters.filter_by until cleared', async ({
+    test('Selections are ANDed with typesenseSearchParameters.filter_by', async ({
       docSearch,
       page,
     }) => {
@@ -183,12 +183,16 @@ for (const route of ['/', '/keyword']) {
         .poll(() => hitPages(docSearch))
         .toEqual(['/docs/fr/v1/recherche', '/docs/v1/guide/faceting']);
 
-      const search = nextKeywordSearch(page, 'g', 'language:=[`fr`]');
+      const search = nextKeywordSearch(
+        page,
+        'g',
+        '(version:=[`v1`]) && language:=[`fr`]'
+      );
       await docSearch.selectFacet('Language', 'Fr');
       await search;
       await expect
         .poll(() => hitPages(docSearch))
-        .toEqual(['/docs/fr/guide-de-demarrage', '/docs/fr/v1/recherche']);
+        .toEqual(['/docs/fr/v1/recherche']);
 
       await page.getByRole('button', { name: 'Clear all' }).click();
       await expect

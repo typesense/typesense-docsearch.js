@@ -82,6 +82,24 @@ describe('utils', () => {
       );
     });
 
+    it('ANDs selections with a parenthesized scope', () => {
+      expect(
+        createFilterBy({ language: ['en'] }, 'version:=v1 || version:=v2')
+      ).toBe('(version:=v1 || version:=v2) && language:=[`en`]');
+    });
+
+    it('ignores a blank scope', () => {
+      expect(createFilterBy({ language: ['en'] }, '  ')).toBe(
+        'language:=[`en`]'
+      );
+    });
+
+    it('returns the scope unchanged without selections', () => {
+      expect(createFilterBy({ language: [] }, 'version:=v1')).toBe(
+        'version:=v1'
+      );
+    });
+
     it('skips facets without selected values', () => {
       expect(createFilterBy({ language: [], type: ['guide'] })).toBe(
         'type:=[`guide`]'

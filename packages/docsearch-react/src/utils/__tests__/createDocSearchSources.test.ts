@@ -216,11 +216,19 @@ describe('buildTypesenseQuerySources', () => {
       expect(sentRequest().filter_by).toBe('version:=[`v1`]');
     });
 
-    it('replaces the configured filter_by with the selections', async () => {
+    it('ANDs the selections with the configured filter_by', async () => {
       await buildWith({
         filterBy: 'version:=[`v1`]',
         selections: { language: ['fr'] },
       });
+
+      expect(sentRequest().filter_by).toBe(
+        '(version:=[`v1`]) && language:=[`fr`]'
+      );
+    });
+
+    it('sends only the selections without a configured filter_by', async () => {
+      await buildWith({ selections: { language: ['fr'] } });
 
       expect(sentRequest().filter_by).toBe('language:=[`fr`]');
     });
