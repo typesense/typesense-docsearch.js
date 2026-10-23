@@ -183,6 +183,17 @@ for (const route of ['/', '/keyword']) {
         .poll(() => hitPages(docSearch))
         .toEqual(['/docs/fr/v1/recherche', '/docs/v1/guide/faceting']);
 
+      // Menus only list values inside the configured scope.
+      await docSearch.modal
+        .locator('.DocSearch-FacetBar')
+        .getByRole('button', { name: 'Version', exact: true })
+        .click();
+      await expect(
+        page.getByRole('menu').getByRole('menuitemcheckbox')
+      ).toHaveText(['V1']);
+      await page.keyboard.press('Escape');
+      await expect(page.getByRole('menu')).toBeHidden();
+
       const search = nextKeywordSearch(
         page,
         'g',

@@ -134,6 +134,33 @@ describe('useFacetValues', () => {
     });
   });
 
+  it('scopes the values to the given filter_by', async () => {
+    const { rerender } = renderHook<unknown, { filterBy?: string }>(
+      ({ filterBy }) =>
+        useFacetValues({
+          facets: [{ key: 'language' }],
+          typesenseCollectionName: 'docs',
+          searchClient,
+          filterBy,
+        }),
+      { initialProps: { filterBy: 'version:=[`v1`]' } }
+    );
+
+    await waitFor(() => {
+      expect(search).toHaveBeenCalledTimes(1);
+    });
+    expect(search.mock.calls[0][0].requests[0].filter_by).toBe(
+      'version:=[`v1`]'
+    );
+
+    rerender({ filterBy: undefined });
+
+    await waitFor(() => {
+      expect(search).toHaveBeenCalledTimes(2);
+    });
+    expect(search.mock.calls[1][0].requests[0]).not.toHaveProperty('filter_by');
+  });
+
   it('skips the request when no facets are configured', () => {
     renderHook(() =>
       useFacetValues({

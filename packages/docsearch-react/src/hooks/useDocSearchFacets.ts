@@ -16,6 +16,8 @@ export interface UseDocSearchFacetsProps {
   facets?: DocSearchFacet[];
   typesenseCollectionName: string;
   searchClient: ReturnType<typeof useSearchClient>;
+  /** `typesenseSearchParameters.filter_by`, which scopes the listed values. */
+  filterBy?: string;
   /**
    * Called after any facet selection change. Modals use this to refresh the
    * autocomplete results.
@@ -59,6 +61,7 @@ export function useDocSearchFacets({
   facets,
   typesenseCollectionName,
   searchClient,
+  filterBy,
   onSelectionsChange,
 }: UseDocSearchFacetsProps): UseDocSearchFacetsResult {
   const normalizedFacets = React.useMemo(
@@ -69,6 +72,7 @@ export function useDocSearchFacets({
     facets: normalizedFacets,
     typesenseCollectionName,
     searchClient,
+    filterBy,
   });
   const [facetSelections, setFacetSelections] = React.useState<FacetSelections>(
     () => ({})

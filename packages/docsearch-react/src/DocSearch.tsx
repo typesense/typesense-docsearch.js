@@ -68,7 +68,7 @@ export interface DocSearchProps {
   /**
    * Additional Typesense search parameters to merge into each query. A
    * `filter_by` here scopes every search: FacetBar selections are ANDed with
-   * it.
+   * it, and facet menus only list values inside it.
    */
   typesenseSearchParameters?: TypesenseSearchParams<
     Record<string, unknown>,

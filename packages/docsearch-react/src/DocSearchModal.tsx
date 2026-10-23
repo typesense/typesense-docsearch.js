@@ -130,6 +130,7 @@ export function DocSearchModal({
     facets,
     typesenseCollectionName,
     searchClient,
+    filterBy: typesenseSearchParameters?.filter_by,
     onSelectionsChange: () => autocompleteRef.current?.refresh(),
   });
 
