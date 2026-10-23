@@ -17,10 +17,16 @@ export function useFacetValues({
   facets,
   typesenseCollectionName,
   searchClient,
+  filterBy,
 }: {
   facets: DocSearchFacet[];
   typesenseCollectionName: string;
   searchClient: ReturnType<typeof useSearchClient>;
+  /**
+   * The caller's `filter_by`, so menus only list values that can match inside
+   * the scope it sets.
+   */
+  filterBy?: string;
 }): FacetValues {
   const [facetValues, setFacetValues] = React.useState<FacetValues>({});
 
@@ -49,6 +55,7 @@ export function useFacetValues({
             per_page: 0,
             facet_by: facetKeys.join(','),
             max_facet_values: 100,
+            ...(filterBy ? { filter_by: filterBy } : {}),
           },
         ],
       })
@@ -70,15 +77,25 @@ export function useFacetValues({
         setFacetValues(valuesByFacet);
       })
       .catch(() => {
-        if (isMounted) {
-          setFacetValues({});
+        if (!isMounted) {
+          return;
         }
+
+        // Settle every facet without values rather than leaving them unloaded,
+        // so a facet with selected values (such as `defaultValues`) stays
+        // visible and its chip can clear a filter that still applies.
+        setFacetValues(
+          facetKeys.reduce<FacetValues>((acc, facet) => {
+            acc[facet] = [];
+            return acc;
+          }, {})
+        );
       });
 
     return () => {
       isMounted = false;
     };
-  }, [stableFacetKeys, typesenseCollectionName, searchClient]);
+  }, [stableFacetKeys, typesenseCollectionName, searchClient, filterBy]);
 
   return facetValues;
 }

@@ -112,6 +112,7 @@
     --docsearch-soft-primary-color
   );
   --docsearch-menu-trigger-active-text-color: var(--typesense-primary);
+  --docsearch-menu-popup-background: var(--docsearch-popover-background);
 
   /* Popover */
   --docsearch-popover-background: var(--typesense-surface);
@@ -196,6 +197,7 @@ html[data-theme='dark'],
   /* Menu */
   --docsearch-menu-trigger-active-background: var(--typesense-surface-line);
   --docsearch-menu-trigger-active-text-color: var(--docsearch-text-color);
+  --docsearch-menu-popup-background: var(--docsearch-modal-background);
 
   /* Popover */
   --docsearch-popover-background: var(--typesense-surface-line);

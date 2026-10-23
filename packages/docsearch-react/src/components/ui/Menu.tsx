@@ -51,40 +51,32 @@ function MenuPopup({
 
 Menu.Popup = MenuPopup;
 
-function MenuRadioGroup({
+function MenuItem({
+  className,
   ...props
-}: MenuPrimitive.RadioGroup.Props): JSX.Element {
-  return <MenuPrimitive.RadioGroup {...props} />;
+}: MenuPrimitive.Item.Props): JSX.Element {
+  const cn = `DocSearch-Menu-Item${className ? ` ${className}` : ''}`;
+  return <MenuPrimitive.Item className={cn} {...props} />;
 }
 
-Menu.RadioGroup = MenuRadioGroup;
+Menu.Item = MenuItem;
 
-function MenuRadioItem({
+function MenuCheckboxItem({
   className,
   children,
   ...props
-}: MenuPrimitive.RadioItem.Props): JSX.Element {
-  const cn = `DocSearch-Menu-Item DocSearch-Menu-RadioItem${className ? ` ${className}` : ''}`;
+}: MenuPrimitive.CheckboxItem.Props): JSX.Element {
+  const cn = `DocSearch-Menu-Item DocSearch-Menu-CheckboxItem${className ? ` ${className}` : ''}`;
   return (
-    <MenuPrimitive.RadioItem className={cn} closeOnClick={true} {...props}>
-      <span className="DocSearch-Menu-RadioItem-Indicator">
-        <MenuPrimitive.RadioItemIndicator>
-          <CheckIcon />
-        </MenuPrimitive.RadioItemIndicator>
+    <MenuPrimitive.CheckboxItem className={cn} {...props}>
+      {/* Always rendered; CSS reveals it from the item's `data-checked` so
+          checking and unchecking both animate. */}
+      <span className="DocSearch-Menu-CheckboxItem-Indicator">
+        <CheckIcon />
       </span>
       {children}
-    </MenuPrimitive.RadioItem>
+    </MenuPrimitive.CheckboxItem>
   );
 }
 
-Menu.RadioItem = MenuRadioItem;
-
-function MenuGroupLabel({
-  className,
-  ...props
-}: MenuPrimitive.GroupLabel.Props): JSX.Element {
-  const cn = `DocSearch-Menu-GroupLabel${className ? ` ${className}` : ''}`;
-  return <MenuPrimitive.GroupLabel className={cn} {...props} />;
-}
-
-Menu.GroupLabel = MenuGroupLabel;
+Menu.CheckboxItem = MenuCheckboxItem;

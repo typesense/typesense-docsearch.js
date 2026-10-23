@@ -49,6 +49,11 @@ export type TypesenseDocsearchTransformClient = {
 export interface DocSearchFacet {
   key: string;
   label?: string;
+  /**
+   * Values selected when the modal opens. Users can deselect them, unlike a
+   * `typesenseSearchParameters.filter_by` scope.
+   */
+  defaultValues?: string[];
 }
 
 export interface HitComponentProps {
@@ -65,14 +70,20 @@ export interface DocSearchProps {
   typesenseCollectionName: string;
   /** Typesense server configuration for the client. */
   typesenseServerConfig: TypesenseConfigurationOptions;
-  /** Additional Typesense search parameters to merge into each query. */
+  /**
+   * Additional Typesense search parameters to merge into each query. A
+   * `filter_by` here scopes every search: FacetBar selections are ANDed with
+   * it, and facet menus only list values inside it.
+   */
   typesenseSearchParameters?: TypesenseSearchParams<
     Record<string, unknown>,
     string
   >;
   /**
    * Facets to display as keyword-search filter controls. Values are read
-   * dynamically from the configured Typesense collection.
+   * dynamically from the configured Typesense collection. Several values can be
+   * selected per facet: values of one facet are ORed, facets are ANDed, and the
+   * result is ANDed with `typesenseSearchParameters.filter_by`.
    *
    * @default [ ]
    */

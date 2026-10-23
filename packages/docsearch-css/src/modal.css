@@ -251,6 +251,9 @@
   line-height: 1.43em;
   padding-block: 0.285em;
   padding-inline: 0.571em;
+  transition:
+    background-color 120ms var(--ease-smooth),
+    color 120ms var(--ease-smooth);
 
   &:hover,
   &[data-popup-open],
@@ -268,6 +271,10 @@
     inline-size: 1.5rem;
     block-size: 1.5rem;
     flex-shrink: 0;
+
+    /* The chevron is drawn 6/24 in from its box; pull the box into the padding
+       so the glyph, not the box, sits at the same distance as the label. */
+    margin-inline-end: -0.25rem;
     transform: rotate(0deg);
     transition: transform 0.15s ease-in-out;
   }
@@ -277,6 +284,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
     svg {
       transition-duration: 0s;
     }
@@ -289,7 +298,7 @@
 }
 
 .DocSearch-Menu-Popup {
-  background-color: var(--docsearch-popover-background);
+  background-color: var(--docsearch-menu-popup-background);
   border-radius: 0.25rem;
   box-shadow: var(--docsearch-popover-shadow);
   max-height: 20rem;
@@ -308,7 +317,7 @@
   font-size: 0.875em;
   line-height: 1.43em;
   outline: none;
-  padding-block: 0.714em;
+  padding-block: 0.571em;
   padding-inline: 1.14em;
   user-select: none;
   gap: 0.25rem;
@@ -323,34 +332,62 @@
     background: var(--docsearch-dropdown-menu-item-hover-background);
   }
 
+  /* Keyboard focus needs a cue distinct from the shared hover/highlight background.
+     Inset, as the popup's overflow clips an outline drawn outside the item. */
+  &:focus-visible {
+    outline: 2px solid var(--docsearch-primary-color);
+    outline-offset: -2px;
+  }
+
   svg {
     flex-shrink: 0;
   }
 }
 
-.DocSearch-Menu-RadioItem[data-checked] {
-  color: var(--docsearch-highlight-color);
+/* Unchecked labels start where the check goes; checking grows the check in
+   from there and pushes the label aside. */
+.DocSearch-Menu-CheckboxItem {
+  gap: 0;
+
+  &[data-checked] {
+    color: var(--docsearch-highlight-color);
+  }
 }
 
-.DocSearch-Menu-RadioItem-Indicator {
+.DocSearch-Menu-CheckboxItem-Indicator {
   --indicator-size: 1rem;
 
   pointer-events: none;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: center;
-  width: var(--indicator-size);
-
-  span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
+  overflow: hidden;
+  width: 0;
+  transition: width 120ms var(--ease-smooth);
 
   svg {
     stroke-width: var(--docsearch-icon-stroke-width);
     height: var(--indicator-size);
     width: var(--indicator-size);
+    transform: scale(0.5);
+    transform-origin: left center;
+    transition: transform 120ms var(--ease-smooth);
+  }
+
+  .DocSearch-Menu-CheckboxItem[data-checked] > & {
+    /* The check plus the gap it keeps from the label. */
+    width: calc(var(--indicator-size) + 0.25rem);
+  }
+
+  .DocSearch-Menu-CheckboxItem[data-checked] > & svg {
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &,
+    svg {
+      transition: none;
+    }
   }
 }
 
@@ -361,6 +398,7 @@
   align-items: center;
   gap: 0.29em;
   font-size: 0.875em;
+  line-height: 1.43em;
   color: var(--docsearch-chip-text-color);
   background: var(--docsearch-chip-background);
   padding-inline: 0.57em;
@@ -381,6 +419,10 @@
   justify-content: center;
   height: 1em;
   width: 1em;
+
+  /* The close glyph is drawn ~1/4 in from its box; offset it so it sits at the
+     same distance from the edge as the label. */
+  margin-inline-end: -0.14em;
   cursor: pointer;
 
   svg {
@@ -417,6 +459,33 @@
 
 /* Facet selection bar */
 
+/* Animates the bar's height between 0 and its content (grid `0fr`/`1fr`). */
+.DocSearch-FacetSelectionBar-Collapse {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 120ms var(--ease-smooth);
+
+  > div {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  &[data-closed] {
+    grid-template-rows: 0fr;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+@starting-style {
+  .DocSearch-FacetSelectionBar-Collapse {
+    grid-template-rows: 0fr;
+  }
+}
+
 .DocSearch-FacetSelectionBar {
   display: flex;
   align-items: center;
@@ -435,6 +504,7 @@
   all: unset;
   color: var(--docsearch-secondary-text-color);
   font-size: 0.875em;
+  line-height: 1.43em;
   display: inline-flex;
   align-items: center;
   padding-inline: 0.57em;

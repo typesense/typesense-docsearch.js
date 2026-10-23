@@ -28,7 +28,13 @@ export const typesenseSearchParameters = filterBy
 // never reaches a real Typesense conversation model.
 export const askAi = { conversationModelId: 'e2e-conversation-model' };
 
+// `?version=…` preselects that version through `defaultValues`.
+const defaultVersion = searchParams.get('version');
 export const facets = [
   { key: 'language', label: 'Language' },
-  { key: 'version', label: 'Version' },
+  {
+    key: 'version',
+    label: 'Version',
+    defaultValues: defaultVersion ? [defaultVersion] : undefined,
+  },
 ];

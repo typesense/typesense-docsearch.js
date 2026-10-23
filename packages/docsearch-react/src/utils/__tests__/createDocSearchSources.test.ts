@@ -1,6 +1,7 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { DocSearchHit, InternalDocSearchHit } from '../../types';
+import type { useSearchClient } from '../../useSearchClient';
 import { buildTypesenseQuerySources } from '../createDocSearchSources';
 
 function createHit({
@@ -107,7 +108,7 @@ describe('buildTypesenseQuerySources', () => {
       typesenseCollectionName: 'docs',
       saveRecentSearch: vi.fn(),
       onClose: vi.fn(),
-      facetSelections: { current: { language: 'en' } },
+      facetSelections: { current: { language: ['en', 'fr'] } },
     });
 
     expect(search).toHaveBeenCalledWith({
@@ -116,7 +117,7 @@ describe('buildTypesenseQuerySources', () => {
           collection: 'docs',
           q: 'install',
           group_by: 'url',
-          filter_by: 'language:=[`en`]',
+          filter_by: 'language:=[`en`,`fr`]',
         }),
       ],
     });
@@ -168,5 +169,74 @@ describe('buildTypesenseQuerySources', () => {
     expect(await sources[0].getItems({} as never)).toEqual([]);
     expect(consoleError).toHaveBeenCalledWith(error);
     consoleError.mockRestore();
+  });
+
+  describe('filter_by precedence', () => {
+    const search = vi.fn();
+
+    beforeEach(() => {
+      search.mockReset();
+      search.mockResolvedValue({
+        results: [{ index: 'docs', nbHits: 0, hits: [] }],
+      });
+    });
+
+    function buildWith({
+      filterBy,
+      selections,
+    }: {
+      filterBy?: string;
+      selections: Record<string, string[]>;
+    }): Promise<unknown> {
+      return buildTypesenseQuerySources({
+        query: 'install',
+        state: { context: { searchSuggestions: [] } },
+        setContext: vi.fn(),
+        searchClient: { search } as unknown as ReturnType<
+          typeof useSearchClient
+        >,
+        typesenseCollectionName: 'docs',
+        typesenseSearchParameters: filterBy ? { filter_by: filterBy } : {},
+        saveRecentSearch: vi.fn(),
+        onClose: vi.fn(),
+        facetSelections: { current: selections },
+      });
+    }
+
+    function sentRequest(): Record<string, unknown> {
+      return search.mock.calls[0][0].requests[0];
+    }
+
+    it('sends the configured filter_by while nothing is selected', async () => {
+      await buildWith({
+        filterBy: 'version:=[`v1`]',
+        selections: { language: [] },
+      });
+
+      expect(sentRequest().filter_by).toBe('version:=[`v1`]');
+    });
+
+    it('ANDs the selections with the configured filter_by', async () => {
+      await buildWith({
+        filterBy: 'version:=[`v1`]',
+        selections: { language: ['fr'] },
+      });
+
+      expect(sentRequest().filter_by).toBe(
+        '(version:=[`v1`]) && language:=[`fr`]'
+      );
+    });
+
+    it('sends only the selections without a configured filter_by', async () => {
+      await buildWith({ selections: { language: ['fr'] } });
+
+      expect(sentRequest().filter_by).toBe('language:=[`fr`]');
+    });
+
+    it('omits filter_by without configuration or selections', async () => {
+      await buildWith({ selections: {} });
+
+      expect(sentRequest()).not.toHaveProperty('filter_by');
+    });
   });
 });

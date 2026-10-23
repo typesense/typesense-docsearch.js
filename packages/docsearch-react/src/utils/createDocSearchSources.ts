@@ -29,19 +29,68 @@ export type StoredSearchesLike<TItem> = {
   getAll: () => TItem[];
 };
 
-export type FacetSelections = Record<string, string>;
+/**
+ * Selected values per facet key. An empty array means nothing is selected for
+ * that facet.
+ */
+export type FacetSelections = Record<string, string[]>;
 
 /**
- * Translates the FacetBar selections into a Typesense `filter_by` expression,
- * e.g. `{ language: 'en', version: 'v2' }` → `language:=[\`en`] &&
- * version:=[`v2`]`. Values are backtick-quoted so they can contain spaces and
- * punctuation.
+ * Next selected values for a facet, or an updater that receives the current
+ * values. Updaters are resolved against the always-current selections so
+ * toggles can't lose selections to stale props.
  */
-export function createFilterBy(facetSelections: FacetSelections): string {
-  return Object.entries(facetSelections)
-    .filter(([, selection]) => selection !== '')
-    .map(([facet, selection]) => `${facet}:=[\`${selection}\`]`)
+export type FacetSelectionUpdate =
+  | string[]
+  | ((currentValues: string[]) => string[]);
+
+/**
+ * Backtick-quotes a facet value so it can contain spaces and punctuation.
+ * Booleans and numbers stay bare so filters on `bool` and numeric facet fields
+ * still parse, matching typesense-instantsearch-adapter.
+ */
+function escapeFacetValue(value: string): string {
+  if (
+    value === 'true' ||
+    value === 'false' ||
+    (value.trim() !== '' && Number.isFinite(Number(value)))
+  ) {
+    return value;
+  }
+
+  return `\`${value}\``;
+}
+
+/**
+ * Translates the FacetBar selections into a Typesense `filter_by` expression.
+ * Values of one facet are ORed and facets are ANDed:
+ *
+ *     { language: ['en', 'fr'], version: ['v2'] }
+ *     → language:=[`en`,`fr`] && version:=[`v2`]
+ *
+ * Facets without values contribute nothing. The selections are ANDed with
+ * `scope`, the caller's own `filter_by`, which sites use to keep search inside
+ * their current language or version. It is parenthesized so it stays a single
+ * operand whatever it contains.
+ */
+export function createFilterBy(
+  facetSelections: FacetSelections,
+  scope = ''
+): string {
+  const selectionsFilter = Object.entries(facetSelections)
+    .filter(([, values]) => values.length > 0)
+    .map(
+      ([facet, values]) =>
+        `${facet}:=[${values.map(escapeFacetValue).join(',')}]`
+    )
     .join(' && ');
+
+  // A blank scope would leave an empty `()` operand, which Typesense rejects.
+  if (!scope.trim() || !selectionsFilter) {
+    return selectionsFilter || scope;
+  }
+
+  return `(${scope}) && ${selectionsFilter}`;
 }
 
 export function buildNoQuerySources({
@@ -134,7 +183,10 @@ export async function buildTypesenseQuerySources({
   facetSelections?: React.MutableRefObject<FacetSelections>;
 }): Promise<Array<AutocompleteSource<InternalDocSearchHit>>> {
   try {
-    const filterBy = createFilterBy(facetSelections?.current ?? {});
+    const filterBy = createFilterBy(
+      facetSelections?.current ?? {},
+      typesenseSearchParameters?.filter_by
+    );
 
     const typesenseRequest: MultiSearchRequestSchema<DocSearchHit, string> = {
       collection: typesenseCollectionName,
@@ -147,10 +199,8 @@ export async function buildTypesenseQuerySources({
       sort_by: 'item_priority:desc',
       snippet_threshold: 8,
       highlight_affix_num_tokens: 4,
-      // FacetBar selections are applied before the caller's parameters so an
-      // explicit `filter_by` in `typesenseSearchParameters` still wins.
-      ...(filterBy ? { filter_by: filterBy } : {}),
       ...(typesenseSearchParameters ?? {}),
+      ...(filterBy ? { filter_by: filterBy } : {}),
     };
 
     const { results } = await searchClient.search<DocSearchHit>({

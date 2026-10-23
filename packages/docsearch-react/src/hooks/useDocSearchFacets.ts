@@ -4,13 +4,20 @@ import type { FacetBarFacet } from '../components/FacetBar';
 import type { DocSearchFacet } from '../DocSearch';
 import { useFacetValues } from '../useFacetValues';
 import type { useSearchClient } from '../useSearchClient';
-import type { FacetSelections } from '../utils/createDocSearchSources';
-import { normalizeFacets } from '../utils/facets';
+import type {
+  FacetSelections,
+  FacetSelectionUpdate,
+} from '../utils/createDocSearchSources';
+import { getDefaultFacetSelections, normalizeFacets } from '../utils/facets';
+
+const EMPTY_SELECTION: string[] = [];
 
 export interface UseDocSearchFacetsProps {
   facets?: DocSearchFacet[];
   typesenseCollectionName: string;
   searchClient: ReturnType<typeof useSearchClient>;
+  /** `typesenseSearchParameters.filter_by`, which scopes the listed values. */
+  filterBy?: string;
   /**
    * Called after any facet selection change. Modals use this to refresh the
    * autocomplete results.
@@ -24,43 +31,80 @@ export interface UseDocSearchFacetsResult {
   facetSelections: FacetSelections;
   /** Always-current selections, for consumption inside `getSources` closures. */
   facetSelectionsRef: React.MutableRefObject<FacetSelections>;
-  handleFacetSelectionChange: (facet: string, value: string) => void;
+  /** Replaces the selected values of a facet. An empty array clears the facet. */
+  handleFacetSelectionChange: (
+    facet: string,
+    update: FacetSelectionUpdate
+  ) => void;
   clearFacetSelections: () => void;
+}
+
+/**
+ * Compares two selections for a facet. A missing entry and an empty array are
+ * both "nothing selected" so clearing an untouched facet doesn't trigger a
+ * refresh.
+ */
+function areSelectionsEqual(
+  a: string[] | undefined,
+  b: string[] | undefined
+): boolean {
+  const left = a ?? EMPTY_SELECTION;
+  const right = b ?? EMPTY_SELECTION;
+
+  if (left === right) return true;
+  if (left.length !== right.length) return false;
+
+  return left.every((value, index) => value === right[index]);
 }
 
 export function useDocSearchFacets({
   facets,
   typesenseCollectionName,
   searchClient,
+  filterBy,
   onSelectionsChange,
 }: UseDocSearchFacetsProps): UseDocSearchFacetsResult {
   const normalizedFacets = React.useMemo(
     () => normalizeFacets(facets),
     [facets]
   );
-  const normalizedFacetsRef = React.useRef(normalizedFacets);
   const facetValues = useFacetValues({
     facets: normalizedFacets,
     typesenseCollectionName,
     searchClient,
+    filterBy,
   });
   const [facetSelections, setFacetSelections] = React.useState<FacetSelections>(
-    () => ({})
+    () => getDefaultFacetSelections(normalizedFacets)
   );
   const facetSelectionsRef = React.useRef(facetSelections);
 
   const onSelectionsChangeRef = React.useRef(onSelectionsChange);
 
+  const facetsWithValues = React.useMemo(
+    () =>
+      normalizedFacets.map((facet) => ({
+        ...facet,
+        values: facetValues[facet.key] ?? [],
+      })),
+    [facetValues, normalizedFacets]
+  );
+  // Keep a facet without values visible while it has selected values (such as
+  // a `defaultValues` entry outside the scope) so its chip can clear them. Only
+  // once the values have loaded, when every key is present, so facets don't
+  // pop in one by one as the modal opens.
   const visibleFacets = React.useMemo(
     () =>
-      normalizedFacets
-        .map((facet) => ({ ...facet, values: facetValues[facet.key] ?? [] }))
-        .filter((facet) => facet.values.length > 0),
-    [facetValues, normalizedFacets]
+      facetsWithValues.filter(
+        (facet) =>
+          facet.values.length > 0 ||
+          (facet.key in facetValues &&
+            (facetSelections[facet.key]?.length ?? 0) > 0)
+      ),
+    [facetSelections, facetValues, facetsWithValues]
   );
 
   React.useLayoutEffect(() => {
-    normalizedFacetsRef.current = normalizedFacets;
     onSelectionsChangeRef.current = onSelectionsChange;
   });
 
@@ -71,31 +115,28 @@ export function useDocSearchFacets({
   }, []);
 
   const handleFacetSelectionChange = React.useCallback(
-    (facet: string, value: string): void => {
+    (facet: string, update: FacetSelectionUpdate): void => {
       const existing = facetSelectionsRef.current[facet];
+      const values =
+        typeof update === 'function'
+          ? update(existing ?? EMPTY_SELECTION)
+          : update;
 
-      if (existing === value) return;
+      if (areSelectionsEqual(existing, values)) return;
 
-      const next = { ...facetSelectionsRef.current };
-
-      next[facet] = value;
-
-      applySelections(next);
+      applySelections({ ...facetSelectionsRef.current, [facet]: values });
     },
     [applySelections]
   );
 
   const clearFacetSelections = React.useCallback(() => {
-    if (Object.keys(facetSelectionsRef.current).length === 0) return;
-    const next = {};
+    const hasSelectedValues = Object.values(facetSelectionsRef.current).some(
+      (values) => values.length > 0
+    );
 
-    for (const facet of normalizedFacetsRef.current) {
-      if (facetSelectionsRef.current[facet.key]) {
-        next[facet.key] = '';
-      }
-    }
+    if (!hasSelectedValues) return;
 
-    applySelections(next);
+    applySelections({});
   }, [applySelections]);
 
   return {

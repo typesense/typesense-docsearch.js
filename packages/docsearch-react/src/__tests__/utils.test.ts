@@ -3,7 +3,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { AIMessage } from '../types/AskiAi';
 import { extractLinksFromMessage } from '../utils/ai';
 import { createFilterBy } from '../utils/createDocSearchSources';
-import { getFacetLabel, normalizeFacets } from '../utils/facets';
+import {
+  getDefaultFacetSelections,
+  getFacetLabel,
+  normalizeFacets,
+} from '../utils/facets';
 import {
   createObjectStorage,
   createStorage,
@@ -71,21 +75,79 @@ describe('utils', () => {
     });
 
     it('joins selections into a Typesense filter_by expression', () => {
-      expect(createFilterBy({ language: 'en', version: 'v2' })).toBe(
+      expect(createFilterBy({ language: ['en'], version: ['v2'] })).toBe(
         'language:=[`en`] && version:=[`v2`]'
       );
     });
 
-    it('skips cleared facet selections', () => {
-      expect(createFilterBy({ language: '', type: 'guide' })).toBe(
+    it('ORs multiple values of the same facet', () => {
+      expect(createFilterBy({ language: ['en', 'fr'], version: ['v2'] })).toBe(
+        'language:=[`en`,`fr`] && version:=[`v2`]'
+      );
+    });
+
+    it('ANDs selections with a parenthesized scope', () => {
+      expect(
+        createFilterBy({ language: ['en'] }, 'version:=v1 || version:=v2')
+      ).toBe('(version:=v1 || version:=v2) && language:=[`en`]');
+    });
+
+    it('ignores a blank scope', () => {
+      expect(createFilterBy({ language: ['en'] }, '  ')).toBe(
+        'language:=[`en`]'
+      );
+    });
+
+    it('returns the scope unchanged without selections', () => {
+      expect(createFilterBy({ language: [] }, 'version:=v1')).toBe(
+        'version:=v1'
+      );
+    });
+
+    it('skips facets without selected values', () => {
+      expect(createFilterBy({ language: [], type: ['guide'] })).toBe(
         'type:=[`guide`]'
       );
     });
 
     it('backtick-quotes values containing spaces', () => {
-      expect(createFilterBy({ type: 'Getting Started' })).toBe(
+      expect(createFilterBy({ type: ['Getting Started'] })).toBe(
         'type:=[`Getting Started`]'
       );
+    });
+
+    it('leaves numbers and booleans unquoted', () => {
+      expect(
+        createFilterBy({
+          year: ['2024', '1.5'],
+          beta: ['true', 'false'],
+          version: ['v2', '2.x'],
+        })
+      ).toBe('year:=[2024,1.5] && beta:=[true,false] && version:=[`v2`,`2.x`]');
+    });
+
+    it('quotes empty strings and leaves negative numbers bare', () => {
+      expect(createFilterBy({ offset: ['-5'], label: [''] })).toBe(
+        'offset:=[-5] && label:=[``]'
+      );
+    });
+
+    it('reads default selections from defaultValues', () => {
+      expect(
+        getDefaultFacetSelections([
+          { key: 'language' },
+          { key: 'version', defaultValues: ['v2', 'v1', 'v2'] },
+          { key: 'type', defaultValues: [] },
+        ])
+      ).toEqual({ version: ['v2', 'v1'] });
+    });
+
+    it('stringifies non-string defaultValues from untyped configs', () => {
+      expect(
+        getDefaultFacetSelections([
+          { key: 'year', defaultValues: [2024, true] as unknown as string[] },
+        ])
+      ).toEqual({ year: ['2024', 'true'] });
     });
   });
 
