@@ -232,8 +232,10 @@ async function releaseAlerts(): Promise<Alert[]> {
 }
 
 async function existingKeys(): Promise<Set<string>> {
+  // Every issue rather than only labelled ones, so removing the label from an
+  // issue can't get it opened again.
   const issues = await paginate<{ body: string | null }>(
-    `/repos/${target}/issues?labels=${LABEL}&state=all&per_page=100`
+    `/repos/${target}/issues?state=all&per_page=100`
   );
 
   return new Set(
