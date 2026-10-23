@@ -77,9 +77,19 @@ export function useFacetValues({
         setFacetValues(valuesByFacet);
       })
       .catch(() => {
-        if (isMounted) {
-          setFacetValues({});
+        if (!isMounted) {
+          return;
         }
+
+        // Settle every facet without values rather than leaving them unloaded,
+        // so a facet with selected values (such as `defaultValues`) stays
+        // visible and its chip can clear a filter that still applies.
+        setFacetValues(
+          facetKeys.reduce<FacetValues>((acc, facet) => {
+            acc[facet] = [];
+            return acc;
+          }, {})
+        );
       });
 
     return () => {

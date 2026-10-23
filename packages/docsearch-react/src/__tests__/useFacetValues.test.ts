@@ -173,19 +173,19 @@ describe('useFacetValues', () => {
     expect(search).not.toHaveBeenCalled();
   });
 
-  it('resets to empty values when the request fails', async () => {
+  it('settles every facet without values when the request fails', async () => {
     search.mockRejectedValue(new Error('boom'));
 
     const { result } = renderHook(() =>
       useFacetValues({
-        facets: [{ key: 'language' }],
+        facets: [{ key: 'language' }, { key: 'version' }],
         typesenseCollectionName: 'docs',
         searchClient,
       })
     );
 
     await waitFor(() => {
-      expect(result.current).toEqual({});
+      expect(result.current).toEqual({ language: [], version: [] });
     });
   });
 });

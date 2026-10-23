@@ -124,6 +124,28 @@ describe('useDocSearchFacets', () => {
     });
   });
 
+  it('keeps a facet with selected values visible when the values request fails', async () => {
+    search.mockRejectedValue(new Error('boom'));
+
+    const { result } = renderHook(() =>
+      useDocSearchFacets({
+        facets: [
+          { key: 'language' },
+          { key: 'version', defaultValues: ['v2'] },
+        ],
+        typesenseCollectionName,
+        searchClient,
+      })
+    );
+
+    await waitFor(() => {
+      expect(result.current.visibleFacets).toEqual([
+        { key: 'version', defaultValues: ['v2'], values: [] },
+      ]);
+    });
+    expect(result.current.facetSelections).toEqual({ version: ['v2'] });
+  });
+
   it('clears default selections like any other selection', () => {
     const onSelectionsChange = vi.fn();
     const { result } = renderHook(() =>
