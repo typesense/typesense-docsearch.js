@@ -1,7 +1,7 @@
 name: Upstream alerts
 
-# Opens an `upstream-sync` issue for every pull request merged into
-# algolia/docsearch and for every upstream release (scripts/upstreamAlerts.ts).
+# Opens an `upstream-sync` issue for every commit on algolia/docsearch's main,
+# including its releases (scripts/upstreamAlerts.ts).
 on:
   schedule:
     - cron: '17 * * * *'

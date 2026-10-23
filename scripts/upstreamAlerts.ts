@@ -1,7 +1,9 @@
 /**
- * Opens an issue in this repository for every pull request merged into
- * algolia/docsearch's `main` and for every upstream release, so each change can
- * be triaged for porting. Run by `.github/workflows/upstream-alerts.yml`.
+ * Opens an issue in this repository for every commit on algolia/docsearch's
+ * `main`, so each upstream change can be triaged for porting. Upstream
+ * squash-merges pull requests but sometimes pushes directly, so commits cover
+ * both, and its `chore: release` commits mark releases. Run by
+ * `.github/workflows/upstream-alerts.yml`.
  *
  * Env: `GITHUB_TOKEN` (required), `GITHUB_REPOSITORY` (the repository to open
  * issues in), `UPSTREAM_SINCE` (ISO date; only later changes are reported),
@@ -33,16 +35,19 @@ if (!token) {
   throw new Error('GITHUB_TOKEN is required.');
 }
 
-type PullRequest = {
-  number: number;
-  title: string;
-  merged_at: string | null;
-  updated_at: string;
-  merge_commit_sha: string;
-  user: { login: string };
+type Commit = {
+  sha: string;
+  commit: {
+    message: string;
+    author: { name: string };
+    committer: { date: string };
+  };
+  // The GitHub account behind the commit author, if their email maps to one.
+  author: { login: string } | null;
+  parents: Array<{ sha: string }>;
 };
 
-type PullRequestFile = {
+type CommitFile = {
   filename: string;
   previous_filename?: string;
   status: string;
@@ -50,15 +55,7 @@ type PullRequestFile = {
   deletions: number;
 };
 
-type Release = {
-  tag_name: string;
-  html_url: string;
-  published_at: string | null;
-  draft: boolean;
-  prerelease: boolean;
-};
-
-type Alert = { key: string; date: string; title: string; body: string };
+type Alert = { title: string; body: string };
 
 async function request<T>(
   path: string,
@@ -89,18 +86,14 @@ async function request<T>(
   return { data: (await response.json()) as T, next };
 }
 
-/** Follows pagination until `isDone` says the rest of the pages are older. */
-async function paginate<T>(
-  path: string,
-  isDone: (page: T[]) => boolean = (): boolean => false
-): Promise<T[]> {
+async function paginate<T>(path: string): Promise<T[]> {
   const items: T[] = [];
   let next: string | null = path;
 
   while (next) {
     const page: { data: T[]; next: string | null } = await request<T[]>(next);
     items.push(...page.data);
-    next = isDone(page.data) ? null : page.next;
+    next = page.next;
   }
 
   return items;
@@ -110,7 +103,7 @@ async function paginate<T>(
  * Whether the fork has the file the change touches, or for new files the folder
  * it lands in. Runs from the fork's checkout.
  */
-function isInFork(file: PullRequestFile): boolean {
+function isInFork(file: CommitFile): boolean {
   return existsSync(
     file.status === 'added'
       ? dirname(file.filename)
@@ -118,7 +111,7 @@ function isInFork(file: PullRequestFile): boolean {
   );
 }
 
-function triageHint(files: PullRequestFile[]): string {
+function triageHint(files: CommitFile[]): string {
   const relevant = files.filter(
     (file) => !INCIDENTAL_PATHS.some((path) => file.filename.startsWith(path))
   );
@@ -136,99 +129,57 @@ function triageHint(files: PullRequestFile[]): string {
   return 'Port candidate: touches code the fork still ships.';
 }
 
-async function pullRequestAlerts(known: Set<string>): Promise<Alert[]> {
-  // Sorted by last update, which is never earlier than the merge, so paging
-  // can stop at the first page that ends before `since`.
-  const pulls = await paginate<PullRequest>(
-    `/repos/${UPSTREAM}/pulls?state=closed&base=main&sort=updated&direction=desc&per_page=100`,
-    (page) => new Date(page[page.length - 1]?.updated_at ?? 0) < since
-  );
-  const merged = pulls.filter(
-    (pull) =>
-      pull.merged_at &&
-      new Date(pull.merged_at) > since &&
-      !known.has(`pr:${pull.number}`) &&
-      // Release PRs are covered by the release's own issue.
-      !/^chore(\([^)]*\))?: release\b/i.test(pull.title)
-  );
+async function alertFor({ sha, commit, author }: Commit): Promise<Alert> {
+  const subject = commit.message.split('\n')[0]!;
+  // Squash merges end their subject with the pull request number.
+  const pr = subject.match(/ \(#(\d+)\)$/)?.[1];
+  const title = pr ? subject.slice(0, subject.lastIndexOf(' (#')) : subject;
+  const date = commit.committer.date.slice(0, 10);
+  const committed = `[\`${sha.slice(0, 8)}\`](https://github.com/${UPSTREAM}/commit/${sha}) (${pr ? `upstream PR \`${pr}\`` : 'no pull request'}, author \`${author?.login ?? commit.author.name}\`)`;
+  const release = title.match(/^chore(\([^)]*\))?: release v?(\d\S*)/i)?.[2];
 
-  return Promise.all(
-    merged.map(async (pull) => {
-      const files = await paginate<PullRequestFile>(
-        `/repos/${UPSTREAM}/pulls/${pull.number}/files?per_page=100`
-      );
-      const commitUrl = `https://github.com/${UPSTREAM}/commit/${pull.merge_commit_sha}`;
-
-      return {
-        key: `pr:${pull.number}`,
-        date: pull.merged_at!,
-        title: `Upstream PR ${pull.number}: ${pull.title}`,
-        body: [
-          `Merged into \`${UPSTREAM}\` \`main\` on ${pull.merged_at!.slice(0, 10)} as [\`${pull.merge_commit_sha.slice(0, 8)}\`](${commitUrl}) (upstream PR \`${pull.number}\`, author \`${pull.user.login}\`).`,
-          '',
-          `**Triage hint:** ${triageHint(files)}`,
-          '',
-          `<details><summary>Changed files (${files.length})</summary>`,
-          '',
-          ...files
-            .slice(0, MAX_LISTED_FILES)
-            .map(
-              (file) =>
-                `- \`${file.filename}\` (+${file.additions} −${file.deletions})`
-            ),
-          ...(files.length > MAX_LISTED_FILES
-            ? [`- …and ${files.length - MAX_LISTED_FILES} more`]
-            : []),
-          '',
-          '</details>',
-          '',
-          'To port it:',
-          '',
-          '```sh',
-          `git fetch https://github.com/${UPSTREAM}.git ${pull.merge_commit_sha} && git cherry-pick -x ${pull.merge_commit_sha}`,
-          '```',
-        ].join('\n'),
-      };
-    })
-  );
-}
-
-async function releaseAlerts(): Promise<Alert[]> {
-  const releases = await paginate<Release>(
-    `/repos/${UPSTREAM}/releases?per_page=100`,
-    (page) => new Date(page[page.length - 1]?.published_at ?? 0) < since
-  );
-  // Upstream publishes one release per package (`@docsearch/react@5.1.2`);
-  // group them into one alert per version.
-  const byVersion = new Map<string, Release[]>();
-
-  for (const release of releases) {
-    if (
-      release.draft ||
-      !release.published_at ||
-      new Date(release.published_at) <= since
-    ) {
-      continue;
-    }
-
-    const version = release.tag_name.replace(/^.*@|^v/, '');
-    byVersion.set(version, [...(byVersion.get(version) ?? []), release]);
+  if (release) {
+    return {
+      title: `Upstream release ${release}`,
+      body: `\`${UPSTREAM}\` released ${release} on ${date} in ${committed}. Each change in it has its own \`${LABEL}\` issue.`,
+    };
   }
 
-  return Array.from(byVersion, ([version, packages]) => ({
-    key: `release:${version}`,
-    date: packages[0]!.published_at!,
-    title: `Upstream release ${version}${packages.some((r) => r.prerelease) ? ' (prerelease)' : ''}`,
+  const { data } = await request<{ files: CommitFile[] }>(
+    `/repos/${UPSTREAM}/commits/${sha}`
+  );
+  const { files } = data;
+
+  return {
+    title: pr
+      ? `Upstream PR ${pr}: ${title}`
+      : `Upstream commit ${sha.slice(0, 8)}: ${title}`,
     body: [
-      `\`${UPSTREAM}\` published ${version} on ${packages[0]!.published_at!.slice(0, 10)}:`,
+      `Committed to \`${UPSTREAM}\` \`main\` on ${date} as ${committed}.`,
       '',
-      ...packages.map(
-        (release) => `- [\`${release.tag_name}\`](${release.html_url})`
-      ),
+      `**Triage hint:** ${triageHint(files)}`,
       '',
-      `Each pull request in this release has its own \`${LABEL}\` issue.`,
+      `<details><summary>Changed files (${files.length})</summary>`,
+      '',
+      ...files
+        .slice(0, MAX_LISTED_FILES)
+        .map(
+          (file) =>
+            `- \`${file.filename}\` (+${file.additions} −${file.deletions})`
+        ),
+      ...(files.length > MAX_LISTED_FILES
+        ? [`- …and ${files.length - MAX_LISTED_FILES} more`]
+        : []),
+      '',
+      '</details>',
+      '',
+      'To port it:',
+      '',
+      '```sh',
+      `git fetch https://github.com/${UPSTREAM}.git ${sha} && git cherry-pick -x ${sha}`,
+      '```',
     ].join('\n'),
-  }));
+  };
 }
 
 async function existingKeys(): Promise<Set<string>> {
@@ -264,18 +215,26 @@ async function ensureLabel(): Promise<void> {
 }
 
 const known = await existingKeys();
-const fresh = (await Promise.all([pullRequestAlerts(known), releaseAlerts()]))
-  .flat()
-  .filter((alert) => !known.has(alert.key))
-  .sort((a, b) => a.date.localeCompare(b.date));
+// `since` filters on the commit date, which for a squash merge is the merge.
+const commits = await paginate<Commit>(
+  `/repos/${UPSTREAM}/commits?sha=main&since=${since.toISOString()}&per_page=100`
+);
+// Oldest first, so issue numbers follow upstream's order. Merge commits are
+// skipped because the commits they bring in are listed too.
+const fresh = commits
+  .filter(
+    (commit) =>
+      commit.parents.length === 1 && !known.has(`commit:${commit.sha}`)
+  )
+  .reverse();
 
 if (!dryRun && fresh.length > 0) {
   await ensureLabel();
 }
 
-// Oldest first, so issue numbers follow upstream's order.
-for (const alert of fresh) {
-  const body = `<!-- upstream-sync:${alert.key} -->\n${alert.body}`;
+for (const commit of fresh) {
+  const alert = await alertFor(commit);
+  const body = `<!-- upstream-sync:commit:${commit.sha} -->\n${alert.body}`;
 
   if (dryRun) {
     // eslint-disable-next-line no-console
