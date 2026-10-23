@@ -1,5 +1,7 @@
 import type { DocSearchFacet } from '../DocSearch';
 
+import type { FacetSelections } from './createDocSearchSources';
+
 export const MAX_FACETS = 5;
 
 export function normalizeFacets(
@@ -39,4 +41,25 @@ export function getFacetLabel(facet: DocSearchFacet): string {
   return facet.key
     .replace(/[._-]+/g, ' ')
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+/**
+ * Selections the FacetBar starts with, from each facet's `defaultValues`.
+ * Values are stringified like the facet values Typesense returns, since untyped
+ * configs may pass numbers or booleans.
+ */
+export function getDefaultFacetSelections(
+  facets: DocSearchFacet[]
+): FacetSelections {
+  const selections: FacetSelections = {};
+
+  for (const facet of facets) {
+    if (facet.defaultValues?.length) {
+      selections[facet.key] = Array.from(
+        new Set(facet.defaultValues.map(String))
+      );
+    }
+  }
+
+  return selections;
 }

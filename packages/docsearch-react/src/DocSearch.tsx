@@ -49,6 +49,11 @@ export type TypesenseDocsearchTransformClient = {
 export interface DocSearchFacet {
   key: string;
   label?: string;
+  /**
+   * Values selected when the modal opens. Users can deselect them, unlike a
+   * `typesenseSearchParameters.filter_by` scope.
+   */
+  defaultValues?: string[];
 }
 
 export interface HitComponentProps {

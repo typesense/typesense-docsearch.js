@@ -8,7 +8,7 @@ import type {
   FacetSelections,
   FacetSelectionUpdate,
 } from '../utils/createDocSearchSources';
-import { normalizeFacets } from '../utils/facets';
+import { getDefaultFacetSelections, normalizeFacets } from '../utils/facets';
 
 const EMPTY_SELECTION: string[] = [];
 
@@ -75,18 +75,33 @@ export function useDocSearchFacets({
     filterBy,
   });
   const [facetSelections, setFacetSelections] = React.useState<FacetSelections>(
-    () => ({})
+    () => getDefaultFacetSelections(normalizedFacets)
   );
   const facetSelectionsRef = React.useRef(facetSelections);
 
   const onSelectionsChangeRef = React.useRef(onSelectionsChange);
 
+  const facetsWithValues = React.useMemo(
+    () =>
+      normalizedFacets.map((facet) => ({
+        ...facet,
+        values: facetValues[facet.key] ?? [],
+      })),
+    [facetValues, normalizedFacets]
+  );
+  // Keep a facet without values visible while it has selected values (such as
+  // a `defaultValues` entry outside the scope) so its chip can clear them. Only
+  // once the values have loaded, when every key is present, so facets don't
+  // pop in one by one as the modal opens.
   const visibleFacets = React.useMemo(
     () =>
-      normalizedFacets
-        .map((facet) => ({ ...facet, values: facetValues[facet.key] ?? [] }))
-        .filter((facet) => facet.values.length > 0),
-    [facetValues, normalizedFacets]
+      facetsWithValues.filter(
+        (facet) =>
+          facet.values.length > 0 ||
+          (facet.key in facetValues &&
+            (facetSelections[facet.key]?.length ?? 0) > 0)
+      ),
+    [facetSelections, facetValues, facetsWithValues]
   );
 
   React.useLayoutEffect(() => {

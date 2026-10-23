@@ -210,5 +210,38 @@ for (const route of ['/', '/keyword']) {
         .poll(() => hitPages(docSearch))
         .toEqual(['/docs/fr/v1/recherche', '/docs/v1/guide/faceting']);
     });
+
+    test('defaultValues are selected when the modal opens', async ({
+      docSearch,
+      page,
+    }) => {
+      await docSearch.goto(`${route}?version=v1`);
+      await docSearch.openModal();
+
+      const search = nextKeywordSearch(page, 'g', 'version:=[`v1`]');
+      await docSearch.typeQueryMatching();
+      await search;
+      await expect(
+        page.getByRole('button', { name: 'Clear filter: V1 (Version)' })
+      ).toBeVisible();
+      await expect
+        .poll(() => hitPages(docSearch))
+        .toEqual(['/docs/fr/v1/recherche', '/docs/v1/guide/faceting']);
+
+      await page.getByRole('button', { name: 'Clear all' }).click();
+      await expect
+        .poll(() => hitPages(docSearch))
+        .toContain('/docs/getting-started');
+
+      // The modal remounts on open, so the defaults come back.
+      await docSearch.closeModal();
+      await docSearch.openModal();
+      const reopenedSearch = nextKeywordSearch(page, 'g', 'version:=[`v1`]');
+      await docSearch.typeQueryMatching();
+      await reopenedSearch;
+      await expect(
+        page.getByRole('button', { name: 'Clear filter: V1 (Version)' })
+      ).toBeVisible();
+    });
   });
 }

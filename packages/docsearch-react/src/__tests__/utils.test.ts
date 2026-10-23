@@ -3,7 +3,11 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import type { AIMessage } from '../types/AskiAi';
 import { extractLinksFromMessage } from '../utils/ai';
 import { createFilterBy } from '../utils/createDocSearchSources';
-import { getFacetLabel, normalizeFacets } from '../utils/facets';
+import {
+  getDefaultFacetSelections,
+  getFacetLabel,
+  normalizeFacets,
+} from '../utils/facets';
 import {
   createObjectStorage,
   createStorage,
@@ -126,6 +130,24 @@ describe('utils', () => {
       expect(createFilterBy({ offset: ['-5'], label: [''] })).toBe(
         'offset:=[-5] && label:=[``]'
       );
+    });
+
+    it('reads default selections from defaultValues', () => {
+      expect(
+        getDefaultFacetSelections([
+          { key: 'language' },
+          { key: 'version', defaultValues: ['v2', 'v1', 'v2'] },
+          { key: 'type', defaultValues: [] },
+        ])
+      ).toEqual({ version: ['v2', 'v1'] });
+    });
+
+    it('stringifies non-string defaultValues from untyped configs', () => {
+      expect(
+        getDefaultFacetSelections([
+          { key: 'year', defaultValues: [2024, true] as unknown as string[] },
+        ])
+      ).toEqual({ year: ['2024', 'true'] });
     });
   });
 

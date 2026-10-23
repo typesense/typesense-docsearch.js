@@ -83,6 +83,66 @@ describe('useDocSearchFacets', () => {
     expect(result.current.facetSelections).toEqual({});
   });
 
+  it('starts with the defaultValues of each facet selected', () => {
+    const { result } = renderHook(() =>
+      useDocSearchFacets({
+        facets: [
+          { key: 'language' },
+          { key: 'version', defaultValues: ['v2'] },
+        ],
+        typesenseCollectionName,
+        searchClient,
+      })
+    );
+
+    expect(result.current.facetSelections).toEqual({ version: ['v2'] });
+    expect(result.current.facetSelectionsRef.current).toEqual({
+      version: ['v2'],
+    });
+  });
+
+  it('keeps a facet with selected values visible once values load without any', async () => {
+    const { result } = renderHook(() =>
+      useDocSearchFacets({
+        facets: [
+          { key: 'language' },
+          { key: 'empty', defaultValues: ['x'] },
+          { key: 'unselected' },
+        ],
+        typesenseCollectionName,
+        searchClient,
+      })
+    );
+
+    expect(result.current.visibleFacets).toEqual([]);
+
+    await waitFor(() => {
+      expect(result.current.visibleFacets).toEqual([
+        { key: 'language', values: ['en', 'fr'] },
+        { key: 'empty', defaultValues: ['x'], values: [] },
+      ]);
+    });
+  });
+
+  it('clears default selections like any other selection', () => {
+    const onSelectionsChange = vi.fn();
+    const { result } = renderHook(() =>
+      useDocSearchFacets({
+        facets: [{ key: 'version', defaultValues: ['v2'] }],
+        typesenseCollectionName,
+        searchClient,
+        onSelectionsChange,
+      })
+    );
+
+    act(() => {
+      result.current.clearFacetSelections();
+    });
+
+    expect(result.current.facetSelections).toEqual({});
+    expect(onSelectionsChange).toHaveBeenCalledTimes(1);
+  });
+
   it('supports multiple selected values per facet', () => {
     const onSelectionsChange = vi.fn();
     const { result } = renderHook(() =>
