@@ -35,7 +35,6 @@
   --docsearch-focus-color: var(--typesense-primary);
   --docsearch-highlight-color: var(--typesense-primary);
   --docsearch-muted-color: var(--typesense-muted);
-  --docsearch-muted-color-darker: rgb(77 77 77 / 25%);
   --docsearch-icon-color: var(--typesense-muted);
   --docsearch-container-background: rgb(0 0 0 / 20%);
   --docsearch-logo-color: var(--typesense-primary);
@@ -82,14 +81,9 @@
   /* footer */
   --docsearch-footer-height: 48px;
   --docsearch-footer-background: var(--typesense-surface);
-  --docsearch-footer-shadow: 0 -1px 0 0 var(--typesense-border-color);
 
   /* animations */
-  --fav-out-dur: 160ms;
-  --del-dur: 150ms;
   --ease-smooth: cubic-bezier(0.25, 0.8, 0.4, 1);
-  --ease-fast: cubic-bezier(0.45, 0.15, 0.6, 0.9);
-  --shadow-pop: 0 4px 12px rgb(0 0 0 / 6%);
   --shimmer-bg: linear-gradient(
     90deg,
     #4d4d4d 0%,
@@ -151,7 +145,6 @@ html[data-theme='dark'],
   --docsearch-background-color: var(--typesense-surface-dim);
   --docsearch-icon-color: var(--typesense-muted);
   --docsearch-muted-color: var(--typesense-muted);
-  --docsearch-muted-color-darker: rgb(179 179 179 / 25%);
   --docsearch-soft-primary-color: rgb(192 255 88 / 8%);
   --docsearch-hit-highlight-color: rgb(192 255 88 / 16%);
   --docsearch-searchbox-background: var(--typesense-surface);
@@ -161,7 +154,6 @@ html[data-theme='dark'],
     --typesense-surface-line
   );
   --docsearch-hit-color: var(--typesense-ink);
-  --docsearch-hit-shadow: none;
   --docsearch-hit-background: #191919;
   --docsearch-hit-focus-background: var(--typesense-surface-line);
   --docsearch-askai-hit-border-color: rgb(192 255 88 / 20%);
@@ -177,7 +169,6 @@ html[data-theme='dark'],
     0 24px 32px -12px hsl(91deg 76% 20% / 20%),
     0 0 0 0.75px rgb(192 255 88 / 9%);
   --docsearch-footer-background: var(--typesense-surface);
-  --docsearch-footer-shadow: inset 0 1px 0 0 var(--typesense-border-color);
   --docsearch-search-button-background: var(--typesense-surface);
   --docsearch-search-button-text-color: var(--docsearch-text-color);
   --shimmer-bg: linear-gradient(
