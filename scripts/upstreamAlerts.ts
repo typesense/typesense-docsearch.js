@@ -149,6 +149,21 @@ async function alertFor({ sha, commit, author }: Commit): Promise<Alert> {
     `/repos/${UPSTREAM}/commits/${sha}`
   );
   const { files } = data;
+  // Upstream's changesets name `@docsearch/*` packages, which the fork's
+  // changesets setup rejects.
+  const changesets = files
+    .filter(
+      (file) =>
+        file.status === 'added' && file.filename.startsWith('.changeset/')
+    )
+    .map((file) => file.filename);
+  const port = [
+    `git fetch https://github.com/${UPSTREAM}.git ${sha}`,
+    `git cherry-pick -x ${sha}`,
+    ...(changesets.length > 0
+      ? [`git rm -q ${changesets.join(' ')}`, 'git commit -q --amend --no-edit']
+      : []),
+  ];
 
   return {
     title: pr
@@ -173,10 +188,12 @@ async function alertFor({ sha, commit, author }: Commit): Promise<Alert> {
       '',
       '</details>',
       '',
-      'To port it:',
+      changesets.length > 0
+        ? "To port it, without upstream's changesets:"
+        : 'To port it:',
       '',
       '```sh',
-      `git fetch https://github.com/${UPSTREAM}.git ${sha} && git cherry-pick -x ${sha}`,
+      port.join(' && '),
       '```',
     ].join('\n'),
   };
