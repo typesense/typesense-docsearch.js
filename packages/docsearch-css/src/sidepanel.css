@@ -227,14 +227,6 @@
   box-sizing: border-box;
   height: 100%;
   position: relative;
-
-  @media screen and (width >= 768px) {
-    .DocSearch-PromptSuggestions-Content {
-      align-items: start;
-      justify-content: start;
-      flex-flow: column nowrap;
-    }
-  }
 }
 
 .DocSearch-Sidepanel * {
@@ -733,12 +725,6 @@
   padding-block-start: 2.4em;
 }
 
-.DocSearch-Sidepanel .DocSearch-AskAiScreen-MessageContent-Tool-Query:hover {
-  cursor: unset;
-  box-shadow: none;
-  color: var(--docsearch-muted-color);
-}
-
 .DocSearch-Sidepanel .DocSearch-AskAiScreen-Actions-Controls {
   align-self: flex-start;
 }
@@ -749,10 +735,6 @@
 
 .DocSearch-Sidepanel .DocSearch-Feedback-Panel {
   padding: 0.75em;
-}
-
-.DocSearch-Sidepanel .DocSearch-AskAiScreen-RelatedSources {
-  padding-bottom: 1rem;
 }
 
 .DocSearch-Sidepanel .DocSearch-Menu-content {
