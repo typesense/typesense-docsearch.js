@@ -1,5 +1,13 @@
 # typesense-docsearch-css
 
+## 5.0.2-4
+
+### Patch Changes
+
+- Style multi-value facet menus, animate checking a value and the selected-filters bar, and add a `--docsearch-menu-popup-background` token ([#35](https://github.com/typesense/typesense-docsearch.js/pull/35)).
+- Drop the background fade on the selected hit, in keyword results and Ask AI, so the highlight keeps up with held arrow keys ([#39](https://github.com/typesense/typesense-docsearch.js/pull/39)).
+- Drop unused CSS classes inherited from upstream DocSearch ([#37](https://github.com/typesense/typesense-docsearch.js/pull/37)).
+
 ## 5.0.2-3
 
 ## 5.0.2-2
