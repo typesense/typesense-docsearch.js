@@ -43,15 +43,6 @@
   padding-inline-start: 0.5rem;
   width: 100%;
   cursor: pointer;
-  transition:
-    background-color 120ms var(--ease-smooth),
-    border-color 120ms var(--ease-smooth);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .DocSearch-Hit--AskAI {
-    transition: none;
-  }
 }
 
 .DocSearch-Hit[aria-selected='true'] .DocSearch-Hit--AskAI {
