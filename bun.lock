@@ -98,7 +98,7 @@
     },
     "packages/docsearch-core": {
       "name": "typesense-docsearch-core",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "devDependencies": {
         "@testing-library/jest-dom": "6.6.3",
         "@testing-library/react": "16.2.0",
@@ -120,7 +120,7 @@
     },
     "packages/docsearch-css": {
       "name": "typesense-docsearch-css",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "devDependencies": {
         "browserslist": "4.28.2",
         "lightningcss": "1.32.0",
@@ -129,22 +129,22 @@
     },
     "packages/docsearch-js": {
       "name": "typesense-docsearch.js",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "devDependencies": {
         "htm": "3.1.1",
         "preact": "11.0.0-beta.0",
         "tsdown": "catalog:dev",
         "typescript": "5.7.3",
-        "typesense-docsearch-core": "5.0.2-3",
-        "typesense-docsearch-react": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
+        "typesense-docsearch-react": "5.0.2-4",
       },
     },
     "packages/docsearch-modal": {
       "name": "typesense-docsearch-modal",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "dependencies": {
-        "typesense-docsearch-core": "5.0.2-3",
-        "typesense-docsearch-react": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
+        "typesense-docsearch-react": "5.0.2-4",
       },
       "devDependencies": {
         "@testing-library/jest-dom": "6.6.3",
@@ -166,15 +166,15 @@
     },
     "packages/docsearch-react": {
       "name": "typesense-docsearch-react",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "dependencies": {
         "@algolia/autocomplete-core": "1.19.2",
         "@base-ui/react": "^1.5.0",
         "algoliasearch": "^5.28.0",
         "marked": "^16.3.0",
         "typesense": "3.1.1",
-        "typesense-docsearch-core": "5.0.2-3",
-        "typesense-docsearch-css": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
+        "typesense-docsearch-css": "5.0.2-4",
         "typesense-instantsearch-adapter": "3.0.0",
         "zod": "^4.1.8",
       },
@@ -185,7 +185,7 @@
         "preact": "11.0.0-beta.0",
         "tsdown": "catalog:dev",
         "typescript": "5.7.3",
-        "typesense-docsearch-core": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
         "vitest": "3.0.2",
       },
       "peerDependencies": {
@@ -203,11 +203,11 @@
     },
     "packages/docsearch-sidepanel": {
       "name": "typesense-docsearch-sidepanel",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "dependencies": {
-        "typesense-docsearch-core": "5.0.2-3",
-        "typesense-docsearch-css": "5.0.2-3",
-        "typesense-docsearch-react": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
+        "typesense-docsearch-css": "5.0.2-4",
+        "typesense-docsearch-react": "5.0.2-4",
       },
       "devDependencies": {
         "@testing-library/jest-dom": "6.6.3",
@@ -229,13 +229,13 @@
     },
     "packages/docsearch-sidepanel-js": {
       "name": "typesense-docsearch-sidepanel-js",
-      "version": "5.0.2-3",
+      "version": "5.0.2-4",
       "devDependencies": {
         "preact": "11.0.0-beta.0",
         "tsdown": "catalog:dev",
         "typescript": "5.7.3",
-        "typesense-docsearch-core": "5.0.2-3",
-        "typesense-docsearch-react": "5.0.2-3",
+        "typesense-docsearch-core": "5.0.2-4",
+        "typesense-docsearch-react": "5.0.2-4",
       },
     },
   },

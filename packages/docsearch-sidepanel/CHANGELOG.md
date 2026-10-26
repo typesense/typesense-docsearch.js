@@ -1,5 +1,15 @@
 # typesense-docsearch-sidepanel
 
+## 5.0.2-4
+
+### Patch Changes
+
+- Import the side panel button and panel from their own `typesense-docsearch-react` entry points ([#31](https://github.com/typesense/typesense-docsearch.js/pull/31)).
+- Updated dependencies:
+  - typesense-docsearch-core@5.0.2-4
+  - typesense-docsearch-css@5.0.2-4
+  - typesense-docsearch-react@5.0.2-4
+
 ## 5.0.2-3
 
 ### Patch Changes

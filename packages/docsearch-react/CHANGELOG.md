@@ -1,5 +1,20 @@
 # typesense-docsearch-react
 
+## 5.0.2-4
+
+### Patch Changes
+
+- Select several values per facet. Values of one facet are ORed, facets are ANDed, and each selected value gets its own chip ([#35](https://github.com/typesense/typesense-docsearch.js/pull/35)).
+- **Behavior change:** facet selections are now ANDed with `typesenseSearchParameters.filter_by` instead of being ignored when it is set, and facet menus only list values inside it ([#35](https://github.com/typesense/typesense-docsearch.js/pull/35)).
+- Add `facets[].defaultValues` to preselect facet values each time the modal opens ([#35](https://github.com/typesense/typesense-docsearch.js/pull/35)).
+- Show the error screen when a search fails, including a missing collection reported inside a successful `multi_search` response ([#34](https://github.com/typesense/typesense-docsearch.js/pull/34)).
+- Fix the facet bar never rendering by reading facet values from the adapted search response ([#32](https://github.com/typesense/typesense-docsearch.js/pull/32)).
+- Sync with upstream DocSearch 5.1.2: ignore Enter during IME composition, restore Control shortcut key feedback, prevent a Safari 14 crash, make the closed side panel inert, add `sidepanelButton` and `sidepanelPanel` entry points, let `DocSearchAI` accept Ask AI-specific modal translations, and call `interceptAskAiEvent` when an Ask AI item is selected with the keyboard ([#31](https://github.com/typesense/typesense-docsearch.js/pull/31)).
+- Drop the unused `ai` and `@ai-sdk/react` dependencies ([#31](https://github.com/typesense/typesense-docsearch.js/pull/31)).
+- Updated dependencies:
+  - typesense-docsearch-core@5.0.2-4
+  - typesense-docsearch-css@5.0.2-4
+
 ## 5.0.2-3
 
 ### Patch Changes
