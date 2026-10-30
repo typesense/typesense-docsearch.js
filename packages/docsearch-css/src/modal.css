@@ -767,6 +767,10 @@
   font-weight: 300;
 }
 
+.DocSearch-Help a {
+  color: var(--docsearch-primary-color);
+}
+
 .DocSearch-Title {
   color: var(--docsearch-text-color);
   vertical-align: middle;
@@ -1064,15 +1068,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.DocSearch-NoResults {
   gap: 0.8em;
   margin-block-start: 2em;
-}
-
-.DocSearch-ErrorScreen {
-  gap: 24px;
 }
 
 .DocSearch-Screen-Icon svg {
