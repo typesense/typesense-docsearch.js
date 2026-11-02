@@ -240,6 +240,7 @@ export function DocSearchModal({
       dropdownRef={dropdownRef}
       getRootProps={getRootProps}
       showDropdown={showDocsearchDropdown}
+      keepInputFocus={true}
       searchBox={
         <KeywordSearchBox
           {...autocomplete}

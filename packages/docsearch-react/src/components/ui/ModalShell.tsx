@@ -4,6 +4,26 @@ import React, { type JSX } from 'react';
 import type { DocSearchState, InternalDocSearchHit } from '../../types';
 import { hasSearchError } from '../../utils';
 
+const EDITABLE_ELEMENTS_SELECTOR = 'input, select, textarea, [contenteditable]';
+
+// Pressing a part of the results panel or the footer that can't take focus
+// (the panel's scrollbar, a group title, the footer text) moves focus to the
+// container, and the arrow keys only work while the search input is focused.
+// This mirrors autocomplete's `getPanelProps().onMouseDown`, without the
+// `onMouseLeave` handler that resets the active item.
+const KEEP_INPUT_FOCUS_PROPS = {
+  onMouseDown(event: React.MouseEvent<HTMLElement>): void {
+    if (
+      event.button !== 0 ||
+      (event.target as HTMLElement).closest(EDITABLE_ELEMENTS_SELECTOR)
+    ) {
+      return;
+    }
+
+    event.preventDefault();
+  },
+};
+
 export type ModalShellProps = {
   state: DocSearchState<InternalDocSearchHit>;
   containerRef: React.RefObject<HTMLDivElement | null>;
@@ -22,6 +42,7 @@ export type ModalShellProps = {
   filterBar?: React.ReactNode;
   screenState: React.ReactNode;
   footer: React.ReactNode;
+  keepInputFocus?: boolean;
 };
 
 export function ModalShell({
@@ -37,7 +58,12 @@ export function ModalShell({
   filterBar,
   screenState,
   footer,
+  keepInputFocus = false,
 }: ModalShellProps): JSX.Element {
+  const keepInputFocusProps = keepInputFocus
+    ? KEEP_INPUT_FOCUS_PROPS
+    : undefined;
+
   return (
     <div
       ref={containerRef}
@@ -73,11 +99,14 @@ export function ModalShell({
             .filter(Boolean)
             .join(' ')}
           ref={dropdownRef}
+          {...keepInputFocusProps}
         >
           {screenState}
         </div>
 
-        <footer className="DocSearch-Footer">{footer}</footer>
+        <footer className="DocSearch-Footer" {...keepInputFocusProps}>
+          {footer}
+        </footer>
       </div>
     </div>
   );

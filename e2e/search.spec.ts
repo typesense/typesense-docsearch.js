@@ -169,6 +169,38 @@ test.describe('Search', () => {
     await expect(page).not.toHaveURL(initialURL, { timeout: 10000 });
   });
 
+  test('Keyboard navigation keeps working after clicking a group title or the footer', async ({
+    docSearch,
+    page,
+  }) => {
+    // With its 60px top margin, the 700px modal ends below a 720px viewport
+    // once results fill the dropdown, which leaves the footer unclickable.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await docSearch.typeQueryMatching();
+    await expect(docSearch.firstHit).toBeVisible();
+
+    for (const target of [
+      page.locator('.DocSearch-Hit-source').first(),
+      page.locator('.DocSearch-Commands'),
+    ]) {
+      await target.click();
+      await expect(docSearch.input).toBeFocused();
+
+      const activeItemId = await docSearch.input.getAttribute(
+        'aria-activedescendant'
+      );
+      await page.keyboard.press('ArrowDown');
+      await expect(docSearch.input).toHaveAttribute(
+        'aria-activedescendant',
+        /.+/
+      );
+      await expect(docSearch.input).not.toHaveAttribute(
+        'aria-activedescendant',
+        activeItemId ?? ''
+      );
+    }
+  });
+
   test('Pointer navigation leads to result', async ({ docSearch, page }) => {
     const initialURL = page.url();
 
