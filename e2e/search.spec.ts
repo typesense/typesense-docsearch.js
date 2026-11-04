@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, waitForAnimations } from './fixtures';
 
 const MAX_KEYBOARD_NAVIGATION_STEPS = 10;
 
@@ -210,9 +210,6 @@ test.describe('Search', () => {
     docSearch,
     page,
   }) => {
-    // With its 60px top margin, the 700px modal ends below a 720px viewport
-    // once results fill the dropdown, which leaves the footer unclickable.
-    await page.setViewportSize({ width: 1280, height: 900 });
     await docSearch.typeQueryMatching();
     await expect(docSearch.firstHit).toBeVisible();
 
@@ -236,6 +233,37 @@ test.describe('Search', () => {
         activeItemId ?? ''
       );
     }
+  });
+
+  test('The modal fits inside a short window', async ({ docSearch, page }) => {
+    await page.setViewportSize({ width: 1280, height: 600 });
+    await docSearch.typeQueryMatching();
+    await expect(docSearch.firstHit).toBeVisible();
+    await waitForAnimations(page);
+
+    await expect(page.locator('.DocSearch-Footer')).toBeInViewport({
+      ratio: 1,
+    });
+
+    await page.locator('.DocSearch-Dropdown').evaluate((element) => {
+      element.scrollTop = element.scrollHeight;
+    });
+    await expect(page.locator('.DocSearch-Hit').last()).toBeInViewport({
+      ratio: 1,
+    });
+  });
+
+  test('The dropdown keeps its full height in a tall window', async ({
+    docSearch,
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1280, height: 1000 });
+    await docSearch.typeQueryMatching();
+    await expect(docSearch.firstHit).toBeVisible();
+    await waitForAnimations(page);
+
+    const box = await page.locator('.DocSearch-Dropdown').boundingBox();
+    expect(box?.height).toBe(600);
   });
 
   test('Pointer navigation leads to result', async ({ docSearch, page }) => {

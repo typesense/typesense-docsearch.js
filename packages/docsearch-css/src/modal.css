@@ -39,6 +39,7 @@
   display: flex;
   flex-direction: column;
   margin: 60px auto auto;
+  max-height: calc(var(--docsearch-vh, 1vh) * 100 - 120px);
   max-width: var(--docsearch-modal-width);
   position: relative;
   font-family: var(--docsearch-font-family);
@@ -431,6 +432,7 @@
   align-items: center;
   background: var(--docsearch-modal-background);
   display: flex;
+  flex-shrink: 0;
   gap: 0.57em;
   overflow-x: auto;
   padding-block: 0.57em;
@@ -447,6 +449,7 @@
 /* Animates the bar's height between 0 and its content (grid `0fr`/`1fr`). */
 .DocSearch-FacetSelectionBar-Collapse {
   display: grid;
+  flex-shrink: 0;
   grid-template-rows: 1fr;
   transition: grid-template-rows 120ms var(--ease-smooth);
 
@@ -1270,6 +1273,7 @@ assistive tech users */
     height: calc(var(--docsearch-vh, 1vh) * 100);
     height: 100dvh;
     margin: 0;
+    max-height: none;
     max-width: 100%;
     width: 100%;
   }
